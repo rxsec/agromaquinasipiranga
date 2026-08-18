@@ -61,10 +61,6 @@ Base local:
 
 - [`.env.example`](/home/paulo-pereira/Área%20de%20trabalho/agro/.env.example)
 
-Base de produção:
-
-- [`.env.production.example`](/home/paulo-pereira/Área%20de%20trabalho/agro/.env.production.example)
-
 Variáveis usadas:
 
 - `DATABASE_URL`

@@ -28,15 +28,13 @@ Essas variáveis devem ficar no arquivo local `.env`, que nao sobe para o reposi
 - `/.env`
   arquivo real local, privado, usado pelo projeto
 - `/.env.example`
-  modelo público para desenvolvimento
-- `/.env.production.example`
-  modelo público para produção
+  modelo público único para desenvolvimento e produção
 
 Fluxo recomendado:
 
 1. usar `/.env.example` como base no ambiente local
 2. manter credenciais reais apenas em `/.env`
-3. usar `/.env.production.example` como referência para deploy
+3. na Vercel, copiar os mesmos nomes de variáveis do `.env.example`
 
 `CORS_ORIGIN` aceita uma ou mais origens separadas por vírgula.
 
