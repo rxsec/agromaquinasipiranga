@@ -1,11 +1,13 @@
 import { pool } from "../auth/db.js";
 import { comparePassword, hashPassword } from "../auth/security.js";
 import { createUser, findUserByEmailOrCpf, updateUserPasswordAndRole } from "../auth/repository.js";
+import { DEFAULT_CATALOG_ITEMS } from "./default-catalog.js";
 
 const DEFAULT_ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@agromaquinasipiranga.com.br";
 const DEFAULT_ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "agro@2026";
 
 let adminSchemaPromise;
+let defaultCatalogPromise;
 
 export const ensureAdminSchema = async () => {
   if (!adminSchemaPromise) {
@@ -151,8 +153,47 @@ export const ensureDefaultAdminUser = async () => {
   return admin;
 };
 
+export const ensureDefaultCatalogItems = async () => {
+  await ensureAdminSchema();
+
+  if (!defaultCatalogPromise) {
+    defaultCatalogPromise = (async () => {
+      for (const item of DEFAULT_CATALOG_ITEMS) {
+        await pool.query(
+          `
+            insert into public.app_catalog_items (
+              title, slug, category, sections, price, location, year_label, image_url, gallery_images,
+              whatsapp, badge, gallery_count, description, is_published
+            )
+            values ($1,$2,$3,$4,$5,$6,$7,$8,$9::jsonb,$10,$11,$12,$13,true)
+            on conflict (slug) do nothing
+          `,
+          [
+            item.title,
+            item.slug,
+            item.category,
+            item.sections,
+            item.price,
+            item.location,
+            item.yearLabel,
+            item.imageUrl,
+            JSON.stringify([item.imageUrl]),
+            item.whatsapp || "5512997371569",
+            item.badge || item.category,
+            1,
+            item.description
+          ]
+        );
+      }
+    })();
+  }
+
+  return defaultCatalogPromise;
+};
+
 export const getAdminDashboardData = async () => {
   await ensureAdminSchema();
+  await ensureDefaultCatalogItems();
 
   const [users, catalogItems, drivers, yards, trackings] = await Promise.all([
     pool.query(`
@@ -418,6 +459,7 @@ export const listPublicCatalogItems = async ({
   limit = null
 } = {}) => {
   await ensureAdminSchema();
+  await ensureDefaultCatalogItems();
 
   const conditions = ["is_published = true"];
   const values = [];
@@ -473,6 +515,7 @@ export const listPublicCatalogItems = async ({
 
 export const findPublicCatalogItemBySlug = async (slug) => {
   await ensureAdminSchema();
+  await ensureDefaultCatalogItems();
 
   const { rows } = await pool.query(
     `
