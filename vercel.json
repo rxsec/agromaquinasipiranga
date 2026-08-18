@@ -36,6 +36,10 @@
       "destination": "/cadastro.html"
     },
     {
+      "source": "/rastreio",
+      "destination": "/rastreio.html"
+    },
+    {
       "source": "/admin",
       "destination": "/admin.html"
     },
