@@ -18,7 +18,9 @@ import {
   createTracking,
   createYard,
   ensureDefaultAdminUser,
-  getAdminDashboardData
+  findPublicCatalogItemBySlug,
+  getAdminDashboardData,
+  listPublicCatalogItems
 } from "./src/admin/repository.js";
 import {
   comparePassword,
@@ -45,7 +47,7 @@ const allowedOrigins = (process.env.CORS_ORIGIN || appUrl)
   .map((origin) => origin.trim())
   .filter(Boolean);
 
-app.use(express.json());
+app.use(express.json({ limit: "25mb" }));
 app.use((req, res, next) => {
   const origin = req.headers.origin;
 
@@ -285,7 +287,7 @@ app.get("/api/admin/dashboard", adminRequired, async (_req, res) => {
 
 app.post("/api/admin/catalog-items", adminRequired, async (req, res) => {
   try {
-    const { title, slug, category, sections, price, location, yearLabel, imageUrl, whatsapp, badge, galleryCount, description } =
+    const { title, slug, category, sections, price, location, yearLabel, imageUrl, galleryImages, whatsapp, badge, galleryCount, description } =
       req.body;
 
     if (!title || !slug || !category) {
@@ -301,6 +303,7 @@ app.post("/api/admin/catalog-items", adminRequired, async (req, res) => {
       location: location ? String(location).trim() : null,
       yearLabel: yearLabel ? String(yearLabel).trim() : null,
       imageUrl: imageUrl ? String(imageUrl).trim() : null,
+      galleryImages: Array.isArray(galleryImages) ? galleryImages : [],
       whatsapp: whatsapp ? String(whatsapp).trim() : null,
       badge: badge ? String(badge).trim() : null,
       galleryCount: Number(galleryCount || 1),
@@ -407,6 +410,43 @@ app.post("/api/admin/trackings", adminRequired, async (req, res) => {
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Erro ao cadastrar rastreio." });
+  }
+});
+
+app.get("/api/catalog/items", async (req, res) => {
+  try {
+    const items = await listPublicCatalogItems({
+      section: req.query.section ? String(req.query.section).trim() : null,
+      category: req.query.category ? String(req.query.category).trim() : null,
+      search: req.query.search ? String(req.query.search).trim() : null,
+      excludeSlug: req.query.excludeSlug ? String(req.query.excludeSlug).trim() : null,
+      limit: req.query.limit ? Number(req.query.limit) : null
+    });
+
+    return res.json({ items });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Erro ao carregar itens do catalogo." });
+  }
+});
+
+app.get("/api/catalog/detail", async (req, res) => {
+  try {
+    const slug = req.query.slug ? String(req.query.slug).trim() : "";
+
+    if (!slug) {
+      return res.status(400).json({ message: "Slug do item nao informado." });
+    }
+
+    const item = await findPublicCatalogItemBySlug(slug);
+    if (!item) {
+      return res.status(404).json({ message: "Item nao encontrado." });
+    }
+
+    return res.json({ item });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Erro ao carregar detalhe do item." });
   }
 });
 

@@ -17,7 +17,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { title, slug, category, sections, price, location, yearLabel, imageUrl, whatsapp, badge, galleryCount, description } =
+    const { title, slug, category, sections, price, location, yearLabel, imageUrl, galleryImages, whatsapp, badge, galleryCount, description } =
       await readJsonBody(req);
 
     if (!title || !slug || !category) {
@@ -33,6 +33,7 @@ export default async function handler(req, res) {
       location: location ? String(location).trim() : null,
       yearLabel: yearLabel ? String(yearLabel).trim() : null,
       imageUrl: imageUrl ? String(imageUrl).trim() : null,
+      galleryImages: Array.isArray(galleryImages) ? galleryImages : [],
       whatsapp: whatsapp ? String(whatsapp).trim() : null,
       badge: badge ? String(badge).trim() : null,
       galleryCount: Number(galleryCount || 1),

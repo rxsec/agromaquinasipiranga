@@ -74,7 +74,7 @@
             <a class="section-link" href="./catalogo.html">Ver todo o estoque →</a>
           </div>
 
-          <div class="catalog-grid">
+          <div class="catalog-grid" id="homeFeaturedGrid">
             <article class="product-card">
               <div class="product-media">
                 <img
@@ -418,7 +418,79 @@
     </nav>
 
     <script>
-      document.querySelectorAll(".product-card").forEach((card) => {
+      const homeFeaturedGrid = document.getElementById("homeFeaturedGrid");
+
+      const formatCurrency = (value) =>
+        Number(value || 0).toLocaleString("pt-BR", {
+          style: "currency",
+          currency: "BRL"
+        });
+
+      const getItemImage = (item) => {
+        const galleryImages = Array.isArray(item.gallery_images) ? item.gallery_images : [];
+        return galleryImages[0] || item.image_url || "https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1200&auto=format&fit=crop";
+      };
+
+      const createProductCard = (item) => {
+        const whatsapp = (item.whatsapp || "5512997371569").replace(/\D/g, "");
+        const image = getItemImage(item);
+        const photoCount = Array.isArray(item.gallery_images) && item.gallery_images.length
+          ? item.gallery_images.length
+          : Number(item.gallery_count || 1);
+
+        return `
+          <article class="product-card" data-detail="./detalhe.html?slug=${item.slug}">
+            <div class="product-media">
+              <img src="${image}" alt="${item.title}" />
+              <div class="product-tag">${item.badge || item.category || "Catalogo"}</div>
+              <button class="favorite-btn" type="button" aria-label="Favoritar">♡</button>
+              <span class="photo-count">1/${photoCount}</span>
+            </div>
+            <div class="product-body">
+              <h3>${item.title}</h3>
+              <div class="product-divider"></div>
+              <div class="product-footer">
+                <div class="price-block">
+                  <strong>${formatCurrency(item.price)}</strong>
+                </div>
+                <a class="whatsapp-btn" href="https://wa.me/${whatsapp}" aria-label="Enviar mensagem">✦</a>
+              </div>
+            </div>
+          </article>
+        `;
+      };
+
+      const bindProductCards = (scope = document) => {
+        scope.querySelectorAll(".product-card[data-detail]").forEach((card) => {
+          card.tabIndex = 0;
+          card.addEventListener("click", (event) => {
+            if (event.target.closest("a, button")) {
+              return;
+            }
+            window.location.href = card.dataset.detail;
+          });
+          card.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              window.location.href = card.dataset.detail;
+            }
+          });
+        });
+      };
+
+      fetch("/api/catalog/items?section=destaques&limit=12")
+        .then((response) => response.json())
+        .then((data) => {
+          if (Array.isArray(data.items) && data.items.length) {
+            homeFeaturedGrid.innerHTML = data.items.map(createProductCard).join("");
+          }
+        })
+        .catch(() => null)
+        .finally(() => bindProductCards());
+    </script>
+
+    <script>
+      document.querySelectorAll(".product-card:not([data-detail])").forEach((card) => {
         card.tabIndex = 0;
         card.addEventListener("click", (event) => {
           if (event.target.closest("a, button")) {

@@ -25,6 +25,7 @@ export const ensureAdminSchema = async () => {
         location text,
         year_label text,
         image_url text,
+        gallery_images jsonb not null default '[]'::jsonb,
         whatsapp text,
         badge text,
         gallery_count integer not null default 1,
@@ -33,6 +34,9 @@ export const ensureAdminSchema = async () => {
         created_at timestamptz not null default timezone('utc', now()),
         updated_at timestamptz not null default timezone('utc', now())
       );
+
+      alter table public.app_catalog_items
+      add column if not exists gallery_images jsonb not null default '[]'::jsonb;
 
       create table if not exists public.app_drivers (
         id uuid primary key default gen_random_uuid(),
@@ -157,7 +161,7 @@ export const getAdminDashboardData = async () => {
       order by created_at desc
     `),
     pool.query(`
-      select id, title, slug, category, sections, price, location, year_label, image_url, badge, gallery_count, is_published, created_at
+      select id, title, slug, category, sections, price, location, year_label, image_url, gallery_images, badge, gallery_count, is_published, created_at
       from public.app_catalog_items
       order by created_at desc
     `),
@@ -210,6 +214,7 @@ export const createCatalogItem = async ({
   location,
   yearLabel,
   imageUrl,
+  galleryImages,
   whatsapp,
   badge,
   galleryCount,
@@ -220,9 +225,9 @@ export const createCatalogItem = async ({
   const { rows } = await pool.query(
     `
       insert into public.app_catalog_items (
-        title, slug, category, sections, price, location, year_label, image_url, whatsapp, badge, gallery_count, description
+        title, slug, category, sections, price, location, year_label, image_url, gallery_images, whatsapp, badge, gallery_count, description
       )
-      values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
+      values ($1,$2,$3,$4,$5,$6,$7,$8,$9::jsonb,$10,$11,$12,$13)
       returning *
     `,
     [
@@ -234,6 +239,7 @@ export const createCatalogItem = async ({
       location,
       yearLabel,
       imageUrl,
+      JSON.stringify(Array.isArray(galleryImages) ? galleryImages : []),
       whatsapp,
       badge,
       galleryCount,
@@ -325,4 +331,98 @@ export const createTracking = async ({
   );
 
   return rows[0];
+};
+
+export const listPublicCatalogItems = async ({
+  section = null,
+  category = null,
+  search = null,
+  excludeSlug = null,
+  limit = null
+} = {}) => {
+  await ensureAdminSchema();
+
+  const conditions = ["is_published = true"];
+  const values = [];
+
+  if (section) {
+    values.push(section);
+    conditions.push(`$${values.length} = any(sections)`);
+  }
+
+  if (category) {
+    values.push(category);
+    conditions.push(`category ilike $${values.length}`);
+  }
+
+  if (search) {
+    values.push(`%${search}%`);
+    conditions.push(`(title ilike $${values.length} or category ilike $${values.length} or coalesce(location, '') ilike $${values.length})`);
+  }
+
+  if (excludeSlug) {
+    values.push(excludeSlug);
+    conditions.push(`slug <> $${values.length}`);
+  }
+
+  const limitClause = limit ? `limit ${Number(limit)}` : "";
+  const query = `
+    select
+      id,
+      title,
+      slug,
+      category,
+      sections,
+      price,
+      location,
+      year_label,
+      image_url,
+      gallery_images,
+      whatsapp,
+      badge,
+      gallery_count,
+      description,
+      is_published,
+      created_at
+    from public.app_catalog_items
+    where ${conditions.join(" and ")}
+    order by created_at desc
+    ${limitClause}
+  `;
+
+  const { rows } = await pool.query(query, values);
+  return rows;
+};
+
+export const findPublicCatalogItemBySlug = async (slug) => {
+  await ensureAdminSchema();
+
+  const { rows } = await pool.query(
+    `
+      select
+        id,
+        title,
+        slug,
+        category,
+        sections,
+        price,
+        location,
+        year_label,
+        image_url,
+        gallery_images,
+        whatsapp,
+        badge,
+        gallery_count,
+        description,
+        is_published,
+        created_at
+      from public.app_catalog_items
+      where slug = $1
+        and is_published = true
+      limit 1
+    `,
+    [slug]
+  );
+
+  return rows[0] || null;
 };

@@ -53,21 +53,21 @@
 
             <label class="filters-label">Categoria</label>
             <div class="category-list">
-              <button class="category-pill category-pill--active" type="button">Todas as Categorias</button>
-              <button class="category-pill" type="button">Carros</button>
-              <button class="category-pill" type="button">Implementos</button>
-              <button class="category-pill" type="button">Tratores</button>
+              <button class="category-pill category-pill--active" type="button" data-category="all">Todas as Categorias</button>
+              <button class="category-pill" type="button" data-category="Carros">Carros</button>
+              <button class="category-pill" type="button" data-category="Implementos">Implementos</button>
+              <button class="category-pill" type="button" data-category="Tratores">Tratores</button>
             </div>
           </aside>
 
           <div class="results-main">
             <div class="results-head">
               <h2>Resultados da Busca</h2>
-              <span class="results-count">33 VEÍCULOS</span>
+              <span class="results-count" id="resultsCount">33 VEÍCULOS</span>
             </div>
             <div class="results-divider"></div>
 
-            <div class="catalog-grid catalog-grid--results">
+            <div class="catalog-grid catalog-grid--results" id="catalogResultsGrid">
               <article class="product-card">
                 <div class="product-media">
                   <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1200&auto=format&fit=crop" alt="Trator agricola" />
@@ -372,21 +372,115 @@
     </nav>
 
     <script>
-      document.querySelectorAll(".product-card").forEach((card) => {
-        card.tabIndex = 0;
-        card.addEventListener("click", (event) => {
-          if (event.target.closest("a, button")) {
-            return;
-          }
-          window.location.href = "./detalhe.html";
+      const searchInput = document.getElementById("search-input");
+      const categoryButtons = Array.from(document.querySelectorAll(".category-pill"));
+      const resultsCount = document.getElementById("resultsCount");
+      const catalogResultsGrid = document.getElementById("catalogResultsGrid");
+
+      let catalogItems = [];
+      let selectedCategory = "all";
+
+      const formatCurrency = (value) =>
+        Number(value || 0).toLocaleString("pt-BR", {
+          style: "currency",
+          currency: "BRL"
         });
-        card.addEventListener("keydown", (event) => {
-          if (event.key === "Enter" || event.key === " ") {
-            event.preventDefault();
-            window.location.href = "./detalhe.html";
-          }
+
+      const getItemImage = (item) => {
+        const galleryImages = Array.isArray(item.gallery_images) ? item.gallery_images : [];
+        return galleryImages[0] || item.image_url || "https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1200&auto=format&fit=crop";
+      };
+
+      const createProductCard = (item) => {
+        const whatsapp = (item.whatsapp || "5512997371569").replace(/\D/g, "");
+        const photoCount = Array.isArray(item.gallery_images) && item.gallery_images.length
+          ? item.gallery_images.length
+          : Number(item.gallery_count || 1);
+
+        return `
+          <article class="product-card" data-detail="./detalhe.html?slug=${item.slug}">
+            <div class="product-media">
+              <img src="${getItemImage(item)}" alt="${item.title}" />
+              <div class="product-tag">${item.badge || item.category || "Catalogo"}</div>
+              <button class="favorite-btn" type="button" aria-label="Favoritar">♡</button>
+              <span class="photo-count">1/${photoCount}</span>
+            </div>
+            <div class="product-body">
+              <h3>${item.title}</h3>
+              <div class="product-divider"></div>
+              <div class="product-footer">
+                <div class="price-block"><strong>${formatCurrency(item.price)}</strong></div>
+                <a class="whatsapp-btn" href="https://wa.me/${whatsapp}" aria-label="Enviar mensagem">✦</a>
+              </div>
+            </div>
+          </article>
+        `;
+      };
+
+      const bindProductCards = () => {
+        document.querySelectorAll(".product-card").forEach((card) => {
+          const detailUrl = card.dataset.detail || "./detalhe.html";
+          card.tabIndex = 0;
+          card.addEventListener("click", (event) => {
+            if (event.target.closest("a, button")) {
+              return;
+            }
+            window.location.href = detailUrl;
+          });
+          card.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              window.location.href = detailUrl;
+            }
+          });
+        });
+      };
+
+      const renderCatalog = () => {
+        const search = searchInput.value.trim().toLowerCase();
+        const filteredItems = catalogItems.filter((item) => {
+          const matchesCategory =
+            selectedCategory === "all" || (item.category || "").toLowerCase() === selectedCategory.toLowerCase();
+          const haystack = [item.title, item.category, item.location].filter(Boolean).join(" ").toLowerCase();
+          const matchesSearch = !search || haystack.includes(search);
+          return matchesCategory && matchesSearch;
+        });
+
+        resultsCount.textContent = `${filteredItems.length} VEÍCULOS`;
+
+        if (!filteredItems.length) {
+          catalogResultsGrid.innerHTML = '<div class="catalog-empty">Nenhum veículo encontrado com esse filtro.</div>';
+          return;
+        }
+
+        catalogResultsGrid.innerHTML = filteredItems.map(createProductCard).join("");
+        bindProductCards();
+      };
+
+      categoryButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          categoryButtons.forEach((item) => item.classList.remove("category-pill--active"));
+          button.classList.add("category-pill--active");
+          selectedCategory = button.dataset.category || "all";
+          renderCatalog();
         });
       });
+
+      searchInput.addEventListener("input", renderCatalog);
+
+      fetch("/api/catalog/items?section=catalogo")
+        .then((response) => response.json())
+        .then((data) => {
+          if (Array.isArray(data.items) && data.items.length) {
+            catalogItems = data.items;
+            renderCatalog();
+          } else {
+            bindProductCards();
+          }
+        })
+        .catch(() => bindProductCards());
+
+      bindProductCards();
     </script>
   </body>
 </html>
