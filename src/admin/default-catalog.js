@@ -5,12 +5,12 @@ export const DEFAULT_CATALOG_ITEMS = [
     category: "Carros",
     sections: ["catalogo", "destaques", "relacionados"],
     price: 60915,
-    location: "Sao Paulo, SP",
+    location: "São Paulo, SP",
     yearLabel: "2016/2017",
     imageUrl:
       "https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1200&auto=format&fit=crop",
     badge: "Carros",
-    description: "Item inicial importado do site para administracao e troca de fotos reais."
+    description: "Item inicial importado do site para administração e troca de fotos reais."
   },
   {
     title: "COROLLA GLI CVT 1.8 16V",
@@ -18,12 +18,12 @@ export const DEFAULT_CATALOG_ITEMS = [
     category: "Carros",
     sections: ["catalogo", "destaques", "relacionados"],
     price: 36000,
-    location: "Sao Paulo, SP",
+    location: "São Paulo, SP",
     yearLabel: "2017",
     imageUrl:
       "https://images.unsplash.com/photo-1516245834210-c4c142787335?q=80&w=1200&auto=format&fit=crop",
     badge: "Carros",
-    description: "Item inicial importado do site para administracao e troca de fotos reais."
+    description: "Item inicial importado do site para administração e troca de fotos reais."
   },
   {
     title: "HB20S COMFORT",
@@ -31,12 +31,12 @@ export const DEFAULT_CATALOG_ITEMS = [
     category: "Carros",
     sections: ["catalogo", "destaques", "relacionados"],
     price: 23500,
-    location: "Sao Paulo, SP",
+    location: "São Paulo, SP",
     yearLabel: "2016",
     imageUrl:
       "https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=1200&auto=format&fit=crop",
     badge: "Carros",
-    description: "Item inicial importado do site para administracao e troca de fotos reais."
+    description: "Item inicial importado do site para administração e troca de fotos reais."
   },
   {
     title: "CITY LX 1.5 16V I-VTEC",
@@ -44,12 +44,12 @@ export const DEFAULT_CATALOG_ITEMS = [
     category: "Carros",
     sections: ["catalogo", "destaques", "relacionados"],
     price: 30900,
-    location: "Sao Paulo, SP",
+    location: "São Paulo, SP",
     yearLabel: "2015",
     imageUrl:
       "https://images.unsplash.com/photo-1516762689617-e1cffcef479d?q=80&w=1200&auto=format&fit=crop",
     badge: "Carros",
-    description: "Item inicial importado do site para administracao e troca de fotos reais."
+    description: "Item inicial importado do site para administração e troca de fotos reais."
   },
   {
     title: "HILUX SW4 SRX 2.8 D-4D",
@@ -57,12 +57,12 @@ export const DEFAULT_CATALOG_ITEMS = [
     category: "Carros",
     sections: ["catalogo", "destaques", "relacionados"],
     price: 94000,
-    location: "Sao Paulo, SP",
+    location: "São Paulo, SP",
     yearLabel: "2018",
     imageUrl:
       "https://images.unsplash.com/photo-1549399542-7e6c1f40a7e0?q=80&w=1200&auto=format&fit=crop",
     badge: "Carros",
-    description: "Item inicial importado do site para administracao e troca de fotos reais."
+    description: "Item inicial importado do site para administração e troca de fotos reais."
   },
   {
     title: "CLIO EXPRESSION 1.0 16V",
@@ -70,12 +70,12 @@ export const DEFAULT_CATALOG_ITEMS = [
     category: "Carros",
     sections: ["catalogo", "destaques", "relacionados"],
     price: 24314,
-    location: "Sao Paulo, SP",
+    location: "São Paulo, SP",
     yearLabel: "2014",
     imageUrl:
       "https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1200&auto=format&fit=crop",
     badge: "Carros",
-    description: "Item inicial importado do site para administracao e troca de fotos reais."
+    description: "Item inicial importado do site para administração e troca de fotos reais."
   },
   {
     title: "MERCEDES GLA 200 1.6 16V",
@@ -83,12 +83,12 @@ export const DEFAULT_CATALOG_ITEMS = [
     category: "Carros",
     sections: ["catalogo", "destaques", "relacionados"],
     price: 128859,
-    location: "Sao Paulo, SP",
+    location: "São Paulo, SP",
     yearLabel: "2017",
     imageUrl:
       "https://images.unsplash.com/photo-1536895058696-a69b1c7ba34f?q=80&w=1200&auto=format&fit=crop",
     badge: "Carros",
-    description: "Item inicial importado do site para administracao e troca de fotos reais."
+    description: "Item inicial importado do site para administração e troca de fotos reais."
   },
   {
     title: "CIVIC EXR 2.0 16V I-VTEC",
@@ -96,12 +96,12 @@ export const DEFAULT_CATALOG_ITEMS = [
     category: "Carros",
     sections: ["catalogo", "destaques", "relacionados"],
     price: 70809,
-    location: "Sao Paulo, SP",
+    location: "São Paulo, SP",
     yearLabel: "2016",
     imageUrl:
       "https://images.unsplash.com/photo-1549924231-f129b911e442?q=80&w=1200&auto=format&fit=crop",
     badge: "Carros",
-    description: "Item inicial importado do site para administracao e troca de fotos reais."
+    description: "Item inicial importado do site para administração e troca de fotos reais."
   },
   {
     title: "STRADA CD ADVENTURE 1.8",
@@ -109,12 +109,12 @@ export const DEFAULT_CATALOG_ITEMS = [
     category: "Carros",
     sections: ["catalogo", "relacionados"],
     price: 45930,
-    location: "Sao Paulo, SP",
+    location: "São Paulo, SP",
     yearLabel: "2013",
     imageUrl:
       "https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1200&auto=format&fit=crop",
     badge: "Carros",
-    description: "Item inicial importado do site para administracao e troca de fotos reais."
+    description: "Item inicial importado do site para administração e troca de fotos reais."
   },
   {
     title: "SONIC SEDAN LTZ AT 1.6 16V - 2014",
@@ -122,12 +122,12 @@ export const DEFAULT_CATALOG_ITEMS = [
     category: "Carros",
     sections: ["catalogo", "relacionados"],
     price: 35401,
-    location: "Sao Paulo, SP",
+    location: "São Paulo, SP",
     yearLabel: "2014",
     imageUrl:
       "https://images.unsplash.com/photo-1502877338535-766e1452684a?q=80&w=1200&auto=format&fit=crop",
     badge: "Carros",
-    description: "Item inicial importado do site para administracao e troca de fotos reais."
+    description: "Item inicial importado do site para administração e troca de fotos reais."
   },
   {
     title: "JOHN DEERE 6150J",
@@ -135,12 +135,12 @@ export const DEFAULT_CATALOG_ITEMS = [
     category: "Tratores",
     sections: ["catalogo", "destaques", "relacionados"],
     price: 320000,
-    location: "Parana",
+    location: "Paraná",
     yearLabel: "Linha pesada",
     imageUrl:
       "https://images.unsplash.com/photo-1589894403892-68b16c84eab3?q=80&w=1200&auto=format&fit=crop",
     badge: "Tratores",
-    description: "Item inicial importado do site para administracao e troca de fotos reais."
+    description: "Item inicial importado do site para administração e troca de fotos reais."
   },
   {
     title: "NEW HOLLAND 7630",
@@ -148,12 +148,12 @@ export const DEFAULT_CATALOG_ITEMS = [
     category: "Tratores",
     sections: ["catalogo", "relacionados"],
     price: 195000,
-    location: "Parana",
+    location: "Paraná",
     yearLabel: "Linha pesada",
     imageUrl:
       "https://images.unsplash.com/photo-1516466723877-df8d0f0d0b15?q=80&w=1200&auto=format&fit=crop",
     badge: "Tratores",
-    description: "Item inicial importado do site para administracao e troca de fotos reais."
+    description: "Item inicial importado do site para administração e troca de fotos reais."
   },
   {
     title: "MASSEY FERGUSON 275 CAFEEIRO",
@@ -161,12 +161,12 @@ export const DEFAULT_CATALOG_ITEMS = [
     category: "Implementos",
     sections: ["catalogo", "relacionados"],
     price: 65000,
-    location: "Parana",
-    yearLabel: "Linha agricola",
+    location: "Paraná",
+    yearLabel: "Linha agrícola",
     imageUrl:
       "https://images.unsplash.com/photo-1469398715555-76331b01bfe0?q=80&w=1200&auto=format&fit=crop",
     badge: "Implementos",
-    description: "Item inicial importado do site para administracao e troca de fotos reais."
+    description: "Item inicial importado do site para administração e troca de fotos reais."
   },
   {
     title: "MASSEY FERGUSON 4275 4X4",
@@ -174,11 +174,11 @@ export const DEFAULT_CATALOG_ITEMS = [
     category: "Tratores",
     sections: ["catalogo", "relacionados"],
     price: 104000,
-    location: "Parana",
-    yearLabel: "Linha agricola",
+    location: "Paraná",
+    yearLabel: "Linha agrícola",
     imageUrl:
       "https://images.unsplash.com/photo-1483721310020-03333e577078?q=80&w=1200&auto=format&fit=crop",
     badge: "Tratores",
-    description: "Item inicial importado do site para administracao e troca de fotos reais."
+    description: "Item inicial importado do site para administração e troca de fotos reais."
   }
 ];

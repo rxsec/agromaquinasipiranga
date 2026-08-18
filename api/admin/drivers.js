@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   }
 
   if (req.method !== "POST") {
-    return sendJson(req, res, 405, { message: "Metodo nao permitido." });
+    return sendJson(req, res, 405, { message: "Método não permitido." });
   }
 
   const admin = await requireAdmin(req, res);
@@ -20,7 +20,7 @@ export default async function handler(req, res) {
     const { fullName, cpf, cnh, phone, email, status, notes } = await readJsonBody(req);
 
     if (!fullName) {
-      return sendJson(req, res, 400, { message: "Nome do motorista e obrigatorio." });
+      return sendJson(req, res, 400, { message: "Nome do motorista é obrigatório." });
     }
 
     const driver = await createDriver({

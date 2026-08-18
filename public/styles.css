@@ -2228,9 +2228,8 @@ img {
 }
 
 .admin-shell {
-  width: min(1360px, calc(100% - 40px));
-  margin: 0 auto;
-  padding: 48px 0 72px;
+  width: 100%;
+  min-height: 100vh;
 }
 
 .admin-login__brand {
@@ -2373,15 +2372,43 @@ img {
 }
 
 .admin-dashboard {
+  min-height: 100vh;
+}
+
+.admin-layout {
   display: grid;
-  gap: 28px;
+  grid-template-columns: 252px minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+.admin-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 22px 18px 18px;
+  background: #33475d;
+  color: #fff;
+}
+
+.admin-sidebar__brand h2 {
+  margin: 0;
+  color: #fff;
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.admin-sidebar__nav {
+  display: grid;
+  gap: 8px;
+}
+
+.admin-content {
+  background: #edf1f5;
+  padding: 26px 28px 48px;
 }
 
 .admin-topbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 18px;
+  margin-bottom: 18px;
 }
 
 .admin-grid {
@@ -2392,16 +2419,21 @@ img {
 
 .admin-grid--stats {
   grid-template-columns: repeat(5, minmax(0, 1fr));
+  margin-bottom: 24px;
 }
 
 .admin-card,
 .admin-stat {
-  border-radius: 26px;
+  border-radius: 12px;
   padding: 24px;
 }
 
 .admin-card--wide {
   grid-column: 1 / -1;
+}
+
+.admin-card--welcome {
+  margin-bottom: 22px;
 }
 
 .admin-card__head {
@@ -2500,36 +2532,47 @@ img {
   padding: 24px;
 }
 
-.admin-tabs {
-  display: grid;
-  gap: 24px;
-}
-
-.admin-tabs__nav {
+.admin-tab {
+  min-height: 46px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.84);
+  padding: 0 14px;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: 180ms ease;
   display: flex;
-  flex-wrap: wrap;
+  align-items: center;
   gap: 12px;
 }
 
-.admin-tab {
-  min-height: 48px;
-  border: 1px solid rgba(31, 127, 61, 0.16);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.84);
-  color: rgba(22, 48, 34, 0.78);
-  padding: 0 20px;
-  font: inherit;
-  font-size: 0.92rem;
-  font-weight: 800;
-  cursor: pointer;
-  transition: 180ms ease;
+.admin-tab__icon {
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 18px;
+}
+
+.admin-tab__icon svg {
+  width: 18px;
+  height: 18px;
+  display: block;
 }
 
 .admin-tab.is-active {
-  background: linear-gradient(135deg, #1f7f3d 0%, #2b9249 100%);
-  border-color: transparent;
+  background: rgba(255, 255, 255, 0.12);
   color: #fff;
-  box-shadow: 0 14px 28px rgba(31, 127, 61, 0.22);
+  box-shadow: none;
+}
+
+.admin-tab:hover {
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .admin-tab-panel {
@@ -2538,6 +2581,25 @@ img {
 
 .admin-tab-panel.is-active {
   display: block;
+}
+
+.admin-sidebar__logout {
+  margin-top: auto;
+  min-height: 48px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.9);
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  padding: 0 14px;
+}
+
+.admin-sidebar__logout:hover {
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .admin-upload-note {
@@ -2680,6 +2742,7 @@ img {
 }
 
 @media (max-width: 1080px) {
+  .admin-layout,
   .admin-login__card,
   .admin-grid,
   .admin-grid--stats,
@@ -2687,9 +2750,8 @@ img {
     grid-template-columns: 1fr;
   }
 
-  .admin-topbar {
-    flex-direction: column;
-    align-items: flex-start;
+  .admin-sidebar {
+    gap: 18px;
   }
 
   .admin-gallery-preview,
@@ -2700,8 +2762,7 @@ img {
 
 @media (max-width: 720px) {
   .admin-shell {
-    width: min(100% - 24px, 1360px);
-    padding: 24px 0 48px;
+    width: 100%;
   }
 
   .admin-login__card,
@@ -2711,22 +2772,21 @@ img {
     padding: 20px;
   }
 
+  .admin-content {
+    padding: 22px 16px 32px;
+  }
+
+  .admin-sidebar {
+    padding: 18px 14px;
+  }
+
   .admin-form__actions {
     flex-direction: column;
     align-items: flex-start;
   }
 
-  .admin-tabs__nav,
   .admin-gallery-preview,
   .admin-catalog-list {
     grid-template-columns: 1fr;
-  }
-
-  .admin-tabs__nav {
-    display: grid;
-  }
-
-  .admin-tab {
-    width: 100%;
   }
 }

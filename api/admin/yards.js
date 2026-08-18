@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   }
 
   if (req.method !== "POST") {
-    return sendJson(req, res, 405, { message: "Metodo nao permitido." });
+    return sendJson(req, res, 405, { message: "Método não permitido." });
   }
 
   const admin = await requireAdmin(req, res);
@@ -20,7 +20,7 @@ export default async function handler(req, res) {
     const { name, city, state, address, contactName, contactPhone, capacityInfo, notes } = await readJsonBody(req);
 
     if (!name) {
-      return sendJson(req, res, 400, { message: "Nome do patio e obrigatorio." });
+      return sendJson(req, res, 400, { message: "Nome do pátio é obrigatório." });
     }
 
     const yard = await createYard({
@@ -37,6 +37,6 @@ export default async function handler(req, res) {
     return sendJson(req, res, 201, { yard });
   } catch (error) {
     console.error(error);
-    return sendJson(req, res, 500, { message: "Erro ao cadastrar patio." });
+    return sendJson(req, res, 500, { message: "Erro ao cadastrar pátio." });
   }
 }

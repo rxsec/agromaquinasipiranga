@@ -21,7 +21,7 @@ export default async function handler(req, res) {
   }
 
   if (req.method !== "POST") {
-    return sendJson(req, res, 405, { message: "Metodo nao permitido." });
+    return sendJson(req, res, 405, { message: "Método não permitido." });
   }
 
   try {
@@ -35,12 +35,12 @@ export default async function handler(req, res) {
     const user = await findUserByEmailOrCpf(normalizedIdentifier, onlyDigits(normalizedIdentifier));
 
     if (!user) {
-      return sendJson(req, res, 401, { message: "Dados de acesso invalidos." });
+      return sendJson(req, res, 401, { message: "Dados de acesso inválidos." });
     }
 
     const passwordMatches = await comparePassword(password, user.password_hash);
     if (!passwordMatches) {
-      return sendJson(req, res, 401, { message: "Dados de acesso invalidos." });
+      return sendJson(req, res, 401, { message: "Dados de acesso inválidos." });
     }
 
     return sendAuthPayload(req, res, user);

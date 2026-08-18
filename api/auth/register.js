@@ -21,7 +21,7 @@ export default async function handler(req, res) {
   }
 
   if (req.method !== "POST") {
-    return sendJson(req, res, 405, { message: "Metodo nao permitido." });
+    return sendJson(req, res, 405, { message: "Método não permitido." });
   }
 
   try {
@@ -41,7 +41,7 @@ export default async function handler(req, res) {
     } = await readJsonBody(req);
 
     if (!fullName || !email || !whatsapp || !cpf || !cep || !address || !number || !district || !password) {
-      return sendJson(req, res, 400, { message: "Preencha todos os campos obrigatorios." });
+      return sendJson(req, res, 400, { message: "Preencha todos os campos obrigatórios." });
     }
 
     const normalizedEmail = String(email).trim().toLowerCase();

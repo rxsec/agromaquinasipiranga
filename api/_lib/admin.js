@@ -16,7 +16,7 @@ export const requireAdmin = async (req, res) => {
     const user = await findUserById(payload.sub);
 
     if (!user) {
-      sendJson(req, res, 401, { message: "Usuario nao encontrado." });
+      sendJson(req, res, 401, { message: "Usuário não encontrado." });
       return null;
     }
 
@@ -27,7 +27,7 @@ export const requireAdmin = async (req, res) => {
 
     return user;
   } catch (error) {
-    sendJson(req, res, 401, { message: "Token invalido." });
+    sendJson(req, res, 401, { message: "Token inválido." });
     return null;
   }
 };

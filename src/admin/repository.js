@@ -129,7 +129,7 @@ export const ensureDefaultAdminUser = async () => {
 
   if (!admin) {
     return createUser({
-      fullName: "Administrador Agro Maquinas Ipiranga",
+      fullName: "Administrador Agro Máquinas Ipiranga",
       email: DEFAULT_ADMIN_EMAIL,
       whatsapp: "(43) 99999-9999",
       cpf: "000.000.000-00",

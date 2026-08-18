@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   }
 
   if (!["POST", "PUT", "DELETE"].includes(req.method)) {
-    return sendJson(req, res, 405, { message: "Metodo nao permitido." });
+    return sendJson(req, res, 405, { message: "Método não permitido." });
   }
 
   const admin = await requireAdmin(req, res);
@@ -22,12 +22,12 @@ export default async function handler(req, res) {
 
     if (req.method === "DELETE") {
       if (!id) {
-        return sendJson(req, res, 400, { message: "ID do item nao informado." });
+        return sendJson(req, res, 400, { message: "ID do item não informado." });
       }
 
       const deleted = await deleteCatalogItem(String(id).trim());
       if (!deleted) {
-        return sendJson(req, res, 404, { message: "Item nao encontrado." });
+        return sendJson(req, res, 404, { message: "Item não encontrado." });
       }
 
       return sendJson(req, res, 200, { success: true });
@@ -35,7 +35,7 @@ export default async function handler(req, res) {
 
     if (!title || !slug || !category) {
       return sendJson(req, res, 400, {
-        message: "Titulo, slug e categoria sao obrigatorios."
+        message: "Título, slug e categoria são obrigatórios."
       });
     }
 
@@ -57,12 +57,12 @@ export default async function handler(req, res) {
 
     if (req.method === "PUT") {
       if (!id) {
-        return sendJson(req, res, 400, { message: "ID do item nao informado." });
+        return sendJson(req, res, 400, { message: "ID do item não informado." });
       }
 
       const item = await updateCatalogItem(String(id).trim(), payload);
       if (!item) {
-        return sendJson(req, res, 404, { message: "Item nao encontrado." });
+        return sendJson(req, res, 404, { message: "Item não encontrado." });
       }
 
       return sendJson(req, res, 200, { item });
@@ -73,6 +73,6 @@ export default async function handler(req, res) {
     return sendJson(req, res, 201, { item });
   } catch (error) {
     console.error(error);
-    return sendJson(req, res, 500, { message: "Erro ao processar item do catalogo." });
+    return sendJson(req, res, 500, { message: "Erro ao processar item do catálogo." });
   }
 }

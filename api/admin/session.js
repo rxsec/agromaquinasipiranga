@@ -22,7 +22,7 @@ export default async function handler(req, res) {
   }
 
   if (req.method !== "POST") {
-    return sendJson(req, res, 405, { message: "Metodo nao permitido." });
+    return sendJson(req, res, 405, { message: "Método não permitido." });
   }
 
   try {
@@ -35,12 +35,12 @@ export default async function handler(req, res) {
 
     const admin = await findUserByEmailOrCpf(String(email).trim().toLowerCase(), "");
     if (!admin || admin.role !== "admin") {
-      return sendJson(req, res, 401, { message: "Credenciais administrativas invalidas." });
+      return sendJson(req, res, 401, { message: "Credenciais administrativas inválidas." });
     }
 
     const passwordMatches = await comparePassword(password, admin.password_hash);
     if (!passwordMatches) {
-      return sendJson(req, res, 401, { message: "Credenciais administrativas invalidas." });
+      return sendJson(req, res, 401, { message: "Credenciais administrativas inválidas." });
     }
 
     return sendAuthPayload(req, res, admin);

@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   }
 
   if (req.method !== "POST") {
-    return sendJson(req, res, 405, { message: "Metodo nao permitido." });
+    return sendJson(req, res, 405, { message: "Método não permitido." });
   }
 
   const admin = await requireAdmin(req, res);
@@ -34,7 +34,7 @@ export default async function handler(req, res) {
 
     if (!clientName || !itemName || !trackingCode) {
       return sendJson(req, res, 400, {
-        message: "Cliente, item e codigo de rastreio sao obrigatorios."
+        message: "Cliente, item e código de rastreio são obrigatórios."
       });
     }
 
@@ -47,7 +47,7 @@ export default async function handler(req, res) {
       driverId,
       yardId,
       trackingCode: String(trackingCode).trim().toUpperCase(),
-      status: status ? String(status).trim() : "em separacao",
+      status: status ? String(status).trim() : "em separação",
       currentLocation: currentLocation ? String(currentLocation).trim() : null,
       expectedDeliveryDate: expectedDeliveryDate || null,
       notes: notes ? String(notes).trim() : null

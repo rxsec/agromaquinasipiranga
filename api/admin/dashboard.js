@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   }
 
   if (req.method !== "GET") {
-    return sendJson(req, res, 405, { message: "Metodo nao permitido." });
+    return sendJson(req, res, 405, { message: "Método não permitido." });
   }
 
   const admin = await requireAdmin(req, res);

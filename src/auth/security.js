@@ -11,7 +11,7 @@ const refreshExpiresIn = process.env.JWT_REFRESH_EXPIRES_IN || "30d";
 const bcryptRounds = Number(process.env.BCRYPT_ROUNDS || 12);
 
 if (!accessSecret || !refreshSecret) {
-  throw new Error("JWT secrets nao configurados.");
+  throw new Error("JWT secrets não configurados.");
 }
 
 export const hashPassword = async (password) => bcrypt.hash(password, bcryptRounds);

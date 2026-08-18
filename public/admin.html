@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Agro Maquinas Ipiranga | Admin</title>
+    <title>Agro Máquinas Ipiranga | Admin</title>
     <meta
       name="description"
-      content="Painel administrativo da Agro Maquinas Ipiranga para gerenciar clientes, catalogo, motoristas, patios e rastreios."
+      content="Painel administrativo da Agro Máquinas Ipiranga para gerenciar clientes, catálogo, motoristas, pátios e rastreios."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -20,7 +20,7 @@
     <main class="admin-shell">
       <section class="admin-login" id="adminLogin">
         <div class="admin-login__brand">
-          <img src="./logo.png" alt="Agro Maquinas Ipiranga" />
+          <img src="./logo.png" alt="Agro Máquinas Ipiranga" />
           <span>Painel Administrativo</span>
         </div>
         <div class="admin-login__card">
@@ -28,13 +28,13 @@
             <span class="admin-eyebrow">Acesso Restrito</span>
             <h1>Entrar no painel admin</h1>
             <p>
-              Este ambiente e visivel somente para o administrador e agora esta separado
-              em abas para clientes, veiculos, motoristas, patios e rastreios.
+              Este ambiente é visível somente para o administrador e agora está separado
+              em abas para clientes, veículos, motoristas, pátios e rastreios.
             </p>
           </div>
           <form class="admin-form" id="adminLoginForm">
             <label>
-              <span>E-mail admin</span>
+              <span>E-mail do admin</span>
               <input type="email" name="email" value="admin@agromaquinasipiranga.com.br" required />
             </label>
             <label>
@@ -48,329 +48,373 @@
       </section>
 
       <section class="admin-dashboard hidden" id="adminDashboard">
-        <header class="admin-topbar">
-          <div>
-            <span class="admin-eyebrow">Admin</span>
-            <h1>Painel Agro Maquinas Ipiranga</h1>
-            <p>Ambiente interno separado por area para voce gerenciar tudo com mais clareza.</p>
-          </div>
-          <button class="button button-secondary" type="button" id="adminLogoutButton">
-            Sair
-          </button>
-        </header>
+        <section class="admin-layout">
+          <aside class="admin-sidebar">
+            <div class="admin-sidebar__brand">
+              <h2>Painel Admin</h2>
+            </div>
 
-        <section class="admin-grid admin-grid--stats" id="adminStats"></section>
+            <nav class="admin-sidebar__nav">
+              <button class="admin-tab is-active" type="button" data-tab-target="overview">
+                <span class="admin-tab__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z" fill="currentColor"/></svg>
+                </span>
+                <span>Painel</span>
+              </button>
+              <button class="admin-tab" type="button" data-tab-target="clients">
+                <span class="admin-tab__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm0 2c-4.418 0-8 2.239-8 5v1h16v-1c0-2.761-3.582-5-8-5Z" fill="currentColor"/></svg>
+                </span>
+                <span>Gerenciar Clientes</span>
+              </button>
+              <button class="admin-tab" type="button" data-tab-target="vehicles">
+                <span class="admin-tab__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M5 16h14l-1.1-5.12A2 2 0 0 0 15.95 9H8.05a2 2 0 0 0-1.95 1.88L5 16Zm2 2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Zm10 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3ZM4 7h2l1.1-2.45A2 2 0 0 1 8.92 3h6.16a2 2 0 0 1 1.82 1.55L18 7h2v2h-1l1 7H4l1-7H4V7Z" fill="currentColor"/></svg>
+                </span>
+                <span>Gerenciar Vitrine</span>
+              </button>
+              <button class="admin-tab" type="button" data-tab-target="drivers">
+                <span class="admin-tab__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M7 17h10l1-4-2-2-2-4h-4l-2 4-2 2 1 4Zm5-14a2.5 2.5 0 1 1-2.5 2.5A2.5 2.5 0 0 1 12 3Zm-7 16c0-2.21 3.134-4 7-4s7 1.79 7 4v1H5Z" fill="currentColor"/></svg>
+                </span>
+                <span>Gerenciar Motoristas</span>
+              </button>
+              <button class="admin-tab" type="button" data-tab-target="yards">
+                <span class="admin-tab__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M12 22s7-6.033 7-12a7 7 0 1 0-14 0c0 5.967 7 12 7 12Zm0-9a3 3 0 1 1 3-3 3 3 0 0 1-3 3Z" fill="currentColor"/></svg>
+                </span>
+                <span>Localização do Pátio</span>
+              </button>
+              <button class="admin-tab" type="button" data-tab-target="trackings">
+                <span class="admin-tab__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M7 18a2 2 0 1 0 2 2 2 2 0 0 0-2-2Zm10 0a2 2 0 1 0 2 2 2 2 0 0 0-2-2ZM3 4h3l2.4 9.59A2 2 0 0 0 10.34 15H18a2 2 0 0 0 1.94-1.5L21 8H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <span>Rastreios</span>
+              </button>
+            </nav>
 
-        <section class="admin-tabs">
-          <div class="admin-tabs__nav">
-            <button class="admin-tab is-active" type="button" data-tab-target="overview">Visao Geral</button>
-            <button class="admin-tab" type="button" data-tab-target="clients">Clientes</button>
-            <button class="admin-tab" type="button" data-tab-target="vehicles">Veiculos</button>
-            <button class="admin-tab" type="button" data-tab-target="drivers">Motoristas</button>
-            <button class="admin-tab" type="button" data-tab-target="yards">Patios</button>
-            <button class="admin-tab" type="button" data-tab-target="trackings">Rastreios</button>
-          </div>
+            <button class="admin-sidebar__logout" type="button" id="adminLogoutButton">Sair</button>
+          </aside>
 
-          <div class="admin-tab-panel is-active" data-tab-panel="overview">
-            <section class="admin-grid">
-              <article class="admin-card">
-                <div class="admin-card__head">
-                  <div>
-                    <span class="admin-eyebrow">Resumo</span>
-                    <h2>Ultimos clientes</h2>
-                  </div>
-                </div>
-                <div class="admin-list" id="overviewUsers"></div>
-              </article>
-
-              <article class="admin-card">
-                <div class="admin-card__head">
-                  <div>
-                    <span class="admin-eyebrow">Resumo</span>
-                    <h2>Ultimos veiculos</h2>
-                  </div>
-                </div>
-                <div class="admin-list" id="overviewCatalog"></div>
-              </article>
-
-              <article class="admin-card">
-                <div class="admin-card__head">
-                  <div>
-                    <span class="admin-eyebrow">Resumo</span>
-                    <h2>Ultimos motoristas</h2>
-                  </div>
-                </div>
-                <div class="admin-list" id="overviewDrivers"></div>
-              </article>
-
-              <article class="admin-card">
-                <div class="admin-card__head">
-                  <div>
-                    <span class="admin-eyebrow">Resumo</span>
-                    <h2>Ultimos rastreios</h2>
-                  </div>
-                </div>
-                <div class="admin-list" id="overviewTrackings"></div>
-              </article>
-            </section>
-          </div>
-
-          <div class="admin-tab-panel" data-tab-panel="clients">
-            <article class="admin-card admin-card--wide">
-              <div class="admin-card__head">
-                <div>
-                  <span class="admin-eyebrow">Usuarios</span>
-                  <h2>Clientes cadastrados</h2>
-                </div>
+          <div class="admin-content">
+            <header class="admin-topbar">
+              <div>
+                <h1>Painel de Controle</h1>
               </div>
-              <div class="admin-table-wrap">
-                <table class="admin-table" id="usersTable">
-                  <thead>
-                    <tr>
-                      <th>Nome</th>
-                      <th>E-mail</th>
-                      <th>WhatsApp</th>
-                      <th>Cidade</th>
-                      <th>Perfil</th>
-                    </tr>
-                  </thead>
-                  <tbody></tbody>
-                </table>
-              </div>
-            </article>
-          </div>
+            </header>
 
-          <div class="admin-tab-panel" data-tab-panel="vehicles">
-            <section class="admin-grid">
-              <article class="admin-card admin-card--wide">
+            <div class="admin-tab-panel is-active" data-tab-panel="overview">
+              <article class="admin-card admin-card--welcome">
                 <div class="admin-card__head">
                   <div>
-                    <span class="admin-eyebrow">Cadastro</span>
-                    <h2>Veiculos, Maquinas e Catalogo</h2>
+                    <h2>Bem-vindo!</h2>
+                    <p>Selecione uma das opções no menu à esquerda para começar.</p>
                   </div>
                 </div>
-                <form class="admin-form admin-form--grid" id="catalogForm">
-                  <input type="hidden" name="id" />
-                  <label>
-                    <span>Titulo</span>
-                    <input type="text" name="title" required />
-                  </label>
-                  <label>
-                    <span>Slug</span>
-                    <input type="text" name="slug" placeholder="trator-john-deere-6100j" required />
-                  </label>
-                  <label>
-                    <span>Categoria</span>
-                    <input type="text" name="category" placeholder="Tratores" required />
-                  </label>
-                  <label>
-                    <span>Preco</span>
-                    <input type="number" name="price" step="0.01" required />
-                  </label>
-                  <label>
-                    <span>Local</span>
-                    <input type="text" name="location" />
-                  </label>
-                  <label>
-                    <span>Ano / referencia</span>
-                    <input type="text" name="yearLabel" />
-                  </label>
-                  <label>
-                    <span>WhatsApp</span>
-                    <input type="text" name="whatsapp" />
-                  </label>
-                  <label>
-                    <span>Selo</span>
-                    <input type="text" name="badge" placeholder="Carros / Maquinas" />
-                  </label>
-                  <label>
-                    <span>Qtd. galeria</span>
-                    <input type="number" name="galleryCount" min="1" value="1" />
-                  </label>
-                  <fieldset class="admin-checkboxes">
-                    <legend>Secoes</legend>
-                    <label><input type="checkbox" name="sections" value="destaques" /> Maquinas em destaque</label>
-                    <label><input type="checkbox" name="sections" value="relacionados" /> Produtos relacionados</label>
-                    <label><input type="checkbox" name="sections" value="catalogo" checked /> Catalogo</label>
-                  </fieldset>
-                  <label class="admin-form__full">
-                    <span>Fotos do computador</span>
-                    <input type="file" id="catalogImagesInput" accept="image/*" multiple />
-                  </label>
-                  <div class="admin-form__full">
-                    <div class="admin-upload-note">
-                      As fotos sao comprimidas antes do envio para deixar o painel mais leve.
+              </article>
+
+              <section class="admin-grid admin-grid--stats" id="adminStats"></section>
+
+              <section class="admin-grid">
+                <article class="admin-card">
+                  <div class="admin-card__head">
+                    <div>
+                      <span class="admin-eyebrow">Resumo</span>
+                      <h2>Últimos clientes</h2>
                     </div>
-                    <div class="admin-gallery-preview" id="catalogImagePreview"></div>
                   </div>
-                  <label class="admin-form__full">
-                    <span>Descricao</span>
-                    <textarea name="description" rows="4"></textarea>
-                  </label>
-                  <div class="admin-form__full admin-form__actions">
-                    <button class="button button-primary" type="submit" id="catalogSubmitButton">Salvar veiculo</button>
-                    <button class="button button-secondary hidden" type="button" id="catalogCancelButton">Cancelar edicao</button>
-                    <p class="admin-status" id="catalogStatus"></p>
-                  </div>
-                </form>
-              </article>
+                  <div class="admin-list" id="overviewUsers"></div>
+                </article>
 
+                <article class="admin-card">
+                  <div class="admin-card__head">
+                    <div>
+                      <span class="admin-eyebrow">Resumo</span>
+                      <h2>Últimos veículos</h2>
+                    </div>
+                  </div>
+                  <div class="admin-list" id="overviewCatalog"></div>
+                </article>
+
+                <article class="admin-card">
+                  <div class="admin-card__head">
+                    <div>
+                      <span class="admin-eyebrow">Resumo</span>
+                      <h2>Últimos motoristas</h2>
+                    </div>
+                  </div>
+                  <div class="admin-list" id="overviewDrivers"></div>
+                </article>
+
+                <article class="admin-card">
+                  <div class="admin-card__head">
+                    <div>
+                      <span class="admin-eyebrow">Resumo</span>
+                      <h2>Últimos rastreios</h2>
+                    </div>
+                  </div>
+                  <div class="admin-list" id="overviewTrackings"></div>
+                </article>
+              </section>
+            </div>
+
+            <div class="admin-tab-panel" data-tab-panel="clients">
               <article class="admin-card admin-card--wide">
                 <div class="admin-card__head">
                   <div>
-                    <span class="admin-eyebrow">Catalogo</span>
-                    <h2>Itens cadastrados</h2>
+                    <span class="admin-eyebrow">Usuários</span>
+                    <h2>Clientes cadastrados</h2>
                   </div>
                 </div>
-                <div class="admin-catalog-list" id="catalogCards"></div>
+                <div class="admin-table-wrap">
+                  <table class="admin-table" id="usersTable">
+                    <thead>
+                      <tr>
+                        <th>Nome</th>
+                        <th>E-mail</th>
+                        <th>WhatsApp</th>
+                        <th>Cidade</th>
+                        <th>Perfil</th>
+                      </tr>
+                    </thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
               </article>
-            </section>
-          </div>
+            </div>
 
-          <div class="admin-tab-panel" data-tab-panel="drivers">
-            <section class="admin-grid">
-              <article class="admin-card">
-                <div class="admin-card__head">
-                  <div>
-                    <span class="admin-eyebrow">Cadastro</span>
-                    <h2>Motoristas</h2>
+            <div class="admin-tab-panel" data-tab-panel="vehicles">
+              <section class="admin-grid">
+                <article class="admin-card admin-card--wide">
+                  <div class="admin-card__head">
+                    <div>
+                      <span class="admin-eyebrow">Cadastro</span>
+                      <h2>Veículos, Máquinas e Catálogo</h2>
+                    </div>
                   </div>
-                </div>
-                <form class="admin-form" id="driverForm">
-                  <label><span>Nome completo</span><input type="text" name="fullName" required /></label>
-                  <label><span>CPF</span><input type="text" name="cpf" /></label>
-                  <label><span>CNH</span><input type="text" name="cnh" /></label>
-                  <label><span>Telefone</span><input type="text" name="phone" /></label>
-                  <label><span>E-mail</span><input type="email" name="email" /></label>
-                  <label><span>Status</span><input type="text" name="status" value="ativo" /></label>
-                  <label><span>Observacoes</span><textarea name="notes" rows="3"></textarea></label>
-                  <button class="button button-primary" type="submit">Salvar motorista</button>
-                  <p class="admin-status" id="driverStatus"></p>
-                </form>
-              </article>
+                  <form class="admin-form admin-form--grid" id="catalogForm">
+                    <input type="hidden" name="id" />
+                    <label>
+                      <span>Título</span>
+                      <input type="text" name="title" required />
+                    </label>
+                    <label>
+                      <span>Slug</span>
+                      <input type="text" name="slug" placeholder="trator-john-deere-6100j" required />
+                    </label>
+                    <label>
+                      <span>Categoria</span>
+                      <input type="text" name="category" placeholder="Tratores" required />
+                    </label>
+                    <label>
+                      <span>Preço</span>
+                      <input type="number" name="price" step="0.01" required />
+                    </label>
+                    <label>
+                      <span>Local</span>
+                      <input type="text" name="location" />
+                    </label>
+                    <label>
+                      <span>Ano / referência</span>
+                      <input type="text" name="yearLabel" />
+                    </label>
+                    <label>
+                      <span>WhatsApp</span>
+                      <input type="text" name="whatsapp" />
+                    </label>
+                    <label>
+                      <span>Selo</span>
+                      <input type="text" name="badge" placeholder="Carros / Máquinas" />
+                    </label>
+                    <label>
+                      <span>Qtd. da galeria</span>
+                      <input type="number" name="galleryCount" min="1" value="1" />
+                    </label>
+                    <fieldset class="admin-checkboxes">
+                      <legend>Seções</legend>
+                      <label><input type="checkbox" name="sections" value="destaques" /> Máquinas em destaque</label>
+                      <label><input type="checkbox" name="sections" value="relacionados" /> Produtos relacionados</label>
+                      <label><input type="checkbox" name="sections" value="catalogo" checked /> Catálogo</label>
+                    </fieldset>
+                    <label class="admin-form__full">
+                      <span>Fotos do computador</span>
+                      <input type="file" id="catalogImagesInput" accept="image/*" multiple />
+                    </label>
+                    <div class="admin-form__full">
+                      <div class="admin-upload-note">
+                        As fotos são comprimidas antes do envio para deixar o painel mais leve.
+                      </div>
+                      <div class="admin-gallery-preview" id="catalogImagePreview"></div>
+                    </div>
+                    <label class="admin-form__full">
+                      <span>Descrição</span>
+                      <textarea name="description" rows="4"></textarea>
+                    </label>
+                    <div class="admin-form__full admin-form__actions">
+                      <button class="button button-primary" type="submit" id="catalogSubmitButton">Salvar veículo</button>
+                      <button class="button button-secondary hidden" type="button" id="catalogCancelButton">Cancelar edição</button>
+                      <p class="admin-status" id="catalogStatus"></p>
+                    </div>
+                  </form>
+                </article>
 
-              <article class="admin-card">
-                <div class="admin-card__head">
-                  <div>
-                    <span class="admin-eyebrow">Lista</span>
-                    <h2>Motoristas cadastrados</h2>
+                <article class="admin-card admin-card--wide">
+                  <div class="admin-card__head">
+                    <div>
+                      <span class="admin-eyebrow">Catálogo</span>
+                      <h2>Itens cadastrados</h2>
+                    </div>
                   </div>
-                </div>
-                <div class="admin-list" id="driversList"></div>
-              </article>
-            </section>
-          </div>
+                  <div class="admin-catalog-list" id="catalogCards"></div>
+                </article>
+              </section>
+            </div>
 
-          <div class="admin-tab-panel" data-tab-panel="yards">
-            <section class="admin-grid">
-              <article class="admin-card">
-                <div class="admin-card__head">
-                  <div>
-                    <span class="admin-eyebrow">Cadastro</span>
-                    <h2>Patios</h2>
+            <div class="admin-tab-panel" data-tab-panel="drivers">
+              <section class="admin-grid">
+                <article class="admin-card">
+                  <div class="admin-card__head">
+                    <div>
+                      <span class="admin-eyebrow">Cadastro</span>
+                      <h2>Motoristas</h2>
+                    </div>
                   </div>
-                </div>
-                <form class="admin-form" id="yardForm">
-                  <label><span>Nome do patio</span><input type="text" name="name" required /></label>
-                  <label><span>Cidade</span><input type="text" name="city" /></label>
-                  <label><span>Estado</span><input type="text" name="state" /></label>
-                  <label><span>Endereco</span><input type="text" name="address" /></label>
-                  <label><span>Responsavel</span><input type="text" name="contactName" /></label>
-                  <label><span>Telefone</span><input type="text" name="contactPhone" /></label>
-                  <label><span>Capacidade</span><input type="text" name="capacityInfo" /></label>
-                  <label><span>Observacoes</span><textarea name="notes" rows="3"></textarea></label>
-                  <button class="button button-primary" type="submit">Salvar patio</button>
-                  <p class="admin-status" id="yardStatus"></p>
-                </form>
-              </article>
+                  <form class="admin-form" id="driverForm">
+                    <label><span>Nome completo</span><input type="text" name="fullName" required /></label>
+                    <label><span>CPF</span><input type="text" name="cpf" /></label>
+                    <label><span>CNH</span><input type="text" name="cnh" /></label>
+                    <label><span>Telefone</span><input type="text" name="phone" /></label>
+                    <label><span>E-mail</span><input type="email" name="email" /></label>
+                    <label><span>Status</span><input type="text" name="status" value="ativo" /></label>
+                    <label><span>Observações</span><textarea name="notes" rows="3"></textarea></label>
+                    <button class="button button-primary" type="submit">Salvar motorista</button>
+                    <p class="admin-status" id="driverStatus"></p>
+                  </form>
+                </article>
 
-              <article class="admin-card">
-                <div class="admin-card__head">
-                  <div>
-                    <span class="admin-eyebrow">Lista</span>
-                    <h2>Patios cadastrados</h2>
+                <article class="admin-card">
+                  <div class="admin-card__head">
+                    <div>
+                      <span class="admin-eyebrow">Lista</span>
+                      <h2>Motoristas cadastrados</h2>
+                    </div>
                   </div>
-                </div>
-                <div class="admin-list" id="yardsList"></div>
-              </article>
-            </section>
-          </div>
+                  <div class="admin-list" id="driversList"></div>
+                </article>
+              </section>
+            </div>
 
-          <div class="admin-tab-panel" data-tab-panel="trackings">
-            <section class="admin-grid">
-              <article class="admin-card admin-card--wide">
-                <div class="admin-card__head">
-                  <div>
-                    <span class="admin-eyebrow">Cadastro</span>
-                    <h2>Rastreio de Clientes</h2>
+            <div class="admin-tab-panel" data-tab-panel="yards">
+              <section class="admin-grid">
+                <article class="admin-card">
+                  <div class="admin-card__head">
+                    <div>
+                      <span class="admin-eyebrow">Cadastro</span>
+                      <h2>Pátios</h2>
+                    </div>
                   </div>
-                </div>
-                <form class="admin-form admin-form--grid" id="trackingForm">
-                  <label>
-                    <span>ID do cliente cadastrado</span>
-                    <input type="text" name="clientUserId" placeholder="Opcional" />
-                  </label>
-                  <label>
-                    <span>Nome do cliente</span>
-                    <input type="text" name="clientName" required />
-                  </label>
-                  <label>
-                    <span>E-mail do cliente</span>
-                    <input type="email" name="clientEmail" />
-                  </label>
-                  <label>
-                    <span>ID do item</span>
-                    <input type="text" name="catalogItemId" placeholder="Opcional" />
-                  </label>
-                  <label>
-                    <span>Nome do item</span>
-                    <input type="text" name="itemName" required />
-                  </label>
-                  <label>
-                    <span>ID do motorista</span>
-                    <input type="text" name="driverId" placeholder="Opcional" />
-                  </label>
-                  <label>
-                    <span>ID do patio</span>
-                    <input type="text" name="yardId" placeholder="Opcional" />
-                  </label>
-                  <label>
-                    <span>Codigo de rastreio</span>
-                    <input type="text" name="trackingCode" required />
-                  </label>
-                  <label>
-                    <span>Status</span>
-                    <input type="text" name="status" value="em separacao" />
-                  </label>
-                  <label>
-                    <span>Local atual</span>
-                    <input type="text" name="currentLocation" />
-                  </label>
-                  <label>
-                    <span>Previsao de entrega</span>
-                    <input type="date" name="expectedDeliveryDate" />
-                  </label>
-                  <label class="admin-form__full">
-                    <span>Observacoes</span>
-                    <textarea name="notes" rows="4"></textarea>
-                  </label>
-                  <div class="admin-form__full admin-form__actions">
-                    <button class="button button-primary" type="submit">Salvar rastreio</button>
-                    <p class="admin-status" id="trackingStatus"></p>
-                  </div>
-                </form>
-              </article>
+                  <form class="admin-form" id="yardForm">
+                    <label><span>Nome do pátio</span><input type="text" name="name" required /></label>
+                    <label><span>Cidade</span><input type="text" name="city" /></label>
+                    <label><span>Estado</span><input type="text" name="state" /></label>
+                    <label><span>Endereço</span><input type="text" name="address" /></label>
+                    <label><span>Responsável</span><input type="text" name="contactName" /></label>
+                    <label><span>Telefone</span><input type="text" name="contactPhone" /></label>
+                    <label><span>Capacidade</span><input type="text" name="capacityInfo" /></label>
+                    <label><span>Observações</span><textarea name="notes" rows="3"></textarea></label>
+                    <button class="button button-primary" type="submit">Salvar pátio</button>
+                    <p class="admin-status" id="yardStatus"></p>
+                  </form>
+                </article>
 
-              <article class="admin-card admin-card--wide">
-                <div class="admin-card__head">
-                  <div>
-                    <span class="admin-eyebrow">Lista</span>
-                    <h2>Movimentacoes de rastreio</h2>
+                <article class="admin-card">
+                  <div class="admin-card__head">
+                    <div>
+                      <span class="admin-eyebrow">Lista</span>
+                      <h2>Pátios cadastrados</h2>
+                    </div>
                   </div>
-                </div>
-                <div class="admin-list admin-list--tracking" id="trackingsList"></div>
-              </article>
-            </section>
+                  <div class="admin-list" id="yardsList"></div>
+                </article>
+              </section>
+            </div>
+
+            <div class="admin-tab-panel" data-tab-panel="trackings">
+              <section class="admin-grid">
+                <article class="admin-card admin-card--wide">
+                  <div class="admin-card__head">
+                    <div>
+                      <span class="admin-eyebrow">Cadastro</span>
+                      <h2>Rastreio de Clientes</h2>
+                    </div>
+                  </div>
+                  <form class="admin-form admin-form--grid" id="trackingForm">
+                    <label>
+                      <span>ID do cliente cadastrado</span>
+                      <input type="text" name="clientUserId" placeholder="Opcional" />
+                    </label>
+                    <label>
+                      <span>Nome do cliente</span>
+                      <input type="text" name="clientName" required />
+                    </label>
+                    <label>
+                      <span>E-mail do cliente</span>
+                      <input type="email" name="clientEmail" />
+                    </label>
+                    <label>
+                      <span>ID do item</span>
+                      <input type="text" name="catalogItemId" placeholder="Opcional" />
+                    </label>
+                    <label>
+                      <span>Nome do item</span>
+                      <input type="text" name="itemName" required />
+                    </label>
+                    <label>
+                      <span>ID do motorista</span>
+                      <input type="text" name="driverId" placeholder="Opcional" />
+                    </label>
+                    <label>
+                      <span>ID do pátio</span>
+                      <input type="text" name="yardId" placeholder="Opcional" />
+                    </label>
+                    <label>
+                      <span>Código de rastreio</span>
+                      <input type="text" name="trackingCode" required />
+                    </label>
+                    <label>
+                      <span>Status</span>
+                      <input type="text" name="status" value="em separação" />
+                    </label>
+                    <label>
+                      <span>Local atual</span>
+                      <input type="text" name="currentLocation" />
+                    </label>
+                    <label>
+                      <span>Previsão de entrega</span>
+                      <input type="date" name="expectedDeliveryDate" />
+                    </label>
+                    <label class="admin-form__full">
+                      <span>Observações</span>
+                      <textarea name="notes" rows="4"></textarea>
+                    </label>
+                    <div class="admin-form__full admin-form__actions">
+                      <button class="button button-primary" type="submit">Salvar rastreio</button>
+                      <p class="admin-status" id="trackingStatus"></p>
+                    </div>
+                  </form>
+                </article>
+
+                <article class="admin-card admin-card--wide">
+                  <div class="admin-card__head">
+                    <div>
+                      <span class="admin-eyebrow">Lista</span>
+                      <h2>Movimentações de rastreio</h2>
+                    </div>
+                  </div>
+                  <div class="admin-list admin-list--tracking" id="trackingsList"></div>
+                </article>
+              </section>
+            </div>
           </div>
         </section>
       </section>
@@ -428,7 +472,7 @@
         catalogForm.elements.id.value = "";
         selectedGalleryImages = [];
         catalogImagesInput.value = "";
-        catalogSubmitButton.textContent = "Salvar veiculo";
+        catalogSubmitButton.textContent = "Salvar veículo";
         catalogCancelButton.classList.add("hidden");
         if (!keepStatus) {
           setStatus(catalogStatus, "");
@@ -460,7 +504,7 @@
             ? [item.image_url]
             : [];
 
-        catalogSubmitButton.textContent = "Salvar alteracoes";
+        catalogSubmitButton.textContent = "Salvar alterações";
         catalogCancelButton.classList.remove("hidden");
         renderImagePreview();
         activateTab("vehicles");
@@ -495,7 +539,7 @@
         const data = await response.json().catch(() => ({}));
 
         if (!response.ok) {
-          throw new Error(data.message || "Erro ao processar a solicitacao.");
+          throw new Error(data.message || "Erro ao processar a solicitação.");
         }
 
         return data;
@@ -510,9 +554,9 @@
       const renderStats = (data) => {
         const stats = [
           ["Clientes cadastrados", data.users.length],
-          ["Itens no catalogo", data.catalogItems.length],
+          ["Itens no catálogo", data.catalogItems.length],
           ["Motoristas", data.drivers.length],
-          ["Patios", data.yards.length],
+          ["Pátios", data.yards.length],
           ["Rastreios", data.trackings.length]
         ];
 
@@ -624,7 +668,7 @@
                   resetCatalogForm();
                 }
 
-                setStatus(catalogStatus, "Item excluido com sucesso.");
+                setStatus(catalogStatus, "Item excluído com sucesso.");
                 await loadDashboard();
               } catch (error) {
                 setStatus(catalogStatus, error.message, true);
@@ -739,10 +783,10 @@
               context.drawImage(image, 0, 0, canvas.width, canvas.height);
               resolve(canvas.toDataURL("image/jpeg", 0.78));
             };
-            image.onerror = () => reject(new Error("Nao foi possivel ler a imagem."));
+            image.onerror = () => reject(new Error("Não foi possível ler a imagem."));
             image.src = reader.result;
           };
-          reader.onerror = () => reject(new Error("Nao foi possivel ler o arquivo."));
+          reader.onerror = () => reject(new Error("Não foi possível ler o arquivo."));
           reader.readAsDataURL(file);
         });
 
@@ -802,7 +846,7 @@
           const data = await response.json();
 
           if (!response.ok) {
-            throw new Error(data.message || "Nao foi possivel entrar no painel.");
+            throw new Error(data.message || "Não foi possível entrar no painel.");
           }
 
           setAuth(data);
@@ -881,8 +925,8 @@
           });
 
           const successMessage = editingCatalogId
-            ? "Veiculo atualizado com sucesso."
-            : "Veiculo salvo com sucesso.";
+            ? "Veículo atualizado com sucesso."
+            : "Veículo salvo com sucesso.";
           resetCatalogForm({ keepStatus: true });
           setStatus(catalogStatus, successMessage);
           await loadDashboard();

@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Agro Maquinas Ipiranga | Login</title>
+    <title>Agro Máquinas Ipiranga | Login</title>
     <meta
       name="description"
-      content="Acesse sua conta na Agro Maquinas Ipiranga."
+      content="Acesse sua conta na Agro Máquinas Ipiranga."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -19,14 +19,14 @@
   <body class="login-page">
     <header class="site-header">
       <div class="container header-inner">
-        <a class="brand" href="./index.html" aria-label="Agro Maquinas Ipiranga">
-          <img class="brand-logo" src="./logo.png" alt="Agro Maquinas Ipiranga" />
+        <a class="brand" href="./index.html" aria-label="Agro Máquinas Ipiranga">
+          <img class="brand-logo" src="./logo.png" alt="Agro Máquinas Ipiranga" />
         </a>
 
-        <nav class="desktop-nav" aria-label="Navegacao principal">
-          <a href="./index.html">Inicio</a>
-          <a href="./catalogo.html">Catalogo</a>
-          <a href="./sobre.html">Sobre Nos</a>
+        <nav class="desktop-nav" aria-label="Navegação principal">
+          <a href="./index.html">Início</a>
+          <a href="./catalogo.html">Catálogo</a>
+          <a href="./sobre.html">Sobre Nós</a>
         </nav>
 
         <div class="header-actions">
@@ -75,7 +75,7 @@
                 <div><span>E-mail</span><strong id="summary-email">-</strong></div>
                 <div><span>WhatsApp</span><strong id="summary-whatsapp">-</strong></div>
                 <div><span>CPF</span><strong id="summary-cpf">-</strong></div>
-                <div><span>Endereco</span><strong id="summary-address">-</strong></div>
+                <div><span>Endereço</span><strong id="summary-address">-</strong></div>
               </div>
             </div>
           </div>
@@ -87,9 +87,9 @@
       <div class="container footer-grid">
         <div>
           <div class="footer-brand">
-            <img class="footer-logo" src="./logo.png" alt="Agro Maquinas Ipiranga" />
+            <img class="footer-logo" src="./logo.png" alt="Agro Máquinas Ipiranga" />
           </div>
-          <p>Sua plataforma segura para negociacao de tratores e maquinas agricolas do Brasil.</p>
+          <p>Sua plataforma segura para negociação de tratores e máquinas agrícolas do Brasil.</p>
           <div class="social-row">
             <a href="https://www.facebook.com/" aria-label="Facebook">FB</a>
             <a href="https://www.instagram.com/" aria-label="Instagram">IG</a>
@@ -110,9 +110,9 @@
         <div>
           <h3>Institucional</h3>
           <ul>
-            <li><a href="./sobre.html">Sobre Nos</a></li>
+            <li><a href="./sobre.html">Sobre Nós</a></li>
             <li><a href="./catalogo.html">Como funciona</a></li>
-            <li><a href="./catalogo.html">Politica de privacidade</a></li>
+            <li><a href="./catalogo.html">Política de privacidade</a></li>
             <li><a href="./catalogo.html">Termos de uso</a></li>
           </ul>
         </div>
@@ -122,7 +122,7 @@
           <ul class="contact-list">
             <li>(12) 99737-1569</li>
             <li>contato@agromaquinas.com.br</li>
-            <li>Rod. Pres. Dutra, km 134 - Eugenio de Melo, Sao Jose dos Campos - SP, 12247-004</li>
+            <li>Rod. Pres. Dutra, km 134 - Eugênio de Melo, São José dos Campos - SP, 12247-004</li>
             <li>CNPJ: 63.448.160/0001-18</li>
           </ul>
         </div>
@@ -130,15 +130,15 @@
 
       <div class="container footer-bottom">
         <p>2026 Agro. Todos os direitos reservados.</p>
-        <p>CNPJ: 63.448.160/0001-18 | Rod. Pres. Dutra, km 134 - Eugenio de Melo, Sao Jose dos Campos - SP, 12247-004</p>
+        <p>CNPJ: 63.448.160/0001-18 | Rod. Pres. Dutra, km 134 - Eugênio de Melo, São José dos Campos - SP, 12247-004</p>
       </div>
     </footer>
 
     <a class="floating-whatsapp" href="https://wa.me/5512997371569" aria-label="Falar no WhatsApp">WA</a>
 
-    <nav class="mobile-nav" aria-label="Navegacao mobile">
-      <a class="mobile-nav-item" href="./index.html">Inicio</a>
-      <a class="mobile-nav-item" href="./catalogo.html">Catalogo</a>
+    <nav class="mobile-nav" aria-label="Navegação mobile">
+      <a class="mobile-nav-item" href="./index.html">Início</a>
+      <a class="mobile-nav-item" href="./catalogo.html">Catálogo</a>
       <a class="mobile-nav-item" href="./sobre.html">Sobre</a>
       <a class="mobile-nav-item" href="./catalogo.html">Ofertas</a>
       <a class="mobile-nav-item active" href="./login.html">Perfil</a>
@@ -181,7 +181,7 @@
 
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.get("registered") === "1") {
-        loginStatus.textContent = "Cadastro realizado com sucesso. Agora faca seu login.";
+        loginStatus.textContent = "Cadastro realizado com sucesso. Agora faça seu login.";
       }
 
       const refreshSession = async () => {
@@ -270,7 +270,7 @@
           .then(async (response) => {
             const data = await response.json();
             if (!response.ok) {
-              throw new Error(data.message || "Dados de acesso invalidos.");
+              throw new Error(data.message || "Dados de acesso inválidos.");
             }
 
             localStorage.setItem(ACCESS_TOKEN_KEY, data.accessToken);
