@@ -16,6 +16,10 @@
       "destination": "/api/admin?action=:action"
     },
     {
+      "source": "/api/customer/:action",
+      "destination": "/api/customer?action=:action"
+    },
+    {
       "source": "/api/catalog/items",
       "destination": "/catalog-api-items"
     },
