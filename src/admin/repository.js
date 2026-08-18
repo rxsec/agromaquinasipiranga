@@ -177,10 +177,10 @@ export const ensureDefaultCatalogItems = async () => {
             item.location,
             item.yearLabel,
             item.imageUrl,
-            JSON.stringify([item.imageUrl]),
+            JSON.stringify(Array.isArray(item.galleryImages) && item.galleryImages.length ? item.galleryImages : [item.imageUrl]),
             item.whatsapp || "5512997371569",
             item.badge || item.category,
-            1,
+            item.galleryCount || (Array.isArray(item.galleryImages) && item.galleryImages.length ? item.galleryImages.length : 1),
             item.description
           ]
         );
