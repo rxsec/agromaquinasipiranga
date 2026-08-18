@@ -165,6 +165,7 @@
                     <span class="admin-eyebrow">Usuários</span>
                     <h2>Clientes cadastrados</h2>
                   </div>
+                  <button class="button button-primary" type="button" id="clientOpenCreateButton">Cadastrar cliente</button>
                 </div>
                 <div class="admin-table-wrap">
                   <table class="admin-table" id="usersTable">
@@ -204,33 +205,17 @@
 
             <div class="admin-tab-panel" data-tab-panel="drivers">
               <section class="admin-grid">
-                <article class="admin-card">
+                <article class="admin-card admin-card--wide">
                   <div class="admin-card__head">
                     <div>
                       <span class="admin-eyebrow">Cadastro</span>
                       <h2>Motoristas</h2>
                     </div>
+                    <button class="button button-primary" type="button" id="driverOpenCreateButton">Cadastrar motorista</button>
                   </div>
-                  <form class="admin-form" id="driverForm">
-                    <label><span>Nome completo</span><input type="text" name="fullName" required /></label>
-                    <label><span>CPF</span><input type="text" name="cpf" /></label>
-                    <label><span>CNH</span><input type="text" name="cnh" /></label>
-                    <label><span>Telefone</span><input type="text" name="phone" /></label>
-                    <label><span>E-mail</span><input type="email" name="email" /></label>
-                    <label><span>Status</span><input type="text" name="status" value="ativo" /></label>
-                    <label><span>Observações</span><textarea name="notes" rows="3"></textarea></label>
-                    <button class="button button-primary" type="submit">Salvar motorista</button>
-                    <p class="admin-status" id="driverStatus"></p>
-                  </form>
-                </article>
-
-                <article class="admin-card">
-                  <div class="admin-card__head">
-                    <div>
-                      <span class="admin-eyebrow">Lista</span>
-                      <h2>Motoristas cadastrados</h2>
-                    </div>
-                  </div>
+                  <p class="admin-panel-copy">
+                    Cadastre motoristas com endereço comercial, habilitação, status e foto real.
+                  </p>
                   <div class="admin-list" id="driversList"></div>
                 </article>
               </section>
@@ -282,32 +267,20 @@
                   </div>
                   <form class="admin-form admin-form--grid" id="trackingForm">
                     <label>
-                      <span>ID do cliente cadastrado</span>
-                      <input type="text" name="clientUserId" placeholder="Opcional" />
+                      <span>Cliente cadastrado</span>
+                      <select name="clientUserId" id="trackingClientSelect" required></select>
                     </label>
                     <label>
-                      <span>Nome do cliente</span>
-                      <input type="text" name="clientName" required />
+                      <span>Veículo cadastrado</span>
+                      <select name="catalogItemId" id="trackingCatalogSelect" required></select>
                     </label>
                     <label>
-                      <span>E-mail do cliente</span>
-                      <input type="email" name="clientEmail" />
+                      <span>Motorista cadastrado</span>
+                      <select name="driverId" id="trackingDriverSelect"></select>
                     </label>
                     <label>
-                      <span>ID do item</span>
-                      <input type="text" name="catalogItemId" placeholder="Opcional" />
-                    </label>
-                    <label>
-                      <span>Nome do item</span>
-                      <input type="text" name="itemName" required />
-                    </label>
-                    <label>
-                      <span>ID do motorista</span>
-                      <input type="text" name="driverId" placeholder="Opcional" />
-                    </label>
-                    <label>
-                      <span>ID do pátio</span>
-                      <input type="text" name="yardId" placeholder="Opcional" />
+                      <span>Pátio cadastrado</span>
+                      <select name="yardId" id="trackingYardSelect"></select>
                     </label>
                     <label>
                       <span>Código de rastreio</span>
@@ -315,7 +288,17 @@
                     </label>
                     <label>
                       <span>Status</span>
-                      <input type="text" name="status" value="em separação" />
+                      <select name="status">
+                        <option value="Aguardando nota fiscal">Aguardando nota fiscal</option>
+                        <option value="Em separação">Em separação</option>
+                        <option value="Em andamento">Em andamento</option>
+                        <option value="Em rota de entrega">Em rota de entrega</option>
+                        <option value="Entregue">Entregue</option>
+                      </select>
+                    </label>
+                    <label>
+                      <span>Alerta</span>
+                      <input type="text" name="alertMessage" value="Aguardando nota fiscal" />
                     </label>
                     <label>
                       <span>Local atual</span>
@@ -325,6 +308,9 @@
                       <span>Previsão de entrega</span>
                       <input type="date" name="expectedDeliveryDate" />
                     </label>
+                    <div class="admin-form__full admin-select-note">
+                      O painel usa os cadastros já existentes do site para alimentar o que aparece em `/rastreio`.
+                    </div>
                     <label class="admin-form__full">
                       <span>Observações</span>
                       <textarea name="notes" rows="4"></textarea>
@@ -430,6 +416,79 @@
       </div>
     </div>
 
+    <div class="admin-modal hidden" id="clientModal">
+      <div class="admin-modal__backdrop" data-close-client-modal></div>
+      <div class="admin-modal__dialog admin-modal__dialog--compact" role="dialog" aria-modal="true" aria-labelledby="clientModalTitle">
+        <div class="admin-modal__head">
+          <div>
+            <span class="admin-eyebrow">Cadastro</span>
+            <h2 id="clientModalTitle">Cadastrar cliente</h2>
+          </div>
+          <button class="admin-modal__close" type="button" data-close-client-modal aria-label="Fechar">×</button>
+        </div>
+
+        <form class="admin-form admin-form--grid" id="clientForm">
+          <label><span>Nome completo</span><input type="text" name="fullName" required /></label>
+          <label><span>E-mail</span><input type="email" name="email" required /></label>
+          <label><span>Telefone WhatsApp</span><input type="text" name="whatsapp" required /></label>
+          <label><span>CPF</span><input type="text" name="cpf" required /></label>
+          <label><span>CEP</span><input type="text" name="cep" required /></label>
+          <label><span>Endereço</span><input type="text" name="address" required /></label>
+          <label><span>Número</span><input type="text" name="number" required /></label>
+          <label><span>Bairro</span><input type="text" name="district" required /></label>
+          <label><span>Complemento</span><input type="text" name="complement" /></label>
+          <label><span>Cidade</span><input type="text" name="city" /></label>
+          <label><span>Estado</span><input type="text" name="state" /></label>
+          <label><span>Senha</span><input type="password" name="password" required /></label>
+          <div class="admin-form__full admin-form__actions">
+            <button class="button button-primary" type="submit">Salvar cliente</button>
+            <p class="admin-status" id="clientStatus"></p>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="admin-modal hidden" id="driverModal">
+      <div class="admin-modal__backdrop" data-close-driver-modal></div>
+      <div class="admin-modal__dialog admin-modal__dialog--compact" role="dialog" aria-modal="true" aria-labelledby="driverModalTitle">
+        <div class="admin-modal__head">
+          <div>
+            <span class="admin-eyebrow">Cadastro</span>
+            <h2 id="driverModalTitle">Cadastrar motorista</h2>
+          </div>
+          <button class="admin-modal__close" type="button" data-close-driver-modal aria-label="Fechar">×</button>
+        </div>
+
+        <form class="admin-form admin-form--grid" id="driverForm">
+          <label><span>Nome completo</span><input type="text" name="fullName" required /></label>
+          <label><span>Telefone</span><input type="text" name="phone" /></label>
+          <label><span>E-mail</span><input type="email" name="email" /></label>
+          <label><span>CPF</span><input type="text" name="cpf" /></label>
+          <label><span>Habilitação</span><input type="text" name="cnh" /></label>
+          <label>
+            <span>Status</span>
+            <select name="status">
+              <option value="Situação regular">Situação regular</option>
+              <option value="Em rota">Em rota</option>
+              <option value="Aguardando liberação">Aguardando liberação</option>
+              <option value="Inativo">Inativo</option>
+            </select>
+          </label>
+          <label class="admin-form__full"><span>Endereço comercial</span><input type="text" name="commercialAddress" /></label>
+          <label><span>Foto do computador</span><input type="file" id="driverPhotoInput" accept="image/*" /></label>
+          <div>
+            <span>Pré-visualização</span>
+            <div class="admin-driver-preview" id="driverPhotoPreview">Sem foto</div>
+          </div>
+          <label class="admin-form__full"><span>Observações</span><textarea name="notes" rows="3"></textarea></label>
+          <div class="admin-form__full admin-form__actions">
+            <button class="button button-primary" type="submit">Salvar motorista</button>
+            <p class="admin-status" id="driverStatus"></p>
+          </div>
+        </form>
+      </div>
+    </div>
+
     <script>
       const storageKey = "agro_admin_auth";
       const loginSection = document.getElementById("adminLogin");
@@ -439,6 +498,7 @@
       const adminLogoutButton = document.getElementById("adminLogoutButton");
       const tabButtons = Array.from(document.querySelectorAll("[data-tab-target]"));
       const tabPanels = Array.from(document.querySelectorAll("[data-tab-panel]"));
+
       const catalogImagesInput = document.getElementById("catalogImagesInput");
       const catalogImagePreview = document.getElementById("catalogImagePreview");
       const catalogForm = document.getElementById("catalogForm");
@@ -449,6 +509,27 @@
       const catalogModal = document.getElementById("catalogModal");
       const catalogModalTitle = document.getElementById("catalogModalTitle");
       const catalogModalClosers = Array.from(document.querySelectorAll("[data-close-catalog-modal]"));
+
+      const clientForm = document.getElementById("clientForm");
+      const clientStatus = document.getElementById("clientStatus");
+      const clientModal = document.getElementById("clientModal");
+      const clientOpenCreateButton = document.getElementById("clientOpenCreateButton");
+      const clientModalClosers = Array.from(document.querySelectorAll("[data-close-client-modal]"));
+
+      const driverForm = document.getElementById("driverForm");
+      const driverStatus = document.getElementById("driverStatus");
+      const driverModal = document.getElementById("driverModal");
+      const driverOpenCreateButton = document.getElementById("driverOpenCreateButton");
+      const driverModalClosers = Array.from(document.querySelectorAll("[data-close-driver-modal]"));
+      const driverPhotoInput = document.getElementById("driverPhotoInput");
+      const driverPhotoPreview = document.getElementById("driverPhotoPreview");
+
+      const trackingForm = document.getElementById("trackingForm");
+      const trackingStatus = document.getElementById("trackingStatus");
+      const trackingClientSelect = document.getElementById("trackingClientSelect");
+      const trackingCatalogSelect = document.getElementById("trackingCatalogSelect");
+      const trackingDriverSelect = document.getElementById("trackingDriverSelect");
+      const trackingYardSelect = document.getElementById("trackingYardSelect");
 
       const adminStats = document.getElementById("adminStats");
       const usersTableBody = document.querySelector("#usersTable tbody");
@@ -461,14 +542,22 @@
       const yardsList = document.getElementById("yardsList");
       const trackingsList = document.getElementById("trackingsList");
 
+      let currentAdminData = {
+        users: [],
+        catalogItems: [],
+        drivers: [],
+        yards: [],
+        trackings: []
+      };
       let selectedGalleryImages = [];
       let editingCatalogId = null;
       let draggedImageIndex = null;
+      let driverPhotoBase64 = "";
 
       const getAuth = () => {
         try {
           return JSON.parse(localStorage.getItem(storageKey) || "null");
-        } catch (error) {
+        } catch (_error) {
           return null;
         }
       };
@@ -481,61 +570,44 @@
         element.classList.toggle("is-error", error);
       };
 
-      const resetCatalogForm = ({ keepStatus = false } = {}) => {
-        editingCatalogId = null;
-        catalogForm.reset();
-        catalogForm.elements.id.value = "";
-        selectedGalleryImages = [];
-        catalogImagesInput.value = "";
-        catalogSubmitButton.textContent = "Salvar veículo";
-        catalogCancelButton.classList.add("hidden");
-        catalogModalTitle.textContent = "Cadastrar veículo";
-        if (!keepStatus) {
-          setStatus(catalogStatus, "");
-        }
-        renderImagePreview();
-      };
+      const slugify = (value) =>
+        String(value || "")
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/^-+|-+$/g, "");
 
-      const fillCatalogForm = (item) => {
-        editingCatalogId = item.id;
-        catalogForm.elements.id.value = item.id || "";
-        catalogForm.elements.title.value = item.title || "";
-        catalogForm.elements.slug.value = item.slug || "";
-        catalogForm.elements.category.value = item.category || "";
-        catalogForm.elements.price.value = item.price || "";
-        catalogForm.elements.location.value = item.location || "";
-        catalogForm.elements.yearLabel.value = item.year_label || "";
-        catalogForm.elements.whatsapp.value = item.whatsapp || "";
-        catalogForm.elements.badge.value = item.badge || "";
-        catalogForm.elements.galleryCount.value = item.gallery_count || 1;
-        catalogForm.elements.description.value = item.description || "";
-
-        Array.from(catalogForm.querySelectorAll('input[name="sections"]')).forEach((checkbox) => {
-          checkbox.checked = Array.isArray(item.sections) && item.sections.includes(checkbox.value);
+      const resizeImage = (file) =>
+        new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => {
+            const image = new Image();
+            image.onload = () => {
+              const maxWidth = 1400;
+              const scale = Math.min(1, maxWidth / image.width);
+              const canvas = document.createElement("canvas");
+              canvas.width = Math.round(image.width * scale);
+              canvas.height = Math.round(image.height * scale);
+              const context = canvas.getContext("2d");
+              context.drawImage(image, 0, 0, canvas.width, canvas.height);
+              resolve(canvas.toDataURL("image/jpeg", 0.78));
+            };
+            image.onerror = () => reject(new Error("Não foi possível ler a imagem."));
+            image.src = reader.result;
+          };
+          reader.onerror = () => reject(new Error("Não foi possível ler o arquivo."));
+          reader.readAsDataURL(file);
         });
 
-        selectedGalleryImages = Array.isArray(item.gallery_images)
-          ? [...item.gallery_images]
-          : item.image_url
-            ? [item.image_url]
-            : [];
-
-        catalogSubmitButton.textContent = "Salvar alterações";
-        catalogCancelButton.classList.remove("hidden");
-        catalogModalTitle.textContent = "Editar veículo";
-        renderImagePreview();
-        activateTab("vehicles");
-        openCatalogModal();
+      const showDashboard = () => {
+        loginSection.classList.add("hidden");
+        dashboardSection.classList.remove("hidden");
       };
 
-      const openCatalogModal = () => {
-        catalogModal.classList.remove("hidden");
-        document.body.classList.add("admin-modal-open");
-      };
-
-      const closeCatalogModal = () => {
-        catalogModal.classList.add("hidden");
-        document.body.classList.remove("admin-modal-open");
+      const showLogin = () => {
+        dashboardSection.classList.add("hidden");
+        loginSection.classList.remove("hidden");
       };
 
       const activateTab = (target) => {
@@ -551,19 +623,17 @@
         button.addEventListener("click", () => activateTab(button.dataset.tabTarget));
       });
 
-      catalogOpenCreateButton.addEventListener("click", () => {
-        resetCatalogForm();
-        openCatalogModal();
-      });
+      const openModal = (modal) => {
+        modal.classList.remove("hidden");
+        document.body.classList.add("admin-modal-open");
+      };
 
-      catalogModalClosers.forEach((button) => {
-        button.addEventListener("click", () => {
-          if (!editingCatalogId) {
-            resetCatalogForm();
-          }
-          closeCatalogModal();
-        });
-      });
+      const closeModal = (modal) => {
+        modal.classList.add("hidden");
+        if (!document.querySelector(".admin-modal:not(.hidden)")) {
+          document.body.classList.remove("admin-modal-open");
+        }
+      };
 
       const adminFetch = async (url, options = {}) => {
         const auth = getAuth();
@@ -592,9 +662,38 @@
           : '<div class="admin-empty">Nenhum registro encontrado.</div>';
       };
 
+      const customerUsers = () => currentAdminData.users.filter((user) => (user.role || "customer") !== "admin");
+
+      const renderTrackingSelects = () => {
+        const users = customerUsers();
+
+        trackingClientSelect.innerHTML = users.length
+          ? `<option value="">Selecione um cliente</option>${users
+              .map(
+                (user) =>
+                  `<option value="${user.id}">${user.full_name} • ${user.email || user.cpf || "Sem contato"}</option>`
+              )
+              .join("")}`
+          : '<option value="">Nenhum cliente cadastrado</option>';
+
+        trackingCatalogSelect.innerHTML = currentAdminData.catalogItems.length
+          ? `<option value="">Selecione um veículo</option>${currentAdminData.catalogItems
+              .map((item) => `<option value="${item.id}">${item.title} • ${item.category || "-"}</option>`)
+              .join("")}`
+          : '<option value="">Nenhum veículo cadastrado</option>';
+
+        trackingDriverSelect.innerHTML = `<option value="">Selecione um motorista</option>${currentAdminData.drivers
+          .map((driver) => `<option value="${driver.id}">${driver.full_name} • ${driver.status || "-"}</option>`)
+          .join("")}`;
+
+        trackingYardSelect.innerHTML = `<option value="">Selecione um pátio</option>${currentAdminData.yards
+          .map((yard) => `<option value="${yard.id}">${yard.name} • ${[yard.city, yard.state].filter(Boolean).join(" / ") || "-"}</option>`)
+          .join("")}`;
+      };
+
       const renderStats = (data) => {
         const stats = [
-          ["Clientes cadastrados", data.users.length],
+          ["Clientes cadastrados", customerUsers().length],
           ["Itens no catálogo", data.catalogItems.length],
           ["Motoristas", data.drivers.length],
           ["Pátios", data.yards.length],
@@ -614,7 +713,9 @@
       };
 
       const renderUsers = (users) => {
-        usersTableBody.innerHTML = users
+        const clients = customerUsers();
+
+        usersTableBody.innerHTML = clients
           .map(
             (user) => `
               <tr>
@@ -630,11 +731,11 @@
 
         renderSimpleList(
           overviewUsers,
-          users.slice(0, 5),
+          clients.slice(0, 5),
           (user) => `
             <article class="admin-list-item">
               <strong>${user.full_name}</strong>
-              <span>${user.email}</span>
+              <span>${user.email || user.cpf || "-"}</span>
               <p>${user.whatsapp || "Sem WhatsApp"} • ${[user.city, user.state].filter(Boolean).join(" / ") || "Sem cidade"}</p>
             </article>
           `
@@ -710,7 +811,7 @@
                 }
 
                 setStatus(catalogStatus, "Item excluído com sucesso.");
-                closeCatalogModal();
+                closeModal(catalogModal);
                 await loadDashboard();
               } catch (error) {
                 setStatus(catalogStatus, error.message, true);
@@ -720,15 +821,36 @@
         });
       };
 
+      const driverAvatar = (driver) => {
+        if (driver.photo_url) {
+          return `<img class="admin-list-item__avatar" src="${driver.photo_url}" alt="${driver.full_name}" />`;
+        }
+
+        const initials = String(driver.full_name || "MT")
+          .split(" ")
+          .filter(Boolean)
+          .slice(0, 2)
+          .map((part) => part[0])
+          .join("")
+          .toUpperCase();
+
+        return `<div class="admin-list-item__avatar admin-list-item__avatar--placeholder">${initials}</div>`;
+      };
+
       const renderDrivers = (drivers) => {
         renderSimpleList(
           overviewDrivers,
           drivers.slice(0, 4),
           (driver) => `
             <article class="admin-list-item">
-              <strong>${driver.full_name}</strong>
-              <span>${driver.status || "ativo"}</span>
-              <p>${[driver.phone, driver.email].filter(Boolean).join(" • ") || "Sem contato informado"}</p>
+              <div class="admin-list-item__inline">
+                ${driverAvatar(driver)}
+                <div>
+                  <strong>${driver.full_name}</strong>
+                  <span>${driver.status || "ativo"}</span>
+                  <p>${driver.commercial_address || [driver.phone, driver.email].filter(Boolean).join(" • ") || "Sem contato informado"}</p>
+                </div>
+              </div>
             </article>
           `
         );
@@ -738,9 +860,15 @@
           drivers,
           (driver) => `
             <article class="admin-list-item">
-              <strong>${driver.full_name}</strong>
-              <span>${driver.status || "ativo"}</span>
-              <p>${[driver.phone, driver.email].filter(Boolean).join(" • ") || "Sem contato informado"}</p>
+              <div class="admin-list-item__inline">
+                ${driverAvatar(driver)}
+                <div>
+                  <strong>${driver.full_name}</strong>
+                  <span>${driver.status || "ativo"}</span>
+                  <p>${driver.commercial_address || "Endereço comercial não informado"}</p>
+                  <p>${[driver.cnh, driver.phone, driver.email].filter(Boolean).join(" • ") || "Sem contato informado"}</p>
+                </div>
+              </div>
             </article>
           `
         );
@@ -754,7 +882,7 @@
             <article class="admin-list-item">
               <strong>${yard.name}</strong>
               <span>${[yard.city, yard.state].filter(Boolean).join(" / ") || "Sem local"}</span>
-              <p>${yard.contact_phone || "Sem telefone"}</p>
+              <p>${yard.address || "Sem endereço"} • ${yard.contact_phone || "Sem telefone"}</p>
             </article>
           `
         );
@@ -781,18 +909,22 @@
               <strong>${tracking.tracking_code} • ${tracking.client_name}</strong>
               <span>${tracking.status || "-"}</span>
               <p>${tracking.item_name || "-"} • ${tracking.current_location || "Sem local atual"}</p>
+              <p>Alerta: ${tracking.alert_message || tracking.status || "-"}</p>
+              <p>${tracking.driver_name || "Sem motorista"} • ${tracking.yard_name || "Sem pátio"}</p>
             </article>
           `
         );
       };
 
       const renderDashboard = (data) => {
+        currentAdminData = data;
         renderStats(data);
         renderUsers(data.users);
         renderCatalog(data.catalogItems);
         renderDrivers(data.drivers);
         renderYards(data.yards);
         renderTrackings(data.trackings);
+        renderTrackingSelects();
       };
 
       const loadDashboard = async () => {
@@ -800,37 +932,69 @@
         renderDashboard(data);
       };
 
-      const showDashboard = () => {
-        loginSection.classList.add("hidden");
-        dashboardSection.classList.remove("hidden");
+      const renderDriverPhotoPreview = () => {
+        driverPhotoPreview.innerHTML = driverPhotoBase64 ? `<img src="${driverPhotoBase64}" alt="Pré-visualização do motorista" />` : "Sem foto";
       };
 
-      const showLogin = () => {
-        dashboardSection.classList.add("hidden");
-        loginSection.classList.remove("hidden");
+      const resetDriverForm = () => {
+        driverForm.reset();
+        driverPhotoBase64 = "";
+        driverPhotoInput.value = "";
+        setStatus(driverStatus, "");
+        renderDriverPhotoPreview();
       };
 
-      const resizeImage = (file) =>
-        new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onload = () => {
-            const image = new Image();
-            image.onload = () => {
-              const maxWidth = 1400;
-              const scale = Math.min(1, maxWidth / image.width);
-              const canvas = document.createElement("canvas");
-              canvas.width = Math.round(image.width * scale);
-              canvas.height = Math.round(image.height * scale);
-              const context = canvas.getContext("2d");
-              context.drawImage(image, 0, 0, canvas.width, canvas.height);
-              resolve(canvas.toDataURL("image/jpeg", 0.78));
-            };
-            image.onerror = () => reject(new Error("Não foi possível ler a imagem."));
-            image.src = reader.result;
-          };
-          reader.onerror = () => reject(new Error("Não foi possível ler o arquivo."));
-          reader.readAsDataURL(file);
+      const resetClientForm = () => {
+        clientForm.reset();
+        setStatus(clientStatus, "");
+      };
+
+      const resetCatalogForm = ({ keepStatus = false } = {}) => {
+        editingCatalogId = null;
+        catalogForm.reset();
+        catalogForm.elements.id.value = "";
+        selectedGalleryImages = [];
+        catalogImagesInput.value = "";
+        catalogSubmitButton.textContent = "Salvar veículo";
+        catalogCancelButton.classList.add("hidden");
+        catalogModalTitle.textContent = "Cadastrar veículo";
+        if (!keepStatus) {
+          setStatus(catalogStatus, "");
+        }
+        renderImagePreview();
+      };
+
+      const fillCatalogForm = (item) => {
+        editingCatalogId = item.id;
+        catalogForm.elements.id.value = item.id || "";
+        catalogForm.elements.title.value = item.title || "";
+        catalogForm.elements.slug.value = item.slug || "";
+        catalogForm.elements.category.value = item.category || "";
+        catalogForm.elements.price.value = item.price || "";
+        catalogForm.elements.location.value = item.location || "";
+        catalogForm.elements.yearLabel.value = item.year_label || "";
+        catalogForm.elements.whatsapp.value = item.whatsapp || "";
+        catalogForm.elements.badge.value = item.badge || "";
+        catalogForm.elements.galleryCount.value = item.gallery_count || 1;
+        catalogForm.elements.description.value = item.description || "";
+
+        Array.from(catalogForm.querySelectorAll('input[name="sections"]')).forEach((checkbox) => {
+          checkbox.checked = Array.isArray(item.sections) && item.sections.includes(checkbox.value);
         });
+
+        selectedGalleryImages = Array.isArray(item.gallery_images)
+          ? [...item.gallery_images]
+          : item.image_url
+            ? [item.image_url]
+            : [];
+
+        catalogSubmitButton.textContent = "Salvar alterações";
+        catalogCancelButton.classList.remove("hidden");
+        catalogModalTitle.textContent = "Editar veículo";
+        renderImagePreview();
+        activateTab("vehicles");
+        openModal(catalogModal);
+      };
 
       const moveGalleryImage = (fromIndex, toIndex) => {
         if (fromIndex === toIndex || fromIndex == null || toIndex == null) {
@@ -899,12 +1063,51 @@
         });
       };
 
+      catalogForm.elements.title.addEventListener("input", (event) => {
+        catalogForm.elements.slug.value = slugify(event.target.value);
+      });
+
+      catalogOpenCreateButton.addEventListener("click", () => {
+        resetCatalogForm();
+        openModal(catalogModal);
+      });
+
+      clientOpenCreateButton.addEventListener("click", () => {
+        resetClientForm();
+        openModal(clientModal);
+      });
+
+      driverOpenCreateButton.addEventListener("click", () => {
+        resetDriverForm();
+        openModal(driverModal);
+      });
+
+      catalogModalClosers.forEach((button) => {
+        button.addEventListener("click", () => {
+          closeModal(catalogModal);
+        });
+      });
+
+      clientModalClosers.forEach((button) => {
+        button.addEventListener("click", () => {
+          closeModal(clientModal);
+        });
+      });
+
+      driverModalClosers.forEach((button) => {
+        button.addEventListener("click", () => {
+          closeModal(driverModal);
+        });
+      });
+
+      catalogCancelButton.addEventListener("click", () => {
+        resetCatalogForm();
+        closeModal(catalogModal);
+      });
+
       catalogImagesInput.addEventListener("change", async (event) => {
         const files = Array.from(event.target.files || []).slice(0, 8);
-
-        if (!files.length) {
-          return;
-        }
+        if (!files.length) return;
 
         catalogImagePreview.innerHTML = '<div class="admin-empty">Processando fotos...</div>';
 
@@ -918,6 +1121,24 @@
         } catch (error) {
           selectedGalleryImages = [];
           renderImagePreview();
+          alert(error.message);
+        }
+      });
+
+      driverPhotoInput.addEventListener("change", async (event) => {
+        const file = event.target.files?.[0];
+        if (!file) {
+          driverPhotoBase64 = "";
+          renderDriverPhotoPreview();
+          return;
+        }
+
+        try {
+          driverPhotoBase64 = await resizeImage(file);
+          renderDriverPhotoPreview();
+        } catch (error) {
+          driverPhotoBase64 = "";
+          renderDriverPhotoPreview();
           alert(error.message);
         }
       });
@@ -956,39 +1177,138 @@
         showLogin();
       });
 
-      catalogCancelButton.addEventListener("click", () => {
-        resetCatalogForm();
-        closeCatalogModal();
+      clientForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        setStatus(clientStatus, "Salvando...");
+
+        try {
+          const formData = new FormData(clientForm);
+          await adminFetch("/api/admin/customers", {
+            method: "POST",
+            body: JSON.stringify({
+              fullName: formData.get("fullName"),
+              email: formData.get("email"),
+              whatsapp: formData.get("whatsapp"),
+              cpf: formData.get("cpf"),
+              cep: formData.get("cep"),
+              address: formData.get("address"),
+              number: formData.get("number"),
+              district: formData.get("district"),
+              complement: formData.get("complement"),
+              city: formData.get("city"),
+              state: formData.get("state"),
+              password: formData.get("password")
+            })
+          });
+
+          setStatus(clientStatus, "Cliente salvo com sucesso.");
+          closeModal(clientModal);
+          resetClientForm();
+          await loadDashboard();
+        } catch (error) {
+          setStatus(clientStatus, error.message, true);
+        }
       });
 
-      const bindForm = (formId, url, statusId, payloadBuilder, afterSuccess) => {
-        const form = document.getElementById(formId);
-        const status = document.getElementById(statusId);
+      driverForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        setStatus(driverStatus, "Salvando...");
 
-        form.addEventListener("submit", async (event) => {
-          event.preventDefault();
-          setStatus(status, "Salvando...");
+        try {
+          const formData = new FormData(driverForm);
+          await adminFetch("/api/admin/drivers", {
+            method: "POST",
+            body: JSON.stringify({
+              fullName: formData.get("fullName"),
+              cpf: formData.get("cpf"),
+              cnh: formData.get("cnh"),
+              phone: formData.get("phone"),
+              email: formData.get("email"),
+              commercialAddress: formData.get("commercialAddress"),
+              photoUrl: driverPhotoBase64 || null,
+              status: formData.get("status"),
+              notes: formData.get("notes")
+            })
+          });
 
-          try {
-            const formData = new FormData(form);
-            const payload = await payloadBuilder(formData);
+          setStatus(driverStatus, "Motorista salvo com sucesso.");
+          closeModal(driverModal);
+          resetDriverForm();
+          await loadDashboard();
+        } catch (error) {
+          setStatus(driverStatus, error.message, true);
+        }
+      });
 
-            await adminFetch(url, {
-              method: "POST",
-              body: JSON.stringify(payload)
-            });
+      document.getElementById("yardForm").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const yardStatus = document.getElementById("yardStatus");
+        setStatus(yardStatus, "Salvando...");
 
-            form.reset();
-            if (afterSuccess) {
-              afterSuccess();
-            }
-            setStatus(status, "Salvo com sucesso.");
-            await loadDashboard();
-          } catch (error) {
-            setStatus(status, error.message, true);
+        try {
+          const formData = new FormData(event.currentTarget);
+          await adminFetch("/api/admin/yards", {
+            method: "POST",
+            body: JSON.stringify({
+              name: formData.get("name"),
+              city: formData.get("city"),
+              state: formData.get("state"),
+              address: formData.get("address"),
+              contactName: formData.get("contactName"),
+              contactPhone: formData.get("contactPhone"),
+              capacityInfo: formData.get("capacityInfo"),
+              notes: formData.get("notes")
+            })
+          });
+
+          event.currentTarget.reset();
+          setStatus(yardStatus, "Pátio salvo com sucesso.");
+          await loadDashboard();
+        } catch (error) {
+          setStatus(yardStatus, error.message, true);
+        }
+      });
+
+      trackingForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        setStatus(trackingStatus, "Salvando...");
+
+        try {
+          const formData = new FormData(trackingForm);
+          const client = currentAdminData.users.find((user) => user.id === formData.get("clientUserId"));
+          const item = currentAdminData.catalogItems.find((catalogItem) => catalogItem.id === formData.get("catalogItemId"));
+
+          if (!client || !item) {
+            throw new Error("Selecione um cliente e um veículo válidos.");
           }
-        });
-      };
+
+          await adminFetch("/api/admin/trackings", {
+            method: "POST",
+            body: JSON.stringify({
+              clientUserId: client.id,
+              clientName: client.full_name,
+              clientEmail: client.email,
+              catalogItemId: item.id,
+              itemName: item.title,
+              driverId: formData.get("driverId") || null,
+              yardId: formData.get("yardId") || null,
+              trackingCode: formData.get("trackingCode"),
+              status: formData.get("status"),
+              alertMessage: formData.get("alertMessage"),
+              currentLocation: formData.get("currentLocation"),
+              expectedDeliveryDate: formData.get("expectedDeliveryDate"),
+              notes: formData.get("notes")
+            })
+          });
+
+          trackingForm.reset();
+          renderTrackingSelects();
+          setStatus(trackingStatus, "Rastreio salvo com sucesso.");
+          await loadDashboard();
+        } catch (error) {
+          setStatus(trackingStatus, error.message, true);
+        }
+      });
 
       catalogForm.addEventListener("submit", async (event) => {
         event.preventDefault();
@@ -999,7 +1319,7 @@
           const payload = {
             id: editingCatalogId,
             title: formData.get("title"),
-            slug: formData.get("slug"),
+            slug: slugify(formData.get("slug") || formData.get("title")),
             category: formData.get("category"),
             price: formData.get("price"),
             location: formData.get("location"),
@@ -1021,52 +1341,18 @@
           const successMessage = editingCatalogId
             ? "Veículo atualizado com sucesso."
             : "Veículo salvo com sucesso.";
+
           resetCatalogForm({ keepStatus: true });
           setStatus(catalogStatus, successMessage);
-          closeCatalogModal();
+          closeModal(catalogModal);
           await loadDashboard();
         } catch (error) {
           setStatus(catalogStatus, error.message, true);
         }
       });
 
-      bindForm("driverForm", "/api/admin/drivers", "driverStatus", async (formData) => ({
-        fullName: formData.get("fullName"),
-        cpf: formData.get("cpf"),
-        cnh: formData.get("cnh"),
-        phone: formData.get("phone"),
-        email: formData.get("email"),
-        status: formData.get("status"),
-        notes: formData.get("notes")
-      }));
-
-      bindForm("yardForm", "/api/admin/yards", "yardStatus", async (formData) => ({
-        name: formData.get("name"),
-        city: formData.get("city"),
-        state: formData.get("state"),
-        address: formData.get("address"),
-        contactName: formData.get("contactName"),
-        contactPhone: formData.get("contactPhone"),
-        capacityInfo: formData.get("capacityInfo"),
-        notes: formData.get("notes")
-      }));
-
-      bindForm("trackingForm", "/api/admin/trackings", "trackingStatus", async (formData) => ({
-        clientUserId: formData.get("clientUserId"),
-        clientName: formData.get("clientName"),
-        clientEmail: formData.get("clientEmail"),
-        catalogItemId: formData.get("catalogItemId"),
-        itemName: formData.get("itemName"),
-        driverId: formData.get("driverId"),
-        yardId: formData.get("yardId"),
-        trackingCode: formData.get("trackingCode"),
-        status: formData.get("status"),
-        currentLocation: formData.get("currentLocation"),
-        expectedDeliveryDate: formData.get("expectedDeliveryDate"),
-        notes: formData.get("notes")
-      }));
-
       renderImagePreview();
+      renderDriverPhotoPreview();
       resetCatalogForm();
 
       (async () => {
@@ -1079,7 +1365,7 @@
         try {
           showDashboard();
           await loadDashboard();
-        } catch (error) {
+        } catch (_error) {
           clearAuth();
           showLogin();
         }

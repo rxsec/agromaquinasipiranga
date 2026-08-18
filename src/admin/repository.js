@@ -47,11 +47,19 @@ export const ensureAdminSchema = async () => {
         cnh text,
         phone text,
         email text,
+        commercial_address text,
+        photo_url text,
         status text not null default 'ativo',
         notes text,
         created_at timestamptz not null default timezone('utc', now()),
         updated_at timestamptz not null default timezone('utc', now())
       );
+
+      alter table public.app_drivers
+      add column if not exists commercial_address text;
+
+      alter table public.app_drivers
+      add column if not exists photo_url text;
 
       create table if not exists public.app_yards (
         id uuid primary key default gen_random_uuid(),
@@ -78,12 +86,16 @@ export const ensureAdminSchema = async () => {
         yard_id uuid references public.app_yards(id) on delete set null,
         tracking_code text not null unique,
         status text not null default 'em separacao',
+        alert_message text,
         current_location text,
         expected_delivery_date date,
         notes text,
         created_at timestamptz not null default timezone('utc', now()),
         updated_at timestamptz not null default timezone('utc', now())
       );
+
+      alter table public.app_client_tracking
+      add column if not exists alert_message text;
 
       create index if not exists app_catalog_items_category_idx on public.app_catalog_items (category);
       create index if not exists app_catalog_items_sections_idx on public.app_catalog_items using gin (sections);
@@ -207,7 +219,7 @@ export const getAdminDashboardData = async () => {
       order by created_at desc
     `),
     pool.query(`
-      select id, full_name, cpf, cnh, phone, email, status, notes, created_at
+      select id, full_name, cpf, cnh, phone, email, commercial_address, photo_url, status, notes, created_at
       from public.app_drivers
       order by created_at desc
     `),
@@ -224,6 +236,7 @@ export const getAdminDashboardData = async () => {
         t.item_name,
         t.tracking_code,
         t.status,
+        t.alert_message,
         t.current_location,
         t.expected_delivery_date,
         t.notes,
@@ -368,16 +381,16 @@ export const deleteCatalogItem = async (id) => {
   return rows[0] || null;
 };
 
-export const createDriver = async ({ fullName, cpf, cnh, phone, email, status, notes }) => {
+export const createDriver = async ({ fullName, cpf, cnh, phone, email, commercialAddress, photoUrl, status, notes }) => {
   await ensureAdminSchema();
 
   const { rows } = await pool.query(
     `
-      insert into public.app_drivers (full_name, cpf, cnh, phone, email, status, notes)
-      values ($1,$2,$3,$4,$5,$6,$7)
+      insert into public.app_drivers (full_name, cpf, cnh, phone, email, commercial_address, photo_url, status, notes)
+      values ($1,$2,$3,$4,$5,$6,$7,$8,$9)
       returning *
     `,
-    [fullName, cpf, cnh, phone, email, status, notes]
+    [fullName, cpf, cnh, phone, email, commercialAddress, photoUrl, status, notes]
   );
 
   return rows[0];
@@ -417,6 +430,7 @@ export const createTracking = async ({
   yardId,
   trackingCode,
   status,
+  alertMessage,
   currentLocation,
   expectedDeliveryDate,
   notes
@@ -427,9 +441,9 @@ export const createTracking = async ({
     `
       insert into public.app_client_tracking (
         client_user_id, client_name, client_email, catalog_item_id, item_name, driver_id, yard_id,
-        tracking_code, status, current_location, expected_delivery_date, notes
+        tracking_code, status, alert_message, current_location, expected_delivery_date, notes
       )
-      values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
+      values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)
       returning *
     `,
     [
@@ -442,6 +456,7 @@ export const createTracking = async ({
       yardId || null,
       trackingCode,
       status,
+      alertMessage,
       currentLocation,
       expectedDeliveryDate || null,
       notes
@@ -593,6 +608,7 @@ export const getCustomerTrackingDashboard = async ({ userId, email }) => {
         t.item_name,
         t.tracking_code,
         t.status,
+        t.alert_message,
         t.current_location,
         t.expected_delivery_date,
         t.notes,
@@ -601,6 +617,8 @@ export const getCustomerTrackingDashboard = async ({ userId, email }) => {
         d.full_name as driver_name,
         d.phone as driver_phone,
         d.email as driver_email,
+        d.commercial_address as driver_commercial_address,
+        d.photo_url as driver_photo_url,
         d.cnh as driver_cnh,
         d.status as driver_status,
         d.notes as driver_notes,

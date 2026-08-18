@@ -424,7 +424,7 @@
           ["Telefone", tracking.driver_phone || "(12) 99737-1569"],
           ["E-mail", tracking.driver_email || "contato@agromaquinas.com.br"],
           ["Habilitação", tracking.driver_cnh || "Categoria D"],
-          ["Base comercial", tracking.yard_address || "Rod. Pres. Dutra, km 134 - Eugênio de Melo, São José dos Campos - SP"],
+          ["Endereço comercial", tracking.driver_commercial_address || tracking.yard_address || "Rod. Pres. Dutra, km 134 - Eugênio de Melo, São José dos Campos - SP"],
           ["Observações", tracking.driver_notes || "Entregador vinculado ao seu rastreio com situação regular."]
         ]
           .map(
@@ -437,9 +437,9 @@
           )
           .join("");
 
-        trackingDriverPhoto.innerHTML = `
-          <div class="tracking-driver-avatar">${initials}</div>
-        `;
+        trackingDriverPhoto.innerHTML = tracking.driver_photo_url
+          ? `<img class="tracking-driver-photo__image" src="${tracking.driver_photo_url}" alt="${tracking.driver_name || "Motorista"}" />`
+          : `<div class="tracking-driver-avatar">${initials}</div>`;
       };
 
       const renderProfile = (user, trackings) => {
@@ -494,7 +494,7 @@
         const progress = progressByStatus(tracking.status);
         trackingProgressFill.style.width = `${progress}%`;
         trackingProgressValue.textContent = `${progress}%`;
-        trackingAlertText.textContent = String(tracking.status || "Aguardando atualização").toUpperCase();
+        trackingAlertText.textContent = String(tracking.alert_message || tracking.status || "Aguardando atualização").toUpperCase();
         trackingItemTitle.textContent = tracking.item_name || "Rastreio";
         trackingMapMeta.textContent = `${tracking.tracking_code || "-"} • ${tracking.current_location || "Local sob atualização"}`;
         await renderMap(tracking);

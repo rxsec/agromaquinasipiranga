@@ -289,6 +289,59 @@ app.get("/api/admin/dashboard", adminRequired, async (_req, res) => {
   }
 });
 
+app.post("/api/admin/customers", adminRequired, async (req, res) => {
+  try {
+    const {
+      fullName,
+      email,
+      whatsapp,
+      cpf,
+      cep,
+      address,
+      number,
+      district,
+      complement,
+      city,
+      state,
+      password
+    } = req.body;
+
+    if (!fullName || !email || !whatsapp || !cpf || !cep || !address || !number || !district || !password) {
+      return res.status(400).json({ message: "Preencha todos os campos obrigatórios do cliente." });
+    }
+
+    const normalizedEmail = String(email).trim().toLowerCase();
+    const normalizedCpf = onlyDigits(cpf);
+    const existingUser = await findUserByEmailOrCpf(normalizedEmail, normalizedCpf);
+
+    if (existingUser) {
+      return res.status(409).json({ message: "Já existe um cliente com este e-mail ou CPF." });
+    }
+
+    const passwordHash = await hashPassword(password);
+    const user = await createUser({
+      fullName: String(fullName).trim(),
+      email: normalizedEmail,
+      whatsapp: String(whatsapp).trim(),
+      cpf: String(cpf).trim(),
+      cep: String(cep).trim(),
+      address: String(address).trim(),
+      number: String(number).trim(),
+      district: String(district).trim(),
+      complement: complement ? String(complement).trim() : null,
+      city: city ? String(city).trim() : null,
+      state: state ? String(state).trim() : null,
+      passwordHash,
+      role: "customer"
+    });
+
+    return res.status(201).json({ user: sanitizeUser(user) });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Erro ao cadastrar cliente." });
+  }
+});
+
 app.all("/api/admin/catalog-items", adminRequired, async (req, res) => {
   try {
     if (!["POST", "PUT", "DELETE"].includes(req.method)) {
@@ -355,7 +408,7 @@ app.all("/api/admin/catalog-items", adminRequired, async (req, res) => {
 
 app.post("/api/admin/drivers", adminRequired, async (req, res) => {
   try {
-    const { fullName, cpf, cnh, phone, email, status, notes } = req.body;
+    const { fullName, cpf, cnh, phone, email, commercialAddress, photoUrl, status, notes } = req.body;
 
     if (!fullName) {
       return res.status(400).json({ message: "Nome do motorista é obrigatório." });
@@ -367,6 +420,8 @@ app.post("/api/admin/drivers", adminRequired, async (req, res) => {
       cnh: cnh ? String(cnh).trim() : null,
       phone: phone ? String(phone).trim() : null,
       email: email ? String(email).trim().toLowerCase() : null,
+      commercialAddress: commercialAddress ? String(commercialAddress).trim() : null,
+      photoUrl: photoUrl ? String(photoUrl).trim() : null,
       status: status ? String(status).trim() : "ativo",
       notes: notes ? String(notes).trim() : null
     });
@@ -416,6 +471,7 @@ app.post("/api/admin/trackings", adminRequired, async (req, res) => {
       yardId,
       trackingCode,
       status,
+      alertMessage,
       currentLocation,
       expectedDeliveryDate,
       notes
@@ -437,6 +493,7 @@ app.post("/api/admin/trackings", adminRequired, async (req, res) => {
       yardId,
       trackingCode: String(trackingCode).trim().toUpperCase(),
       status: status ? String(status).trim() : "em separação",
+      alertMessage: alertMessage ? String(alertMessage).trim() : null,
       currentLocation: currentLocation ? String(currentLocation).trim() : null,
       expectedDeliveryDate: expectedDeliveryDate || null,
       notes: notes ? String(notes).trim() : null
