@@ -161,7 +161,7 @@
                 </article>
               </div>
             </div>
-          </article>
+          </div>
         </div>
       </section>
     </main>
@@ -271,11 +271,13 @@
       const setLoggedInState = () => {
         trackingAccessSection.classList.add("hidden");
         trackingDashboardSection.classList.remove("hidden");
+        document.body.classList.add("is-dashboard-mode");
       };
 
       const setLoggedOutState = () => {
         trackingDashboardSection.classList.add("hidden");
         trackingAccessSection.classList.remove("hidden");
+        document.body.classList.remove("is-dashboard-mode");
       };
 
       const activateTrackingTab = (target) => {
@@ -378,8 +380,10 @@
         }
       };
 
-      const progressByStatus = (status) => {
+      const progressByStatus = (status, alertMessage) => {
         const normalized = String(status || "").toLowerCase();
+        const alertNormalized = String(alertMessage || "").toLowerCase();
+        if (alertNormalized.includes("nota fiscal")) return 87;
         if (normalized.includes("aguardando")) return 18;
         if (normalized.includes("separ")) return 34;
         if (normalized.includes("andamento") || normalized.includes("rota")) return 67;
@@ -391,13 +395,28 @@
         trackingVehicleList.innerHTML = trackings.length
           ? trackings
               .map(
-                (tracking) => `
+                (tracking) => {
+                  const badge = String(tracking.item_name || "AMI")
+                    .split(" ")
+                    .filter(Boolean)
+                    .slice(0, 1)
+                    .join("")
+                    .toUpperCase();
+                  return `
                   <button class="tracking-vehicle-card ${tracking.id === selectedTrackingId ? "is-active" : ""}" type="button" data-select-tracking="${tracking.id}">
-                    <strong>${tracking.item_name || "Veículo"}</strong>
-                    <span>Status: ${tracking.status || "Sem status"}</span>
-                    <small>${tracking.tracking_code || "-"}</small>
+                    <div class="tracking-vehicle-card__row">
+                      <div class="tracking-vehicle-card__thumb">
+                        <span>${badge}</span>
+                      </div>
+                      <div class="tracking-vehicle-card__copy">
+                        <strong>${tracking.item_name || "Veículo"}</strong>
+                        <span>Status: ${(tracking.alert_message || tracking.status || "Sem status").toUpperCase()}</span>
+                      </div>
+                      <div class="tracking-vehicle-card__arrow">&gt;</div>
+                    </div>
                   </button>
-                `
+                `;
+                }
               )
               .join("")
           : '<div class="tracking-sidebar__empty">Nenhum rastreio vinculado à sua conta.</div>';
@@ -516,7 +535,7 @@
       };
 
       const renderOverview = async (tracking) => {
-        const progress = progressByStatus(tracking.status);
+        const progress = progressByStatus(tracking.status, tracking.alert_message);
         trackingProgressFill.style.width = `${progress}%`;
         trackingProgressValue.textContent = `${progress}%`;
         trackingAlertText.textContent = String(tracking.alert_message || tracking.status || "Aguardando atualização").toUpperCase();

@@ -605,6 +605,8 @@ export const getCustomerTrackingDashboard = async ({ userId, email }) => {
         t.client_user_id,
         t.client_name,
         t.client_email,
+        c.image_url as item_image_url,
+        c.gallery_images as item_gallery_images,
         t.item_name,
         t.tracking_code,
         t.status,
@@ -630,6 +632,7 @@ export const getCustomerTrackingDashboard = async ({ userId, email }) => {
         y.contact_name as yard_contact_name,
         y.contact_phone as yard_contact_phone
       from public.app_client_tracking t
+      left join public.app_catalog_items c on c.id = t.catalog_item_id
       left join public.app_drivers d on d.id = t.driver_id
       left join public.app_yards y on y.id = t.yard_id
       where (

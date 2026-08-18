@@ -722,12 +722,12 @@ img {
 }
 
 .tracking-dashboard {
-  padding: 54px 0 88px;
+  padding: 10px 0 0;
 }
 
 .tracking-dashboard__container {
   display: grid;
-  gap: 18px;
+  gap: 16px;
 }
 
 .tracking-dashboard__topbar {
@@ -735,68 +735,63 @@ img {
   align-items: center;
   justify-content: space-between;
   gap: 18px;
+  padding: 0 2px;
 }
 
 .tracking-breadcrumb {
-  color: #6b7b6d;
-  font-size: 1.12rem;
+  color: #697b90;
+  font-size: 0.84rem;
+  font-weight: 500;
+  text-transform: uppercase;
 }
 
 .tracking-breadcrumb strong {
-  color: #1b2e1d;
+  color: #1a2940;
+  font-weight: 800;
 }
 
 .tracking-userbar {
   display: flex;
   align-items: center;
   gap: 14px;
-  color: #1f2e1f;
-  font-weight: 800;
+  color: #1f2a37;
+  font-size: 0.88rem;
+  font-weight: 700;
 }
 
 .tracking-logout {
-  min-height: 40px;
-  padding: 0 14px;
-  border: 1px solid rgba(17, 116, 59, 0.12);
-  border-radius: 12px;
-  background: #fff;
-  color: #234526;
-  font: inherit;
-  font-weight: 800;
-  cursor: pointer;
+  display: none;
 }
 
 .tracking-dashboard__shell {
   display: grid;
   grid-template-columns: 320px minmax(0, 1fr);
-  gap: 26px;
+  gap: 24px;
 }
 
 .tracking-sidebar {
-  border-radius: 20px;
-  background: #d7dadc;
-  padding: 20px;
-  min-height: 720px;
+  border-radius: 8px;
+  background: #d3d5d7;
+  padding: 18px 20px 24px;
+  min-height: 846px;
 }
 
 .tracking-sidebar__head h2 {
   margin: 0;
-  color: #10233c;
-  font-size: 1.7rem;
+  color: #0f2238;
+  font-size: 1.1rem;
   font-weight: 800;
+  text-transform: uppercase;
 }
 
 .tracking-sidebar__head p {
-  margin: 4px 0 0;
-  color: #617183;
+  margin: 0;
+  color: #6a7a8c;
+  font-size: 0.78rem;
 }
 
 .tracking-sidebar__nav {
-  display: grid;
-  gap: 10px;
-  margin: 24px 0 24px;
-  padding-top: 20px;
-  border-top: 1px solid rgba(16, 35, 60, 0.12);
+  display: none;
 }
 
 .tracking-sidebar__tab {
@@ -820,37 +815,95 @@ img {
 .tracking-vehicle-list {
   display: grid;
   gap: 12px;
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.84);
+  position: relative;
+}
+
+.tracking-vehicle-list::before {
+  content: "VEÍCULOS";
+  position: absolute;
+  top: -1px;
+  left: 0;
+  color: #24384f;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  padding: 0 14px 10px 14px;
+  border-bottom: 3px solid #1f2f44;
 }
 
 .tracking-vehicle-card {
-  border: 1px solid rgba(16, 35, 60, 0.12);
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.72);
-  padding: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.82);
+  border-radius: 8px;
+  background: transparent;
+  padding: 14px 12px;
   text-align: left;
   cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
 }
 
 .tracking-vehicle-card.is-active {
-  border-color: rgba(17, 116, 59, 0.28);
-  background: #fff;
+  border-color: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.08);
 }
 
-.tracking-vehicle-card strong,
-.tracking-vehicle-card span,
-.tracking-vehicle-card small {
+.tracking-vehicle-card__row {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+}
+
+.tracking-vehicle-card__thumb {
+  width: 34px;
+  min-height: 32px;
+  display: grid;
+  align-items: center;
+  color: #40454c;
+  font-size: 0.56rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.tracking-vehicle-card__thumb span {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tracking-vehicle-card__copy {
+  min-width: 0;
+}
+
+.tracking-vehicle-card__copy strong,
+.tracking-vehicle-card__copy span {
   display: block;
 }
 
-.tracking-vehicle-card strong {
-  color: #1b2e1d;
-  font-size: 1.1rem;
+.tracking-vehicle-card__copy strong {
+  color: #23364d;
+  font-size: 0.74rem;
+  font-weight: 800;
+  line-height: 1.25;
+  text-transform: uppercase;
 }
 
-.tracking-vehicle-card span,
-.tracking-vehicle-card small {
+.tracking-vehicle-card__copy span {
   margin-top: 6px;
-  color: #647385;
+  color: #6c7a89;
+  font-size: 0.58rem;
+  font-weight: 800;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+
+.tracking-vehicle-card__arrow {
+  color: #6d7f92;
+  font-size: 1.9rem;
+  line-height: 1;
 }
 
 .tracking-sidebar__empty,
@@ -871,7 +924,7 @@ img {
 
 .tracking-panel.is-active {
   display: grid;
-  gap: 24px;
+  gap: 18px;
 }
 
 .tracking-summary-grid {
@@ -882,9 +935,10 @@ img {
 
 .tracking-summary-card,
 .tracking-alert-card {
-  border-radius: 20px;
-  background: #d5d7d9;
-  padding: 18px 20px;
+  border-radius: 8px;
+  background: #d3d5d7;
+  padding: 16px 16px;
+  min-height: 102px;
 }
 
 .tracking-summary-card__label,
@@ -892,7 +946,7 @@ img {
 .tracking-map-card__eyebrow {
   display: block;
   color: #617183;
-  font-size: 0.9rem;
+  font-size: 0.72rem;
   font-weight: 800;
   text-transform: uppercase;
 }
@@ -900,15 +954,15 @@ img {
 .tracking-progress {
   display: flex;
   align-items: center;
-  gap: 16px;
-  margin-top: 14px;
+  gap: 14px;
+  margin-top: 10px;
 }
 
 .tracking-progress__bar {
   flex: 1;
   height: 22px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.85);
   overflow: hidden;
 }
 
@@ -935,8 +989,8 @@ img {
 }
 
 .tracking-alert-card {
-  border: 1px solid rgba(241, 99, 120, 0.5);
-  background: rgba(255, 240, 243, 0.9);
+  border: 1px solid rgba(245, 122, 148, 0.7);
+  background: rgba(254, 240, 243, 0.62);
   animation: trackingAlertPulse 1.15s ease-in-out infinite;
 }
 
@@ -954,27 +1008,30 @@ img {
 .tracking-alert-card__body {
   display: flex;
   align-items: center;
-  gap: 16px;
-  margin-top: 18px;
+  gap: 14px;
+  margin-top: 12px;
 }
 
 .tracking-alert-card__icon {
-  width: 54px;
-  height: 54px;
+  width: 52px;
+  height: 52px;
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: rgba(255, 212, 218, 0.94);
-  font-size: 1.6rem;
+  background: rgba(255, 212, 218, 0.88);
+  font-size: 1.45rem;
 }
 
 .tracking-alert-card strong {
-  color: #5a2831;
-  font-size: 1.3rem;
+  color: #4e5667;
+  font-size: 0.94rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: uppercase;
 }
 
 .tracking-map-card {
-  border-radius: 20px;
+  border-radius: 8px;
   background: #ebe5da;
   border: 1px solid rgba(124, 129, 138, 0.18);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
@@ -983,14 +1040,7 @@ img {
 }
 
 .tracking-map-card__head {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 18px;
-  padding: 16px 18px 14px;
-  margin-bottom: 0;
-  background: rgba(255, 255, 255, 0.82);
-  border-bottom: 1px solid rgba(124, 129, 138, 0.12);
+  display: none;
 }
 
 .tracking-map-card__head h2 {
@@ -1007,7 +1057,7 @@ img {
 
 .tracking-map {
   width: 100%;
-  min-height: 640px;
+  min-height: 720px;
   overflow: hidden;
 }
 
@@ -1078,6 +1128,27 @@ img {
   color: #fff;
   font-weight: 800;
   text-transform: uppercase;
+}
+
+.tracking-page.is-dashboard-mode {
+  background: #eff3f6;
+}
+
+.tracking-page.is-dashboard-mode .site-header,
+.tracking-page.is-dashboard-mode .site-footer,
+.tracking-page.is-dashboard-mode .floating-whatsapp,
+.tracking-page.is-dashboard-mode .mobile-nav {
+  display: none;
+}
+
+.tracking-page.is-dashboard-mode main {
+  padding: 0 6px 6px;
+}
+
+.tracking-page.is-dashboard-mode .container {
+  max-width: 1580px;
+  width: 100%;
+  padding: 0;
 }
 
 .tracking-driver-grid {
