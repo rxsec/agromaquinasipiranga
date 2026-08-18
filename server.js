@@ -27,6 +27,7 @@ dotenv.config();
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const publicDir = path.join(__dirname, "public");
 const port = Number(process.env.PORT || 3000);
 const appUrl = process.env.APP_URL || `http://localhost:${port}`;
 const appDomain = process.env.APP_DOMAIN || "localhost";
@@ -54,7 +55,7 @@ app.use((req, res, next) => {
 
   return next();
 });
-app.use(express.static(__dirname));
+app.use(express.static(publicDir));
 
 const sendAuthPayload = async (res, user) => {
   const accessToken = signAccessToken(user);
@@ -212,7 +213,7 @@ app.post("/api/auth/logout", async (req, res) => {
 });
 
 app.get("/", (_req, res) => {
-  res.sendFile(path.join(__dirname, "index.html"));
+  res.sendFile(path.join(publicDir, "index.html"));
 });
 
 app.listen(port, () => {
