@@ -361,9 +361,10 @@
       const ensureMap = () => {
         if (!map) {
           map = L.map("trackingMap", { zoomControl: true }).setView([-23.5505, -46.6333], 6);
-          L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
             maxZoom: 19,
-            attribution: "&copy; OpenStreetMap"
+            subdomains: "abcd",
+            attribution: "&copy; OpenStreetMap &copy; CARTO"
           }).addTo(map);
         }
       };
@@ -477,14 +478,38 @@
         const fallback = [-23.1896, -45.8841];
         const points = [startCoords || fallback, currentCoords || fallback];
 
-        const yardMarker = L.marker(points[0]).addTo(map).bindPopup("Base / Pátio");
-        const currentMarker = L.marker(points[1]).addTo(map).bindPopup("Local atual");
+        const initials = String(tracking.driver_name || "AMI")
+          .split(" ")
+          .filter(Boolean)
+          .slice(0, 2)
+          .map((part) => part[0])
+          .join("")
+          .toUpperCase();
+
+        const yardIcon = L.divIcon({
+          className: "",
+          html: '<div class="tracking-map-yard-marker"></div>',
+          iconSize: [18, 18],
+          iconAnchor: [9, 9]
+        });
+
+        const driverIcon = L.divIcon({
+          className: "",
+          html: tracking.driver_photo_url
+            ? `<div class="tracking-map-driver-marker"><img src="${tracking.driver_photo_url}" alt="${tracking.driver_name || "Entregador"}" /></div>`
+            : `<div class="tracking-map-driver-marker tracking-map-driver-marker--fallback">${initials}</div>`,
+          iconSize: [56, 56],
+          iconAnchor: [28, 28]
+        });
+
+        const yardMarker = L.marker(points[0], { icon: yardIcon }).addTo(map).bindPopup("Base / Pátio");
+        const currentMarker = L.marker(points[1], { icon: driverIcon }).addTo(map).bindPopup(tracking.driver_name || "Local atual");
         mapMarkers.push(yardMarker, currentMarker);
 
         mapRoute = L.polyline(points, {
-          color: "#3b82f6",
-          weight: 5,
-          dashArray: "10, 12"
+          color: "#f27f63",
+          weight: 6,
+          opacity: 0.95
         }).addTo(map);
 
         map.fitBounds(L.latLngBounds(points), { padding: [40, 40] });
