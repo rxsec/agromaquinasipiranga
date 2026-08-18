@@ -232,9 +232,12 @@
                   </div>
                   <form class="admin-form" id="yardForm">
                     <label><span>Nome do pátio</span><input type="text" name="name" required /></label>
+                    <label><span>CEP</span><input type="text" name="cep" maxlength="9" inputmode="numeric" /></label>
+                    <label><span>Endereço</span><input type="text" name="address" /></label>
+                    <label><span>Número</span><input type="text" name="number" /></label>
+                    <label><span>Bairro</span><input type="text" name="district" /></label>
                     <label><span>Cidade</span><input type="text" name="city" /></label>
                     <label><span>Estado</span><input type="text" name="state" /></label>
-                    <label><span>Endereço</span><input type="text" name="address" /></label>
                     <label><span>Responsável</span><input type="text" name="contactName" /></label>
                     <label><span>Telefone</span><input type="text" name="contactPhone" /></label>
                     <label><span>Capacidade</span><input type="text" name="capacityInfo" /></label>
@@ -301,8 +304,12 @@
                       <input type="text" name="alertMessage" value="Aguardando nota fiscal" />
                     </label>
                     <label>
-                      <span>Local atual</span>
-                      <input type="text" name="currentLocation" />
+                      <span>Local atual (pátio)</span>
+                      <select name="currentLocationYardId" id="trackingLocationYardSelect"></select>
+                    </label>
+                    <label>
+                      <span>Endereço do local atual</span>
+                      <input type="text" name="currentLocationPreview" id="trackingCurrentLocationPreview" readonly />
                     </label>
                     <label>
                       <span>Previsão de entrega</span>
@@ -530,6 +537,9 @@
       const trackingCatalogSelect = document.getElementById("trackingCatalogSelect");
       const trackingDriverSelect = document.getElementById("trackingDriverSelect");
       const trackingYardSelect = document.getElementById("trackingYardSelect");
+      const trackingLocationYardSelect = document.getElementById("trackingLocationYardSelect");
+      const trackingCurrentLocationPreview = document.getElementById("trackingCurrentLocationPreview");
+      const yardForm = document.getElementById("yardForm");
 
       const adminStats = document.getElementById("adminStats");
       const usersTableBody = document.querySelector("#usersTable tbody");
@@ -577,6 +587,31 @@
           .toLowerCase()
           .replace(/[^a-z0-9]+/g, "-")
           .replace(/^-+|-+$/g, "");
+
+      const onlyDigits = (value) => String(value || "").replace(/\D/g, "");
+      const formatCep = (value) => {
+        const digits = onlyDigits(value).slice(0, 8);
+        return digits.length > 5 ? `${digits.slice(0, 5)}-${digits.slice(5)}` : digits;
+      };
+
+      const lookupCep = async (cep) => {
+        const normalizedCep = onlyDigits(cep);
+        if (normalizedCep.length !== 8) {
+          throw new Error("Informe um CEP válido com 8 números.");
+        }
+
+        const response = await fetch(`https://viacep.com.br/ws/${normalizedCep}/json/`);
+        if (!response.ok) {
+          throw new Error("Não foi possível consultar o CEP agora.");
+        }
+
+        const data = await response.json();
+        if (data.erro) {
+          throw new Error("CEP não encontrado.");
+        }
+
+        return data;
+      };
 
       const resizeImage = (file) =>
         new Promise((resolve, reject) => {
@@ -664,6 +699,17 @@
 
       const customerUsers = () => currentAdminData.users.filter((user) => (user.role || "customer") !== "admin");
 
+      const buildYardAddress = (yard) => {
+        if (!yard) {
+          return "";
+        }
+
+        const address = String(yard.address || "").trim();
+        const city = String(yard.city || "").trim();
+        const state = String(yard.state || "").trim();
+        return [address, [city, state].filter(Boolean).join(" - ")].filter(Boolean).join(", ");
+      };
+
       const renderTrackingSelects = () => {
         const users = customerUsers();
 
@@ -687,7 +733,11 @@
           .join("")}`;
 
         trackingYardSelect.innerHTML = `<option value="">Selecione um pátio</option>${currentAdminData.yards
-          .map((yard) => `<option value="${yard.id}">${yard.name} • ${[yard.city, yard.state].filter(Boolean).join(" / ") || "-"}</option>`)
+          .map((yard) => `<option value="${yard.id}">${yard.name} • ${buildYardAddress(yard) || "-"}</option>`)
+          .join("")}`;
+
+        trackingLocationYardSelect.innerHTML = `<option value="">Selecione o local atual</option>${currentAdminData.yards
+          .map((yard) => `<option value="${yard.id}">${yard.name} • ${buildYardAddress(yard) || "-"}</option>`)
           .join("")}`;
       };
 
@@ -882,7 +932,7 @@
             <article class="admin-list-item">
               <strong>${yard.name}</strong>
               <span>${[yard.city, yard.state].filter(Boolean).join(" / ") || "Sem local"}</span>
-              <p>${yard.address || "Sem endereço"} • ${yard.contact_phone || "Sem telefone"}</p>
+              <p>${buildYardAddress(yard) || "Sem endereço"} • ${yard.contact_phone || "Sem telefone"}</p>
             </article>
           `
         );
@@ -1143,6 +1193,54 @@
         }
       });
 
+      clientForm.elements.cep.addEventListener("input", () => {
+        clientForm.elements.cep.value = formatCep(clientForm.elements.cep.value);
+      });
+
+      clientForm.elements.cep.addEventListener("blur", async () => {
+        const cep = clientForm.elements.cep.value;
+        if (onlyDigits(cep).length !== 8) {
+          return;
+        }
+
+        try {
+          const data = await lookupCep(cep);
+          clientForm.elements.address.value = data.logradouro || "";
+          clientForm.elements.district.value = data.bairro || "";
+          clientForm.elements.city.value = data.localidade || "";
+          clientForm.elements.state.value = data.uf || "";
+        } catch (error) {
+          setStatus(clientStatus, error.message, true);
+        }
+      });
+
+      yardForm.elements.cep.addEventListener("input", () => {
+        yardForm.elements.cep.value = formatCep(yardForm.elements.cep.value);
+      });
+
+      yardForm.elements.cep.addEventListener("blur", async () => {
+        const cep = yardForm.elements.cep.value;
+        if (onlyDigits(cep).length !== 8) {
+          return;
+        }
+
+        try {
+          const data = await lookupCep(cep);
+          yardForm.elements.address.value = data.logradouro || "";
+          yardForm.elements.district.value = data.bairro || "";
+          yardForm.elements.city.value = data.localidade || "";
+          yardForm.elements.state.value = data.uf || "";
+        } catch (error) {
+          const yardStatus = document.getElementById("yardStatus");
+          setStatus(yardStatus, error.message, true);
+        }
+      });
+
+      trackingLocationYardSelect.addEventListener("change", () => {
+        const selectedYard = currentAdminData.yards.find((yard) => yard.id === trackingLocationYardSelect.value);
+        trackingCurrentLocationPreview.value = buildYardAddress(selectedYard);
+      });
+
       adminLoginForm.addEventListener("submit", async (event) => {
         event.preventDefault();
         setStatus(adminLoginStatus, "Entrando...");
@@ -1246,20 +1344,32 @@
         }
       });
 
-      document.getElementById("yardForm").addEventListener("submit", async (event) => {
+      yardForm.addEventListener("submit", async (event) => {
         event.preventDefault();
         const yardStatus = document.getElementById("yardStatus");
         setStatus(yardStatus, "Salvando...");
 
         try {
           const formData = new FormData(event.currentTarget);
+          const fullAddress = [
+            formData.get("address"),
+            formData.get("number"),
+            formData.get("district"),
+            formData.get("city"),
+            formData.get("state"),
+            formData.get("cep")
+          ]
+            .map((value) => String(value || "").trim())
+            .filter(Boolean)
+            .join(", ");
+
           await adminFetch("/api/admin/yards", {
             method: "POST",
             body: JSON.stringify({
               name: formData.get("name"),
               city: formData.get("city"),
               state: formData.get("state"),
-              address: formData.get("address"),
+              address: fullAddress,
               contactName: formData.get("contactName"),
               contactPhone: formData.get("contactPhone"),
               capacityInfo: formData.get("capacityInfo"),
@@ -1283,6 +1393,9 @@
           const formData = new FormData(trackingForm);
           const client = currentAdminData.users.find((user) => user.id === formData.get("clientUserId"));
           const item = currentAdminData.catalogItems.find((catalogItem) => catalogItem.id === formData.get("catalogItemId"));
+          const selectedLocationYard =
+            currentAdminData.yards.find((yard) => yard.id === formData.get("currentLocationYardId")) ||
+            currentAdminData.yards.find((yard) => yard.id === formData.get("yardId"));
 
           if (!client || !item) {
             throw new Error("Selecione um cliente e um veículo válidos.");
@@ -1301,7 +1414,7 @@
               trackingCode: formData.get("trackingCode"),
               status: formData.get("status"),
               alertMessage: formData.get("alertMessage"),
-              currentLocation: formData.get("currentLocation"),
+              currentLocation: buildYardAddress(selectedLocationYard),
               expectedDeliveryDate: formData.get("expectedDeliveryDate"),
               notes: formData.get("notes")
             })
