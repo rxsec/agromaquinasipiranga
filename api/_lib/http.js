@@ -46,3 +46,16 @@ export const readJsonBody = async (req) => {
   const raw = Buffer.concat(chunks).toString("utf8");
   return raw ? JSON.parse(raw) : {};
 };
+
+export const getQueryParam = (req, key) => {
+  if (req.query && typeof req.query === "object" && key in req.query) {
+    return req.query[key];
+  }
+
+  try {
+    const url = new URL(req.url || "/", "http://localhost");
+    return url.searchParams.get(key);
+  } catch (error) {
+    return null;
+  }
+};

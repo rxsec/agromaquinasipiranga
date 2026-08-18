@@ -1,5 +1,5 @@
 import { listPublicCatalogItems } from "../../src/admin/repository.js";
-import { handleOptions, sendJson } from "../_lib/http.js";
+import { getQueryParam, handleOptions, sendJson } from "../_lib/http.js";
 
 export default async function handler(req, res) {
   if (handleOptions(req, res)) {
@@ -11,12 +11,18 @@ export default async function handler(req, res) {
   }
 
   try {
+    const section = getQueryParam(req, "section");
+    const category = getQueryParam(req, "category");
+    const search = getQueryParam(req, "search");
+    const excludeSlug = getQueryParam(req, "excludeSlug");
+    const limit = getQueryParam(req, "limit");
+
     const items = await listPublicCatalogItems({
-      section: req.query.section ? String(req.query.section).trim() : null,
-      category: req.query.category ? String(req.query.category).trim() : null,
-      search: req.query.search ? String(req.query.search).trim() : null,
-      excludeSlug: req.query.excludeSlug ? String(req.query.excludeSlug).trim() : null,
-      limit: req.query.limit ? Number(req.query.limit) : null
+      section: section ? String(section).trim() : null,
+      category: category ? String(category).trim() : null,
+      search: search ? String(search).trim() : null,
+      excludeSlug: excludeSlug ? String(excludeSlug).trim() : null,
+      limit: limit ? Number(limit) : null
     });
 
     return sendJson(req, res, 200, { items });

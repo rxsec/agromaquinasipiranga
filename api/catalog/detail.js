@@ -1,5 +1,5 @@
 import { findPublicCatalogItemBySlug } from "../../src/admin/repository.js";
-import { handleOptions, sendJson } from "../_lib/http.js";
+import { getQueryParam, handleOptions, sendJson } from "../_lib/http.js";
 
 export default async function handler(req, res) {
   if (handleOptions(req, res)) {
@@ -11,7 +11,8 @@ export default async function handler(req, res) {
   }
 
   try {
-    const slug = req.query.slug ? String(req.query.slug).trim() : "";
+    const slugValue = getQueryParam(req, "slug");
+    const slug = slugValue ? String(slugValue).trim() : "";
 
     if (!slug) {
       return sendJson(req, res, 400, { message: "Slug do item nao informado." });
