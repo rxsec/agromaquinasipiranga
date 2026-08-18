@@ -17,7 +17,8 @@ export const createUser = async ({
   complement,
   city,
   state,
-  passwordHash
+  passwordHash,
+  role = "customer"
 }) => {
   const query = `
     insert into public.app_users (
@@ -32,10 +33,11 @@ export const createUser = async ({
       complement,
       city,
       state,
-      password_hash
+      password_hash,
+      role
     )
-    values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
-    returning id, full_name, email, whatsapp, cpf, cep, address, number, district, complement, city, state, created_at
+    values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)
+    returning id, full_name, email, whatsapp, cpf, cep, address, number, district, complement, city, state, role, created_at
   `;
 
   const { rows } = await pool.query(query, [
@@ -50,7 +52,8 @@ export const createUser = async ({
     complement,
     city,
     state,
-    passwordHash
+    passwordHash,
+    role
   ]);
 
   return rows[0];
@@ -71,6 +74,7 @@ export const findUserByEmailOrCpf = async (email, cpfDigits) => {
       complement,
       city,
       state,
+      role,
       password_hash,
       created_at
     from public.app_users
@@ -98,6 +102,7 @@ export const findUserById = async (id) => {
       complement,
       city,
       state,
+      role,
       password_hash,
       created_at
     from public.app_users
@@ -106,6 +111,22 @@ export const findUserById = async (id) => {
   `;
 
   const { rows } = await pool.query(query, [id]);
+  return rows[0] || null;
+};
+
+export const updateUserPasswordAndRole = async (id, passwordHash, role) => {
+  const { rows } = await pool.query(
+    `
+      update public.app_users
+      set password_hash = $2,
+          role = $3,
+          updated_at = timezone('utc', now())
+      where id = $1
+      returning id, full_name, email, whatsapp, cpf, cep, address, number, district, complement, city, state, role, password_hash, created_at
+    `,
+    [id, passwordHash, role]
+  );
+
   return rows[0] || null;
 };
 

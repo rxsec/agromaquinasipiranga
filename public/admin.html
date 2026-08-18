@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Agro Maquinas Ipiranga | Admin</title>
+    <meta
+      name="description"
+      content="Painel administrativo da Agro Maquinas Ipiranga para gerenciar clientes, catalogo, motoristas, patios e rastreios."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Montserrat:wght@600;700;800&family=Sora:wght@500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body class="admin-page">
+    <main class="admin-shell">
+      <section class="admin-login" id="adminLogin">
+        <div class="admin-login__brand">
+          <img src="./logo.png" alt="Agro Maquinas Ipiranga" />
+          <span>Painel Administrativo</span>
+        </div>
+        <div class="admin-login__card">
+          <div class="admin-login__copy">
+            <span class="admin-eyebrow">Acesso Restrito</span>
+            <h1>Entrar no painel admin</h1>
+            <p>
+              Este ambiente e visivel somente para o administrador e concentra clientes,
+              catalogo, motoristas, patios e rastreios.
+            </p>
+          </div>
+          <form class="admin-form" id="adminLoginForm">
+            <label>
+              <span>E-mail admin</span>
+              <input type="email" name="email" value="admin@agromaquinasipiranga.com.br" required />
+            </label>
+            <label>
+              <span>Senha</span>
+              <input type="password" name="password" value="agro@2026" required />
+            </label>
+            <button class="button button-primary" type="submit">Entrar no painel</button>
+            <p class="admin-status" id="adminLoginStatus"></p>
+          </form>
+        </div>
+      </section>
+
+      <section class="admin-dashboard hidden" id="adminDashboard">
+        <header class="admin-topbar">
+          <div>
+            <span class="admin-eyebrow">Admin</span>
+            <h1>Painel Agro Maquinas Ipiranga</h1>
+            <p>Gerencie os dados principais do site em um unico lugar.</p>
+          </div>
+          <button class="button button-secondary" type="button" id="adminLogoutButton">
+            Sair
+          </button>
+        </header>
+
+        <section class="admin-grid admin-grid--stats" id="adminStats"></section>
+
+        <section class="admin-grid">
+          <article class="admin-card admin-card--wide">
+            <div class="admin-card__head">
+              <div>
+                <span class="admin-eyebrow">Cadastro</span>
+                <h2>Itens do Catalogo</h2>
+              </div>
+            </div>
+            <form class="admin-form admin-form--grid" id="catalogForm">
+              <label>
+                <span>Titulo</span>
+                <input type="text" name="title" required />
+              </label>
+              <label>
+                <span>Slug</span>
+                <input type="text" name="slug" placeholder="trator-john-deere-6100j" required />
+              </label>
+              <label>
+                <span>Categoria</span>
+                <input type="text" name="category" placeholder="Tratores" required />
+              </label>
+              <label>
+                <span>Preco</span>
+                <input type="number" name="price" step="0.01" required />
+              </label>
+              <label>
+                <span>Local</span>
+                <input type="text" name="location" />
+              </label>
+              <label>
+                <span>Ano / referencia</span>
+                <input type="text" name="yearLabel" />
+              </label>
+              <label>
+                <span>Imagem</span>
+                <input type="url" name="imageUrl" placeholder="https://..." />
+              </label>
+              <label>
+                <span>WhatsApp</span>
+                <input type="text" name="whatsapp" />
+              </label>
+              <label>
+                <span>Selo</span>
+                <input type="text" name="badge" placeholder="Carros / Maquinas" />
+              </label>
+              <label>
+                <span>Qtd. galeria</span>
+                <input type="number" name="galleryCount" min="1" value="1" />
+              </label>
+              <fieldset class="admin-checkboxes">
+                <legend>Secoes</legend>
+                <label><input type="checkbox" name="sections" value="destaques" /> Maquinas em destaque</label>
+                <label><input type="checkbox" name="sections" value="relacionados" /> Produtos relacionados</label>
+                <label><input type="checkbox" name="sections" value="catalogo" checked /> Catalogo</label>
+              </fieldset>
+              <label class="admin-form__full">
+                <span>Descricao</span>
+                <textarea name="description" rows="4"></textarea>
+              </label>
+              <div class="admin-form__full admin-form__actions">
+                <button class="button button-primary" type="submit">Salvar item</button>
+                <p class="admin-status" id="catalogStatus"></p>
+              </div>
+            </form>
+          </article>
+
+          <article class="admin-card">
+            <div class="admin-card__head">
+              <div>
+                <span class="admin-eyebrow">Cadastro</span>
+                <h2>Motoristas</h2>
+              </div>
+            </div>
+            <form class="admin-form" id="driverForm">
+              <label><span>Nome completo</span><input type="text" name="fullName" required /></label>
+              <label><span>CPF</span><input type="text" name="cpf" /></label>
+              <label><span>CNH</span><input type="text" name="cnh" /></label>
+              <label><span>Telefone</span><input type="text" name="phone" /></label>
+              <label><span>E-mail</span><input type="email" name="email" /></label>
+              <label><span>Status</span><input type="text" name="status" value="ativo" /></label>
+              <label><span>Observacoes</span><textarea name="notes" rows="3"></textarea></label>
+              <button class="button button-primary" type="submit">Salvar motorista</button>
+              <p class="admin-status" id="driverStatus"></p>
+            </form>
+          </article>
+
+          <article class="admin-card">
+            <div class="admin-card__head">
+              <div>
+                <span class="admin-eyebrow">Cadastro</span>
+                <h2>Patios</h2>
+              </div>
+            </div>
+            <form class="admin-form" id="yardForm">
+              <label><span>Nome do patio</span><input type="text" name="name" required /></label>
+              <label><span>Cidade</span><input type="text" name="city" /></label>
+              <label><span>Estado</span><input type="text" name="state" /></label>
+              <label><span>Endereco</span><input type="text" name="address" /></label>
+              <label><span>Responsavel</span><input type="text" name="contactName" /></label>
+              <label><span>Telefone</span><input type="text" name="contactPhone" /></label>
+              <label><span>Capacidade</span><input type="text" name="capacityInfo" /></label>
+              <label><span>Observacoes</span><textarea name="notes" rows="3"></textarea></label>
+              <button class="button button-primary" type="submit">Salvar patio</button>
+              <p class="admin-status" id="yardStatus"></p>
+            </form>
+          </article>
+
+          <article class="admin-card admin-card--wide">
+            <div class="admin-card__head">
+              <div>
+                <span class="admin-eyebrow">Cadastro</span>
+                <h2>Rastreio de Clientes</h2>
+              </div>
+            </div>
+            <form class="admin-form admin-form--grid" id="trackingForm">
+              <label>
+                <span>ID do cliente cadastrado</span>
+                <input type="text" name="clientUserId" placeholder="Opcional" />
+              </label>
+              <label>
+                <span>Nome do cliente</span>
+                <input type="text" name="clientName" required />
+              </label>
+              <label>
+                <span>E-mail do cliente</span>
+                <input type="email" name="clientEmail" />
+              </label>
+              <label>
+                <span>ID do item</span>
+                <input type="text" name="catalogItemId" placeholder="Opcional" />
+              </label>
+              <label>
+                <span>Nome do item</span>
+                <input type="text" name="itemName" required />
+              </label>
+              <label>
+                <span>ID do motorista</span>
+                <input type="text" name="driverId" placeholder="Opcional" />
+              </label>
+              <label>
+                <span>ID do patio</span>
+                <input type="text" name="yardId" placeholder="Opcional" />
+              </label>
+              <label>
+                <span>Codigo de rastreio</span>
+                <input type="text" name="trackingCode" required />
+              </label>
+              <label>
+                <span>Status</span>
+                <input type="text" name="status" value="em separacao" />
+              </label>
+              <label>
+                <span>Local atual</span>
+                <input type="text" name="currentLocation" />
+              </label>
+              <label>
+                <span>Previsao de entrega</span>
+                <input type="date" name="expectedDeliveryDate" />
+              </label>
+              <label class="admin-form__full">
+                <span>Observacoes</span>
+                <textarea name="notes" rows="4"></textarea>
+              </label>
+              <div class="admin-form__full admin-form__actions">
+                <button class="button button-primary" type="submit">Salvar rastreio</button>
+                <p class="admin-status" id="trackingStatus"></p>
+              </div>
+            </form>
+          </article>
+        </section>
+
+        <section class="admin-grid">
+          <article class="admin-card admin-card--wide">
+            <div class="admin-card__head">
+              <div>
+                <span class="admin-eyebrow">Usuarios</span>
+                <h2>Clientes cadastrados</h2>
+              </div>
+            </div>
+            <div class="admin-table-wrap">
+              <table class="admin-table" id="usersTable">
+                <thead>
+                  <tr>
+                    <th>Nome</th>
+                    <th>E-mail</th>
+                    <th>WhatsApp</th>
+                    <th>Cidade</th>
+                    <th>Perfil</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </article>
+
+          <article class="admin-card admin-card--wide">
+            <div class="admin-card__head">
+              <div>
+                <span class="admin-eyebrow">Catalogo</span>
+                <h2>Itens cadastrados</h2>
+              </div>
+            </div>
+            <div class="admin-table-wrap">
+              <table class="admin-table" id="catalogTable">
+                <thead>
+                  <tr>
+                    <th>Titulo</th>
+                    <th>Categoria</th>
+                    <th>Secoes</th>
+                    <th>Preco</th>
+                    <th>Local</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </article>
+
+          <article class="admin-card">
+            <div class="admin-card__head">
+              <div>
+                <span class="admin-eyebrow">Motoristas</span>
+                <h2>Lista</h2>
+              </div>
+            </div>
+            <div class="admin-list" id="driversList"></div>
+          </article>
+
+          <article class="admin-card">
+            <div class="admin-card__head">
+              <div>
+                <span class="admin-eyebrow">Patios</span>
+                <h2>Lista</h2>
+              </div>
+            </div>
+            <div class="admin-list" id="yardsList"></div>
+          </article>
+
+          <article class="admin-card admin-card--wide">
+            <div class="admin-card__head">
+              <div>
+                <span class="admin-eyebrow">Rastreio</span>
+                <h2>Movimentacoes</h2>
+              </div>
+            </div>
+            <div class="admin-list admin-list--tracking" id="trackingsList"></div>
+          </article>
+        </section>
+      </section>
+    </main>
+
+    <script>
+      const storageKey = "agro_admin_auth";
+      const loginSection = document.getElementById("adminLogin");
+      const dashboardSection = document.getElementById("adminDashboard");
+      const adminLoginForm = document.getElementById("adminLoginForm");
+      const adminLoginStatus = document.getElementById("adminLoginStatus");
+      const adminLogoutButton = document.getElementById("adminLogoutButton");
+
+      const adminStats = document.getElementById("adminStats");
+      const usersTableBody = document.querySelector("#usersTable tbody");
+      const catalogTableBody = document.querySelector("#catalogTable tbody");
+      const driversList = document.getElementById("driversList");
+      const yardsList = document.getElementById("yardsList");
+      const trackingsList = document.getElementById("trackingsList");
+
+      const getAuth = () => {
+        try {
+          return JSON.parse(localStorage.getItem(storageKey) || "null");
+        } catch (error) {
+          return null;
+        }
+      };
+
+      const setAuth = (payload) => localStorage.setItem(storageKey, JSON.stringify(payload));
+      const clearAuth = () => localStorage.removeItem(storageKey);
+
+      const setStatus = (element, message, error = false) => {
+        element.textContent = message;
+        element.classList.toggle("is-error", error);
+      };
+
+      const adminFetch = async (url, options = {}) => {
+        const auth = getAuth();
+        const headers = {
+          "Content-Type": "application/json",
+          ...(options.headers || {})
+        };
+
+        if (auth && auth.accessToken) {
+          headers.Authorization = `Bearer ${auth.accessToken}`;
+        }
+
+        const response = await fetch(url, { ...options, headers });
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          throw new Error(data.message || "Erro ao processar a solicitacao.");
+        }
+
+        return data;
+      };
+
+      const renderStats = (data) => {
+        const stats = [
+          ["Clientes cadastrados", data.users.length],
+          ["Itens no catalogo", data.catalogItems.length],
+          ["Motoristas", data.drivers.length],
+          ["Patios", data.yards.length],
+          ["Rastreios", data.trackings.length]
+        ];
+
+        adminStats.innerHTML = stats
+          .map(
+            ([label, value]) => `
+              <article class="admin-stat">
+                <span>${label}</span>
+                <strong>${value}</strong>
+              </article>
+            `
+          )
+          .join("");
+      };
+
+      const renderUsers = (users) => {
+        usersTableBody.innerHTML = users
+          .map(
+            (user) => `
+              <tr>
+                <td>${user.full_name || "-"}</td>
+                <td>${user.email || "-"}</td>
+                <td>${user.whatsapp || "-"}</td>
+                <td>${[user.city, user.state].filter(Boolean).join(" / ") || "-"}</td>
+                <td>${user.role || "customer"}</td>
+              </tr>
+            `
+          )
+          .join("");
+      };
+
+      const renderCatalog = (items) => {
+        catalogTableBody.innerHTML = items
+          .map(
+            (item) => `
+              <tr>
+                <td>${item.title || "-"}</td>
+                <td>${item.category || "-"}</td>
+                <td>${Array.isArray(item.sections) ? item.sections.join(", ") : "-"}</td>
+                <td>R$ ${Number(item.price || 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</td>
+                <td>${item.location || "-"}</td>
+              </tr>
+            `
+          )
+          .join("");
+      };
+
+      const renderSimpleList = (target, items, renderer) => {
+        target.innerHTML = items.length
+          ? items.map(renderer).join("")
+          : '<div class="admin-empty">Nenhum registro encontrado.</div>';
+      };
+
+      const renderDashboard = (data) => {
+        renderStats(data);
+        renderUsers(data.users);
+        renderCatalog(data.catalogItems);
+        renderSimpleList(
+          driversList,
+          data.drivers,
+          (driver) => `
+            <article class="admin-list-item">
+              <strong>${driver.full_name}</strong>
+              <span>${driver.status || "ativo"}</span>
+              <p>${[driver.phone, driver.email].filter(Boolean).join(" • ") || "Sem contato informado"}</p>
+            </article>
+          `
+        );
+        renderSimpleList(
+          yardsList,
+          data.yards,
+          (yard) => `
+            <article class="admin-list-item">
+              <strong>${yard.name}</strong>
+              <span>${[yard.city, yard.state].filter(Boolean).join(" / ") || "Sem local"}</span>
+              <p>${yard.contact_phone || "Sem telefone"}</p>
+            </article>
+          `
+        );
+        renderSimpleList(
+          trackingsList,
+          data.trackings,
+          (tracking) => `
+            <article class="admin-list-item">
+              <strong>${tracking.tracking_code} • ${tracking.client_name}</strong>
+              <span>${tracking.status || "-"}</span>
+              <p>${tracking.item_name || "-"} • ${tracking.current_location || "Sem local atual"}</p>
+            </article>
+          `
+        );
+      };
+
+      const loadDashboard = async () => {
+        const data = await adminFetch("/api/admin/dashboard");
+        renderDashboard(data);
+      };
+
+      const showDashboard = () => {
+        loginSection.classList.add("hidden");
+        dashboardSection.classList.remove("hidden");
+      };
+
+      const showLogin = () => {
+        dashboardSection.classList.add("hidden");
+        loginSection.classList.remove("hidden");
+      };
+
+      adminLoginForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        setStatus(adminLoginStatus, "Entrando...");
+
+        try {
+          const formData = new FormData(adminLoginForm);
+          const response = await fetch("/api/admin/session", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              email: formData.get("email"),
+              password: formData.get("password")
+            })
+          });
+          const data = await response.json();
+
+          if (!response.ok) {
+            throw new Error(data.message || "Nao foi possivel entrar no painel.");
+          }
+
+          setAuth(data);
+          setStatus(adminLoginStatus, "Acesso liberado.");
+          showDashboard();
+          await loadDashboard();
+        } catch (error) {
+          setStatus(adminLoginStatus, error.message, true);
+        }
+      });
+
+      adminLogoutButton.addEventListener("click", () => {
+        clearAuth();
+        showLogin();
+      });
+
+      const bindForm = (formId, url, statusId, payloadBuilder) => {
+        const form = document.getElementById(formId);
+        const status = document.getElementById(statusId);
+
+        form.addEventListener("submit", async (event) => {
+          event.preventDefault();
+          setStatus(status, "Salvando...");
+
+          try {
+            const formData = new FormData(form);
+            const payload = payloadBuilder(formData);
+
+            await adminFetch(url, {
+              method: "POST",
+              body: JSON.stringify(payload)
+            });
+
+            form.reset();
+            setStatus(status, "Salvo com sucesso.");
+            await loadDashboard();
+          } catch (error) {
+            setStatus(status, error.message, true);
+          }
+        });
+      };
+
+      bindForm("catalogForm", "/api/admin/catalog-items", "catalogStatus", (formData) => ({
+        title: formData.get("title"),
+        slug: formData.get("slug"),
+        category: formData.get("category"),
+        price: formData.get("price"),
+        location: formData.get("location"),
+        yearLabel: formData.get("yearLabel"),
+        imageUrl: formData.get("imageUrl"),
+        whatsapp: formData.get("whatsapp"),
+        badge: formData.get("badge"),
+        galleryCount: formData.get("galleryCount"),
+        description: formData.get("description"),
+        sections: formData.getAll("sections")
+      }));
+
+      bindForm("driverForm", "/api/admin/drivers", "driverStatus", (formData) => ({
+        fullName: formData.get("fullName"),
+        cpf: formData.get("cpf"),
+        cnh: formData.get("cnh"),
+        phone: formData.get("phone"),
+        email: formData.get("email"),
+        status: formData.get("status"),
+        notes: formData.get("notes")
+      }));
+
+      bindForm("yardForm", "/api/admin/yards", "yardStatus", (formData) => ({
+        name: formData.get("name"),
+        city: formData.get("city"),
+        state: formData.get("state"),
+        address: formData.get("address"),
+        contactName: formData.get("contactName"),
+        contactPhone: formData.get("contactPhone"),
+        capacityInfo: formData.get("capacityInfo"),
+        notes: formData.get("notes")
+      }));
+
+      bindForm("trackingForm", "/api/admin/trackings", "trackingStatus", (formData) => ({
+        clientUserId: formData.get("clientUserId"),
+        clientName: formData.get("clientName"),
+        clientEmail: formData.get("clientEmail"),
+        catalogItemId: formData.get("catalogItemId"),
+        itemName: formData.get("itemName"),
+        driverId: formData.get("driverId"),
+        yardId: formData.get("yardId"),
+        trackingCode: formData.get("trackingCode"),
+        status: formData.get("status"),
+        currentLocation: formData.get("currentLocation"),
+        expectedDeliveryDate: formData.get("expectedDeliveryDate"),
+        notes: formData.get("notes")
+      }));
+
+      (async () => {
+        const auth = getAuth();
+        if (!auth || !auth.accessToken) {
+          showLogin();
+          return;
+        }
+
+        try {
+          showDashboard();
+          await loadDashboard();
+        } catch (error) {
+          clearAuth();
+          showLogin();
+        }
+      })();
+    </script>
+  </body>
+</html>

@@ -4,6 +4,7 @@ export const sanitizeUser = (user) => ({
   id: user.id,
   fullName: user.full_name,
   email: user.email,
+  role: user.role || "customer",
   whatsapp: user.whatsapp,
   cpf: user.cpf,
   cep: user.cep,

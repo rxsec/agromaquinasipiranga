@@ -28,6 +28,10 @@
       "destination": "/cadastro.html"
     },
     {
+      "source": "/admin",
+      "destination": "/admin.html"
+    },
+    {
       "source": "/detalhe",
       "destination": "/detalhe.html"
     }
