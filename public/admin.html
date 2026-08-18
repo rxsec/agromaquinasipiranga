@@ -1183,8 +1183,9 @@
 
         try {
           const formData = new FormData(clientForm);
-          await adminFetch("/api/admin/customers", {
+          const response = await fetch("/api/auth/register", {
             method: "POST",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               fullName: formData.get("fullName"),
               email: formData.get("email"),
@@ -1200,6 +1201,11 @@
               password: formData.get("password")
             })
           });
+
+          const data = await response.json().catch(() => ({}));
+          if (!response.ok) {
+            throw new Error(data.message || "Erro ao cadastrar cliente.");
+          }
 
           setStatus(clientStatus, "Cliente salvo com sucesso.");
           closeModal(clientModal);
