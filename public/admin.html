@@ -188,83 +188,15 @@
                 <article class="admin-card admin-card--wide">
                   <div class="admin-card__head">
                     <div>
-                      <span class="admin-eyebrow">Cadastro</span>
-                      <h2>Veículos, Máquinas e Catálogo</h2>
+                      <span class="admin-eyebrow">Vitrine</span>
+                      <h2>Veículos cadastrados</h2>
                     </div>
+                    <button class="button button-primary" type="button" id="catalogOpenCreateButton">Cadastrar veículo</button>
                   </div>
-                  <form class="admin-form admin-form--grid" id="catalogForm">
-                    <input type="hidden" name="id" />
-                    <label>
-                      <span>Título</span>
-                      <input type="text" name="title" required />
-                    </label>
-                    <label>
-                      <span>Slug</span>
-                      <input type="text" name="slug" placeholder="trator-john-deere-6100j" required />
-                    </label>
-                    <label>
-                      <span>Categoria</span>
-                      <input type="text" name="category" placeholder="Tratores" required />
-                    </label>
-                    <label>
-                      <span>Preço</span>
-                      <input type="number" name="price" step="0.01" required />
-                    </label>
-                    <label>
-                      <span>Local</span>
-                      <input type="text" name="location" />
-                    </label>
-                    <label>
-                      <span>Ano / referência</span>
-                      <input type="text" name="yearLabel" />
-                    </label>
-                    <label>
-                      <span>WhatsApp</span>
-                      <input type="text" name="whatsapp" />
-                    </label>
-                    <label>
-                      <span>Selo</span>
-                      <input type="text" name="badge" placeholder="Carros / Máquinas" />
-                    </label>
-                    <label>
-                      <span>Qtd. da galeria</span>
-                      <input type="number" name="galleryCount" min="1" value="1" />
-                    </label>
-                    <fieldset class="admin-checkboxes">
-                      <legend>Seções</legend>
-                      <label><input type="checkbox" name="sections" value="destaques" /> Máquinas em destaque</label>
-                      <label><input type="checkbox" name="sections" value="relacionados" /> Produtos relacionados</label>
-                      <label><input type="checkbox" name="sections" value="catalogo" checked /> Catálogo</label>
-                    </fieldset>
-                    <label class="admin-form__full">
-                      <span>Fotos do computador</span>
-                      <input type="file" id="catalogImagesInput" accept="image/*" multiple />
-                    </label>
-                    <div class="admin-form__full">
-                      <div class="admin-upload-note">
-                        As fotos são comprimidas antes do envio para deixar o painel mais leve.
-                      </div>
-                      <div class="admin-gallery-preview" id="catalogImagePreview"></div>
-                    </div>
-                    <label class="admin-form__full">
-                      <span>Descrição</span>
-                      <textarea name="description" rows="4"></textarea>
-                    </label>
-                    <div class="admin-form__full admin-form__actions">
-                      <button class="button button-primary" type="submit" id="catalogSubmitButton">Salvar veículo</button>
-                      <button class="button button-secondary hidden" type="button" id="catalogCancelButton">Cancelar edição</button>
-                      <p class="admin-status" id="catalogStatus"></p>
-                    </div>
-                  </form>
-                </article>
-
-                <article class="admin-card admin-card--wide">
-                  <div class="admin-card__head">
-                    <div>
-                      <span class="admin-eyebrow">Catálogo</span>
-                      <h2>Itens cadastrados</h2>
-                    </div>
-                  </div>
+                  <p class="admin-panel-copy">
+                    Esta vitrine mostra somente os veículos atuais do site. Para cadastrar ou editar,
+                    use o pop-up e arraste as fotos para escolher a imagem principal do card.
+                  </p>
                   <div class="admin-catalog-list" id="catalogCards"></div>
                 </article>
               </section>
@@ -420,6 +352,84 @@
       </section>
     </main>
 
+    <div class="admin-modal hidden" id="catalogModal">
+      <div class="admin-modal__backdrop" data-close-catalog-modal></div>
+      <div class="admin-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="catalogModalTitle">
+        <div class="admin-modal__head">
+          <div>
+            <span class="admin-eyebrow">Cadastro</span>
+            <h2 id="catalogModalTitle">Cadastrar veículo</h2>
+          </div>
+          <button class="admin-modal__close" type="button" data-close-catalog-modal aria-label="Fechar">×</button>
+        </div>
+
+        <form class="admin-form admin-form--grid" id="catalogForm">
+          <input type="hidden" name="id" />
+          <label>
+            <span>Título</span>
+            <input type="text" name="title" required />
+          </label>
+          <label>
+            <span>Slug</span>
+            <input type="text" name="slug" placeholder="saveiro-cd-cross-1-6-16v" required />
+          </label>
+          <label>
+            <span>Categoria</span>
+            <input type="text" name="category" placeholder="Automóveis" required />
+          </label>
+          <label>
+            <span>Preço</span>
+            <input type="number" name="price" step="0.01" required />
+          </label>
+          <label>
+            <span>Local</span>
+            <input type="text" name="location" />
+          </label>
+          <label>
+            <span>Ano / referência</span>
+            <input type="text" name="yearLabel" />
+          </label>
+          <label>
+            <span>WhatsApp</span>
+            <input type="text" name="whatsapp" />
+          </label>
+          <label>
+            <span>Selo</span>
+            <input type="text" name="badge" placeholder="Carros / Máquinas" />
+          </label>
+          <label>
+            <span>Qtd. da galeria</span>
+            <input type="number" name="galleryCount" min="1" value="1" />
+          </label>
+          <fieldset class="admin-checkboxes">
+            <legend>Seções</legend>
+            <label><input type="checkbox" name="sections" value="destaques" /> Máquinas em destaque</label>
+            <label><input type="checkbox" name="sections" value="relacionados" /> Produtos relacionados</label>
+            <label><input type="checkbox" name="sections" value="catalogo" checked /> Catálogo</label>
+          </fieldset>
+          <label class="admin-form__full">
+            <span>Fotos do computador</span>
+            <input type="file" id="catalogImagesInput" accept="image/*" multiple />
+          </label>
+          <div class="admin-form__full">
+            <div class="admin-upload-note">
+              Arraste as imagens para reorganizar. A primeira imagem será a capa do card no site.
+            </div>
+            <div class="admin-gallery-preview" id="catalogImagePreview"></div>
+          </div>
+          <label class="admin-form__full">
+            <span>Descrição</span>
+            <textarea name="description" rows="4"></textarea>
+          </label>
+          <div class="admin-form__full admin-form__actions">
+            <button class="button button-primary" type="submit" id="catalogSubmitButton">Salvar veículo</button>
+            <button class="button button-secondary hidden" type="button" id="catalogCancelButton">Cancelar edição</button>
+            <p class="admin-status" id="catalogStatus"></p>
+          </div>
+        </form>
+      </div>
+    </div>
+
     <script>
       const storageKey = "agro_admin_auth";
       const loginSection = document.getElementById("adminLogin");
@@ -435,6 +445,10 @@
       const catalogStatus = document.getElementById("catalogStatus");
       const catalogSubmitButton = document.getElementById("catalogSubmitButton");
       const catalogCancelButton = document.getElementById("catalogCancelButton");
+      const catalogOpenCreateButton = document.getElementById("catalogOpenCreateButton");
+      const catalogModal = document.getElementById("catalogModal");
+      const catalogModalTitle = document.getElementById("catalogModalTitle");
+      const catalogModalClosers = Array.from(document.querySelectorAll("[data-close-catalog-modal]"));
 
       const adminStats = document.getElementById("adminStats");
       const usersTableBody = document.querySelector("#usersTable tbody");
@@ -449,6 +463,7 @@
 
       let selectedGalleryImages = [];
       let editingCatalogId = null;
+      let draggedImageIndex = null;
 
       const getAuth = () => {
         try {
@@ -474,6 +489,7 @@
         catalogImagesInput.value = "";
         catalogSubmitButton.textContent = "Salvar veículo";
         catalogCancelButton.classList.add("hidden");
+        catalogModalTitle.textContent = "Cadastrar veículo";
         if (!keepStatus) {
           setStatus(catalogStatus, "");
         }
@@ -506,9 +522,20 @@
 
         catalogSubmitButton.textContent = "Salvar alterações";
         catalogCancelButton.classList.remove("hidden");
+        catalogModalTitle.textContent = "Editar veículo";
         renderImagePreview();
         activateTab("vehicles");
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        openCatalogModal();
+      };
+
+      const openCatalogModal = () => {
+        catalogModal.classList.remove("hidden");
+        document.body.classList.add("admin-modal-open");
+      };
+
+      const closeCatalogModal = () => {
+        catalogModal.classList.add("hidden");
+        document.body.classList.remove("admin-modal-open");
       };
 
       const activateTab = (target) => {
@@ -522,6 +549,20 @@
 
       tabButtons.forEach((button) => {
         button.addEventListener("click", () => activateTab(button.dataset.tabTarget));
+      });
+
+      catalogOpenCreateButton.addEventListener("click", () => {
+        resetCatalogForm();
+        openCatalogModal();
+      });
+
+      catalogModalClosers.forEach((button) => {
+        button.addEventListener("click", () => {
+          if (!editingCatalogId) {
+            resetCatalogForm();
+          }
+          closeCatalogModal();
+        });
       });
 
       const adminFetch = async (url, options = {}) => {
@@ -627,7 +668,7 @@
                     <div class="admin-catalog-card__body">
                       <span>${item.category || "-"}</span>
                       <strong>${item.title || "-"}</strong>
-                      <p>${Array.isArray(item.sections) ? item.sections.join(", ") : "-"}</p>
+                      <p>${Array.isArray(item.sections) ? item.sections.join(", ") : "-"} • capa definida pela 1ª foto</p>
                       <div class="admin-catalog-card__meta">
                         <em>R$ ${Number(item.price || 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</em>
                         <small>${galleryImages.length || item.gallery_count || 0} foto(s)</small>
@@ -669,6 +710,7 @@
                 }
 
                 setStatus(catalogStatus, "Item excluído com sucesso.");
+                closeCatalogModal();
                 await loadDashboard();
               } catch (error) {
                 setStatus(catalogStatus, error.message, true);
@@ -790,25 +832,75 @@
           reader.readAsDataURL(file);
         });
 
+      const moveGalleryImage = (fromIndex, toIndex) => {
+        if (fromIndex === toIndex || fromIndex == null || toIndex == null) {
+          return;
+        }
+        const [moved] = selectedGalleryImages.splice(fromIndex, 1);
+        selectedGalleryImages.splice(toIndex, 0, moved);
+      };
+
+      const removeGalleryImage = (index) => {
+        selectedGalleryImages.splice(index, 1);
+        catalogForm.elements.galleryCount.value = selectedGalleryImages.length || 1;
+        renderImagePreview();
+      };
+
       const renderImagePreview = () => {
         catalogImagePreview.innerHTML = selectedGalleryImages.length
           ? selectedGalleryImages
               .map(
                 (image, index) => `
-                  <figure class="admin-gallery-preview__item">
+                  <figure class="admin-gallery-preview__item" draggable="true" data-gallery-index="${index}">
                     <img src="${image}" alt="Foto ${index + 1}" />
-                    <figcaption>Foto ${index + 1}</figcaption>
+                    <figcaption>
+                      <span>${index === 0 ? "Capa do card" : `Foto ${index + 1}`}</span>
+                      <button class="admin-gallery-preview__remove" type="button" data-remove-gallery="${index}">Remover</button>
+                    </figcaption>
                   </figure>
                 `
               )
               .join("")
           : '<div class="admin-empty">Nenhuma foto selecionada.</div>';
+
+        catalogImagePreview.querySelectorAll("[data-remove-gallery]").forEach((button) => {
+          button.addEventListener("click", () => removeGalleryImage(Number(button.dataset.removeGallery)));
+        });
+
+        catalogImagePreview.querySelectorAll("[data-gallery-index]").forEach((item) => {
+          const index = Number(item.dataset.galleryIndex);
+
+          item.addEventListener("dragstart", () => {
+            draggedImageIndex = index;
+            item.classList.add("is-dragging");
+          });
+
+          item.addEventListener("dragend", () => {
+            draggedImageIndex = null;
+            item.classList.remove("is-dragging");
+          });
+
+          item.addEventListener("dragover", (event) => {
+            event.preventDefault();
+            item.classList.add("is-drop-target");
+          });
+
+          item.addEventListener("dragleave", () => {
+            item.classList.remove("is-drop-target");
+          });
+
+          item.addEventListener("drop", (event) => {
+            event.preventDefault();
+            item.classList.remove("is-drop-target");
+            moveGalleryImage(draggedImageIndex, index);
+            catalogForm.elements.galleryCount.value = selectedGalleryImages.length || 1;
+            renderImagePreview();
+          });
+        });
       };
 
       catalogImagesInput.addEventListener("change", async (event) => {
         const files = Array.from(event.target.files || []).slice(0, 8);
-        selectedGalleryImages = [];
-        renderImagePreview();
 
         if (!files.length) {
           return;
@@ -821,6 +913,7 @@
             const base64 = await resizeImage(file);
             selectedGalleryImages.push(base64);
           }
+          catalogForm.elements.galleryCount.value = selectedGalleryImages.length || 1;
           renderImagePreview();
         } catch (error) {
           selectedGalleryImages = [];
@@ -865,6 +958,7 @@
 
       catalogCancelButton.addEventListener("click", () => {
         resetCatalogForm();
+        closeCatalogModal();
       });
 
       const bindForm = (formId, url, statusId, payloadBuilder, afterSuccess) => {
@@ -929,6 +1023,7 @@
             : "Veículo salvo com sucesso.";
           resetCatalogForm({ keepStatus: true });
           setStatus(catalogStatus, successMessage);
+          closeCatalogModal();
           await loadDashboard();
         } catch (error) {
           setStatus(catalogStatus, error.message, true);
