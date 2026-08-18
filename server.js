@@ -17,10 +17,12 @@ import {
   createDriver,
   createTracking,
   createYard,
+  deleteCatalogItem,
   ensureDefaultAdminUser,
   findPublicCatalogItemBySlug,
   getAdminDashboardData,
-  listPublicCatalogItems
+  listPublicCatalogItems,
+  updateCatalogItem
 } from "./src/admin/repository.js";
 import {
   comparePassword,
@@ -285,16 +287,33 @@ app.get("/api/admin/dashboard", adminRequired, async (_req, res) => {
   }
 });
 
-app.post("/api/admin/catalog-items", adminRequired, async (req, res) => {
+app.all("/api/admin/catalog-items", adminRequired, async (req, res) => {
   try {
-    const { title, slug, category, sections, price, location, yearLabel, imageUrl, galleryImages, whatsapp, badge, galleryCount, description } =
+    if (!["POST", "PUT", "DELETE"].includes(req.method)) {
+      return res.status(405).json({ message: "Metodo nao permitido." });
+    }
+
+    const { id, title, slug, category, sections, price, location, yearLabel, imageUrl, galleryImages, whatsapp, badge, galleryCount, description } =
       req.body;
+
+    if (req.method === "DELETE") {
+      if (!id) {
+        return res.status(400).json({ message: "ID do item nao informado." });
+      }
+
+      const deleted = await deleteCatalogItem(String(id).trim());
+      if (!deleted) {
+        return res.status(404).json({ message: "Item nao encontrado." });
+      }
+
+      return res.json({ success: true });
+    }
 
     if (!title || !slug || !category) {
       return res.status(400).json({ message: "Titulo, slug e categoria sao obrigatorios." });
     }
 
-    const item = await createCatalogItem({
+    const payload = {
       title: String(title).trim(),
       slug: String(slug).trim().toLowerCase(),
       category: String(category).trim(),
@@ -308,12 +327,27 @@ app.post("/api/admin/catalog-items", adminRequired, async (req, res) => {
       badge: badge ? String(badge).trim() : null,
       galleryCount: Number(galleryCount || 1),
       description: description ? String(description).trim() : null
-    });
+    };
+
+    if (req.method === "PUT") {
+      if (!id) {
+        return res.status(400).json({ message: "ID do item nao informado." });
+      }
+
+      const item = await updateCatalogItem(String(id).trim(), payload);
+      if (!item) {
+        return res.status(404).json({ message: "Item nao encontrado." });
+      }
+
+      return res.json({ item });
+    }
+
+    const item = await createCatalogItem(payload);
 
     return res.status(201).json({ item });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: "Erro ao cadastrar item do catalogo." });
+    return res.status(500).json({ message: "Erro ao processar item do catalogo." });
   }
 });
 

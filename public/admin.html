@@ -150,6 +150,7 @@
                   </div>
                 </div>
                 <form class="admin-form admin-form--grid" id="catalogForm">
+                  <input type="hidden" name="id" />
                   <label>
                     <span>Titulo</span>
                     <input type="text" name="title" required />
@@ -207,7 +208,8 @@
                     <textarea name="description" rows="4"></textarea>
                   </label>
                   <div class="admin-form__full admin-form__actions">
-                    <button class="button button-primary" type="submit">Salvar veiculo</button>
+                    <button class="button button-primary" type="submit" id="catalogSubmitButton">Salvar veiculo</button>
+                    <button class="button button-secondary hidden" type="button" id="catalogCancelButton">Cancelar edicao</button>
                     <p class="admin-status" id="catalogStatus"></p>
                   </div>
                 </form>
@@ -385,6 +387,10 @@
       const tabPanels = Array.from(document.querySelectorAll("[data-tab-panel]"));
       const catalogImagesInput = document.getElementById("catalogImagesInput");
       const catalogImagePreview = document.getElementById("catalogImagePreview");
+      const catalogForm = document.getElementById("catalogForm");
+      const catalogStatus = document.getElementById("catalogStatus");
+      const catalogSubmitButton = document.getElementById("catalogSubmitButton");
+      const catalogCancelButton = document.getElementById("catalogCancelButton");
 
       const adminStats = document.getElementById("adminStats");
       const usersTableBody = document.querySelector("#usersTable tbody");
@@ -398,6 +404,7 @@
       const trackingsList = document.getElementById("trackingsList");
 
       let selectedGalleryImages = [];
+      let editingCatalogId = null;
 
       const getAuth = () => {
         try {
@@ -413,6 +420,51 @@
       const setStatus = (element, message, error = false) => {
         element.textContent = message;
         element.classList.toggle("is-error", error);
+      };
+
+      const resetCatalogForm = ({ keepStatus = false } = {}) => {
+        editingCatalogId = null;
+        catalogForm.reset();
+        catalogForm.elements.id.value = "";
+        selectedGalleryImages = [];
+        catalogImagesInput.value = "";
+        catalogSubmitButton.textContent = "Salvar veiculo";
+        catalogCancelButton.classList.add("hidden");
+        if (!keepStatus) {
+          setStatus(catalogStatus, "");
+        }
+        renderImagePreview();
+      };
+
+      const fillCatalogForm = (item) => {
+        editingCatalogId = item.id;
+        catalogForm.elements.id.value = item.id || "";
+        catalogForm.elements.title.value = item.title || "";
+        catalogForm.elements.slug.value = item.slug || "";
+        catalogForm.elements.category.value = item.category || "";
+        catalogForm.elements.price.value = item.price || "";
+        catalogForm.elements.location.value = item.location || "";
+        catalogForm.elements.yearLabel.value = item.year_label || "";
+        catalogForm.elements.whatsapp.value = item.whatsapp || "";
+        catalogForm.elements.badge.value = item.badge || "";
+        catalogForm.elements.galleryCount.value = item.gallery_count || 1;
+        catalogForm.elements.description.value = item.description || "";
+
+        Array.from(catalogForm.querySelectorAll('input[name="sections"]')).forEach((checkbox) => {
+          checkbox.checked = Array.isArray(item.sections) && item.sections.includes(checkbox.value);
+        });
+
+        selectedGalleryImages = Array.isArray(item.gallery_images)
+          ? [...item.gallery_images]
+          : item.image_url
+            ? [item.image_url]
+            : [];
+
+        catalogSubmitButton.textContent = "Salvar alteracoes";
+        catalogCancelButton.classList.remove("hidden");
+        renderImagePreview();
+        activateTab("vehicles");
+        window.scrollTo({ top: 0, behavior: "smooth" });
       };
 
       const activateTab = (target) => {
@@ -536,12 +588,50 @@
                         <em>R$ ${Number(item.price || 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</em>
                         <small>${galleryImages.length || item.gallery_count || 0} foto(s)</small>
                       </div>
+                      <div class="admin-catalog-card__actions">
+                        <button class="button button-secondary admin-card-action" type="button" data-edit-catalog="${item.id}">Editar</button>
+                        <button class="button admin-card-action admin-card-action--danger" type="button" data-delete-catalog="${item.id}">Excluir</button>
+                      </div>
                     </div>
                   </article>
                 `;
               })
               .join("")
           : '<div class="admin-empty">Nenhum item cadastrado ainda.</div>';
+
+        items.forEach((item) => {
+          const editButton = document.querySelector(`[data-edit-catalog="${item.id}"]`);
+          const deleteButton = document.querySelector(`[data-delete-catalog="${item.id}"]`);
+
+          if (editButton) {
+            editButton.addEventListener("click", () => fillCatalogForm(item));
+          }
+
+          if (deleteButton) {
+            deleteButton.addEventListener("click", async () => {
+              const confirmed = window.confirm(`Excluir o item "${item.title}"?`);
+              if (!confirmed) {
+                return;
+              }
+
+              try {
+                await adminFetch("/api/admin/catalog-items", {
+                  method: "DELETE",
+                  body: JSON.stringify({ id: item.id })
+                });
+
+                if (editingCatalogId === item.id) {
+                  resetCatalogForm();
+                }
+
+                setStatus(catalogStatus, "Item excluido com sucesso.");
+                await loadDashboard();
+              } catch (error) {
+                setStatus(catalogStatus, error.message, true);
+              }
+            });
+          }
+        });
       };
 
       const renderDrivers = (drivers) => {
@@ -729,6 +819,10 @@
         showLogin();
       });
 
+      catalogCancelButton.addEventListener("click", () => {
+        resetCatalogForm();
+      });
+
       const bindForm = (formId, url, statusId, payloadBuilder, afterSuccess) => {
         const form = document.getElementById(formId);
         const status = document.getElementById(statusId);
@@ -758,31 +852,44 @@
         });
       };
 
-      bindForm(
-        "catalogForm",
-        "/api/admin/catalog-items",
-        "catalogStatus",
-        async (formData) => ({
-          title: formData.get("title"),
-          slug: formData.get("slug"),
-          category: formData.get("category"),
-          price: formData.get("price"),
-          location: formData.get("location"),
-          yearLabel: formData.get("yearLabel"),
-          imageUrl: selectedGalleryImages[0] || null,
-          galleryImages: selectedGalleryImages,
-          whatsapp: formData.get("whatsapp"),
-          badge: formData.get("badge"),
-          galleryCount: selectedGalleryImages.length || formData.get("galleryCount"),
-          description: formData.get("description"),
-          sections: formData.getAll("sections")
-        }),
-        () => {
-          selectedGalleryImages = [];
-          catalogImagesInput.value = "";
-          renderImagePreview();
+      catalogForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        setStatus(catalogStatus, "Salvando...");
+
+        try {
+          const formData = new FormData(catalogForm);
+          const payload = {
+            id: editingCatalogId,
+            title: formData.get("title"),
+            slug: formData.get("slug"),
+            category: formData.get("category"),
+            price: formData.get("price"),
+            location: formData.get("location"),
+            yearLabel: formData.get("yearLabel"),
+            imageUrl: selectedGalleryImages[0] || null,
+            galleryImages: selectedGalleryImages,
+            whatsapp: formData.get("whatsapp"),
+            badge: formData.get("badge"),
+            galleryCount: selectedGalleryImages.length || formData.get("galleryCount"),
+            description: formData.get("description"),
+            sections: formData.getAll("sections")
+          };
+
+          await adminFetch("/api/admin/catalog-items", {
+            method: editingCatalogId ? "PUT" : "POST",
+            body: JSON.stringify(payload)
+          });
+
+          const successMessage = editingCatalogId
+            ? "Veiculo atualizado com sucesso."
+            : "Veiculo salvo com sucesso.";
+          resetCatalogForm({ keepStatus: true });
+          setStatus(catalogStatus, successMessage);
+          await loadDashboard();
+        } catch (error) {
+          setStatus(catalogStatus, error.message, true);
         }
-      );
+      });
 
       bindForm("driverForm", "/api/admin/drivers", "driverStatus", async (formData) => ({
         fullName: formData.get("fullName"),
@@ -821,6 +928,7 @@
       }));
 
       renderImagePreview();
+      resetCatalogForm();
 
       (async () => {
         const auth = getAuth();

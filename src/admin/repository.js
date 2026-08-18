@@ -250,6 +250,83 @@ export const createCatalogItem = async ({
   return rows[0];
 };
 
+export const updateCatalogItem = async (
+  id,
+  {
+    title,
+    slug,
+    category,
+    sections,
+    price,
+    location,
+    yearLabel,
+    imageUrl,
+    galleryImages,
+    whatsapp,
+    badge,
+    galleryCount,
+    description
+  }
+) => {
+  await ensureAdminSchema();
+
+  const { rows } = await pool.query(
+    `
+      update public.app_catalog_items
+      set
+        title = $2,
+        slug = $3,
+        category = $4,
+        sections = $5,
+        price = $6,
+        location = $7,
+        year_label = $8,
+        image_url = $9,
+        gallery_images = $10::jsonb,
+        whatsapp = $11,
+        badge = $12,
+        gallery_count = $13,
+        description = $14,
+        updated_at = timezone('utc', now())
+      where id = $1
+      returning *
+    `,
+    [
+      id,
+      title,
+      slug,
+      category,
+      sections,
+      price,
+      location,
+      yearLabel,
+      imageUrl,
+      JSON.stringify(Array.isArray(galleryImages) ? galleryImages : []),
+      whatsapp,
+      badge,
+      galleryCount,
+      description
+    ]
+  );
+
+  return rows[0] || null;
+};
+
+export const deleteCatalogItem = async (id) => {
+  await ensureAdminSchema();
+
+  const { rows } = await pool.query(
+    `
+      delete from public.app_catalog_items
+      where id = $1
+      returning id
+    `,
+    [id]
+  );
+
+  return rows[0] || null;
+};
+
 export const createDriver = async ({ fullName, cpf, cnh, phone, email, status, notes }) => {
   await ensureAdminSchema();
 

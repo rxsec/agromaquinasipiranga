@@ -2654,6 +2654,31 @@ img {
   color: rgba(22, 48, 34, 0.58);
 }
 
+.admin-catalog-card__actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.admin-card-action {
+  min-height: 46px;
+  padding: 0 18px;
+  border-radius: 14px;
+}
+
+.admin-card-action--danger {
+  border: 1px solid rgba(176, 37, 37, 0.18);
+  background: rgba(176, 37, 37, 0.08);
+  color: #9f1f1f;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.admin-card-action--danger:hover {
+  background: rgba(176, 37, 37, 0.14);
+}
+
 @media (max-width: 1080px) {
   .admin-login__card,
   .admin-grid,

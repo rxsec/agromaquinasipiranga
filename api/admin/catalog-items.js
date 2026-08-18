@@ -1,4 +1,4 @@
-import { createCatalogItem } from "../../src/admin/repository.js";
+import { createCatalogItem, deleteCatalogItem, updateCatalogItem } from "../../src/admin/repository.js";
 import { requireAdmin } from "../_lib/admin.js";
 import { handleOptions, readJsonBody, sendJson } from "../_lib/http.js";
 
@@ -7,7 +7,7 @@ export default async function handler(req, res) {
     return;
   }
 
-  if (req.method !== "POST") {
+  if (!["POST", "PUT", "DELETE"].includes(req.method)) {
     return sendJson(req, res, 405, { message: "Metodo nao permitido." });
   }
 
@@ -17,14 +17,29 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { title, slug, category, sections, price, location, yearLabel, imageUrl, galleryImages, whatsapp, badge, galleryCount, description } =
+    const { id, title, slug, category, sections, price, location, yearLabel, imageUrl, galleryImages, whatsapp, badge, galleryCount, description } =
       await readJsonBody(req);
 
-    if (!title || !slug || !category) {
-      return sendJson(req, res, 400, { message: "Titulo, slug e categoria sao obrigatorios." });
+    if (req.method === "DELETE") {
+      if (!id) {
+        return sendJson(req, res, 400, { message: "ID do item nao informado." });
+      }
+
+      const deleted = await deleteCatalogItem(String(id).trim());
+      if (!deleted) {
+        return sendJson(req, res, 404, { message: "Item nao encontrado." });
+      }
+
+      return sendJson(req, res, 200, { success: true });
     }
 
-    const item = await createCatalogItem({
+    if (!title || !slug || !category) {
+      return sendJson(req, res, 400, {
+        message: "Titulo, slug e categoria sao obrigatorios."
+      });
+    }
+
+    const payload = {
       title: String(title).trim(),
       slug: String(slug).trim().toLowerCase(),
       category: String(category).trim(),
@@ -38,11 +53,26 @@ export default async function handler(req, res) {
       badge: badge ? String(badge).trim() : null,
       galleryCount: Number(galleryCount || 1),
       description: description ? String(description).trim() : null
-    });
+    };
+
+    if (req.method === "PUT") {
+      if (!id) {
+        return sendJson(req, res, 400, { message: "ID do item nao informado." });
+      }
+
+      const item = await updateCatalogItem(String(id).trim(), payload);
+      if (!item) {
+        return sendJson(req, res, 404, { message: "Item nao encontrado." });
+      }
+
+      return sendJson(req, res, 200, { item });
+    }
+
+    const item = await createCatalogItem(payload);
 
     return sendJson(req, res, 201, { item });
   } catch (error) {
     console.error(error);
-    return sendJson(req, res, 500, { message: "Erro ao cadastrar item do catalogo." });
+    return sendJson(req, res, 500, { message: "Erro ao processar item do catalogo." });
   }
 }
