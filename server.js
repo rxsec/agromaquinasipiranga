@@ -447,7 +447,7 @@ app.post("/api/admin/trackings", adminRequired, async (req, res) => {
   }
 });
 
-app.get("/api/catalog/items", async (req, res) => {
+const handleCatalogItems = async (req, res) => {
   try {
     const items = await listPublicCatalogItems({
       section: req.query.section ? String(req.query.section).trim() : null,
@@ -462,9 +462,9 @@ app.get("/api/catalog/items", async (req, res) => {
     console.error(error);
     return res.status(500).json({ message: "Erro ao carregar itens do catalogo." });
   }
-});
+};
 
-app.get("/api/catalog/detail", async (req, res) => {
+const handleCatalogDetail = async (req, res) => {
   try {
     const slug = req.query.slug ? String(req.query.slug).trim() : "";
 
@@ -482,7 +482,12 @@ app.get("/api/catalog/detail", async (req, res) => {
     console.error(error);
     return res.status(500).json({ message: "Erro ao carregar detalhe do item." });
   }
-});
+};
+
+app.get("/api/catalog/items", handleCatalogItems);
+app.get("/api/catalog/detail", handleCatalogDetail);
+app.get("/catalog-api-items", handleCatalogItems);
+app.get("/catalog-api-detail", handleCatalogDetail);
 
 [
   ["/admin", "admin.html"],

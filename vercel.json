@@ -8,6 +8,14 @@
   },
   "rewrites": [
     {
+      "source": "/api/catalog/items",
+      "destination": "/catalog-api-items"
+    },
+    {
+      "source": "/api/catalog/detail",
+      "destination": "/catalog-api-detail"
+    },
+    {
       "source": "/",
       "destination": "/index.html"
     },
