@@ -19,7 +19,9 @@ import {
   createYard,
   deleteCatalogItem,
   ensureDefaultAdminUser,
+  getCustomerTrackingDashboard,
   findPublicCatalogItemBySlug,
+  findPublicTrackingByCode,
   getAdminDashboardData,
   listPublicCatalogItems,
   updateCatalogItem
@@ -484,8 +486,45 @@ const handleCatalogDetail = async (req, res) => {
   }
 };
 
+const handleTrackingLookup = async (req, res) => {
+  try {
+    const trackingCode = req.query.code ? String(req.query.code).trim().toUpperCase() : "";
+
+    if (!trackingCode) {
+      return res.status(400).json({ message: "Código de rastreio não informado." });
+    }
+
+    const tracking = await findPublicTrackingByCode(trackingCode);
+    if (!tracking) {
+      return res.status(404).json({ message: "Rastreio não encontrado." });
+    }
+
+    return res.json({ tracking });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Erro ao consultar rastreio." });
+  }
+};
+
 app.get("/api/catalog/items", handleCatalogItems);
 app.get("/api/catalog/detail", handleCatalogDetail);
+app.get("/api/tracking", handleTrackingLookup);
+app.get("/api/customer/tracking-dashboard", authRequired, async (req, res) => {
+  try {
+    const trackings = await getCustomerTrackingDashboard({
+      userId: req.user.id,
+      email: req.user.email
+    });
+
+    return res.json({
+      user: sanitizeUser(req.user),
+      trackings
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Erro ao carregar dashboard de rastreio." });
+  }
+});
 app.get("/catalog-api-items", handleCatalogItems);
 app.get("/catalog-api-detail", handleCatalogDetail);
 
@@ -495,6 +534,7 @@ app.get("/catalog-api-detail", handleCatalogDetail);
   ["/sobre", "sobre.html"],
   ["/login", "login.html"],
   ["/cadastro", "cadastro.html"],
+  ["/rastreio", "rastreio.html"],
   ["/detalhe", "detalhe.html"],
   ["/", "index.html"]
 ].forEach(([routePath, fileName]) => {

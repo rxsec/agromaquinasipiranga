@@ -546,3 +546,82 @@ export const findPublicCatalogItemBySlug = async (slug) => {
 
   return rows[0] || null;
 };
+
+export const findPublicTrackingByCode = async (trackingCode) => {
+  await ensureAdminSchema();
+
+  const { rows } = await pool.query(
+    `
+      select
+        t.id,
+        t.client_name,
+        t.client_email,
+        t.item_name,
+        t.tracking_code,
+        t.status,
+        t.current_location,
+        t.expected_delivery_date,
+        t.notes,
+        t.created_at,
+        d.full_name as driver_name,
+        y.name as yard_name,
+        y.city as yard_city,
+        y.state as yard_state
+      from public.app_client_tracking t
+      left join public.app_drivers d on d.id = t.driver_id
+      left join public.app_yards y on y.id = t.yard_id
+      where upper(t.tracking_code) = upper($1)
+      limit 1
+    `,
+    [trackingCode]
+  );
+
+  return rows[0] || null;
+};
+
+export const getCustomerTrackingDashboard = async ({ userId, email }) => {
+  await ensureAdminSchema();
+
+  const values = [userId || null, email || null];
+  const { rows } = await pool.query(
+    `
+      select
+        t.id,
+        t.client_user_id,
+        t.client_name,
+        t.client_email,
+        t.item_name,
+        t.tracking_code,
+        t.status,
+        t.current_location,
+        t.expected_delivery_date,
+        t.notes,
+        t.created_at,
+        d.id as driver_id,
+        d.full_name as driver_name,
+        d.phone as driver_phone,
+        d.email as driver_email,
+        d.cnh as driver_cnh,
+        d.status as driver_status,
+        d.notes as driver_notes,
+        y.id as yard_id,
+        y.name as yard_name,
+        y.city as yard_city,
+        y.state as yard_state,
+        y.address as yard_address,
+        y.contact_name as yard_contact_name,
+        y.contact_phone as yard_contact_phone
+      from public.app_client_tracking t
+      left join public.app_drivers d on d.id = t.driver_id
+      left join public.app_yards y on y.id = t.yard_id
+      where (
+        ($1::uuid is not null and t.client_user_id = $1::uuid)
+        or ($2::text is not null and lower(coalesce(t.client_email, '')) = lower($2::text))
+      )
+      order by t.created_at desc
+    `,
+    values
+  );
+
+  return rows;
+};
