@@ -3016,17 +3016,17 @@ img {
     line-height: 1.2;
   }
 
-  .product-footer {
+  .product-card .product-footer {
     flex-direction: column;
     align-items: flex-start;
   }
 
-  .price-block {
+  .product-card .price-block {
     width: 100%;
     min-width: 0;
   }
 
-  .price-block strong {
+  .product-card .price-block strong {
     width: 100%;
     min-width: 0;
     gap: 10px;
@@ -3037,7 +3037,7 @@ img {
     flex-wrap: wrap;
   }
 
-  .price-block strong::before {
+  .product-card .price-block strong::before {
     flex-shrink: 0;
     height: 24px;
   }
@@ -3049,7 +3049,7 @@ img {
     padding: 12px;
   }
 
-  .whatsapp-btn {
+  .product-card .whatsapp-btn {
     width: 100%;
   }
 
