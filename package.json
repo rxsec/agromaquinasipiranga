@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
-    "import:versace": "node scripts/import-versace-links.js"
+    "import:versace": "node scripts/import-versace-links.js",
+    "catalog:curate": "node scripts/apply-catalog-curation.js",
+    "catalog:export": "node scripts/export-current-catalog.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",
