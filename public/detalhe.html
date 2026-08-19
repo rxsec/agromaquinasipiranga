@@ -244,20 +244,58 @@
         return galleryImages.length ? galleryImages : [item.image_url].filter(Boolean);
       };
 
-      const bindThumbs = () => {
-        document.querySelectorAll(".detail-thumb").forEach((thumb) => {
-          thumb.addEventListener("click", () => {
-            const image = thumb.querySelector("img");
-            document.querySelectorAll(".detail-thumb").forEach((item) => {
-              item.classList.remove("detail-thumb--active");
-            });
-            thumb.classList.add("detail-thumb--active");
-            detailMainImage.src = image.src;
-            detailMainImage.alt = image.alt;
+      const showDetailImagePlaceholder = (message = "Sem foto disponível") => {
+        detailMainImage.removeAttribute("src");
+        detailMainImage.alt = "";
+        detailMainImage.hidden = true;
+        if (detailMainImagePlaceholder) {
+          detailMainImagePlaceholder.hidden = false;
+          detailMainImagePlaceholder.textContent = message;
+        }
+      };
+
+      const loadDetailMainImage = (gallery, itemTitle, preferredIndex = 0) => {
+        if (!Array.isArray(gallery) || !gallery.length) {
+          showDetailImagePlaceholder("Sem foto disponível");
+          return;
+        }
+
+        const tryLoad = (index) => {
+          const currentImage = gallery[index];
+          if (!currentImage) {
+            showDetailImagePlaceholder("Sem foto disponível");
+            return;
+          }
+
+          const probe = new Image();
+          probe.onload = () => {
+            detailMainImage.src = currentImage;
+            detailMainImage.alt = `${itemTitle} - foto ${index + 1}`;
             detailMainImage.hidden = false;
             if (detailMainImagePlaceholder) {
               detailMainImagePlaceholder.hidden = true;
             }
+
+            document.querySelectorAll(".detail-thumb").forEach((item, thumbIndex) => {
+              item.classList.toggle("detail-thumb--active", thumbIndex === index);
+            });
+          };
+          probe.onerror = () => {
+            tryLoad(index + 1);
+          };
+          probe.src = currentImage;
+        };
+
+        tryLoad(preferredIndex);
+      };
+
+      const bindThumbs = () => {
+        document.querySelectorAll(".detail-thumb").forEach((thumb) => {
+          thumb.addEventListener("click", () => {
+            const nextIndex = Number(thumb.dataset.index || 0);
+            const title = thumb.dataset.title || detailTitle.textContent || "Foto do produto";
+            const gallery = Array.from(document.querySelectorAll(".detail-thumb img")).map((image) => image.src);
+            loadDetailMainImage(gallery, title, nextIndex);
           });
         });
       };
@@ -286,7 +324,7 @@
         return `
           <article class="product-card" data-detail="./detalhe.html?slug=${item.slug}">
             <div class="product-media">
-              ${gallery[0] ? `<img src="${gallery[0]}" alt="${item.title}" />` : '<div class="product-media__placeholder">Sem foto</div>'}
+              ${gallery[0] ? `<img src="${gallery[0]}" alt="${item.title}" loading="lazy" />` : '<div class="product-media__placeholder">Sem foto</div>'}
               <div class="product-tag">${item.badge || item.category || "Catálogo"}</div>
               <button class="favorite-btn" type="button" aria-label="Favoritar">♡</button>
               <span class="photo-count">1/${gallery.length || 1}</span>
@@ -332,34 +370,20 @@
           detailBadge.textContent = item.badge || item.category || "Catálogo";
           detailLocation.textContent = item.location || "Local sob consulta";
           detailPrice.textContent = formatCurrency(item.price);
-          if (gallery[0]) {
-            detailMainImage.src = gallery[0];
-            detailMainImage.alt = item.title;
-            detailMainImage.hidden = false;
-            if (detailMainImagePlaceholder) {
-              detailMainImagePlaceholder.hidden = true;
-            }
-          } else {
-            detailMainImage.removeAttribute("src");
-            detailMainImage.alt = "";
-            detailMainImage.hidden = true;
-            if (detailMainImagePlaceholder) {
-              detailMainImagePlaceholder.hidden = false;
-            }
-          }
           detailWhatsappButton.href = `https://wa.me/${whatsapp}`;
           detailBuyButton.href = `https://wa.me/${whatsapp}`;
 
           detailThumbs.innerHTML = gallery
             .map(
               (image, index) => `
-                <button class="detail-thumb ${index === 0 ? "detail-thumb--active" : ""}" type="button">
-                  <img src="${image}" alt="${item.title} - foto ${index + 1}" />
+                <button class="detail-thumb ${index === 0 ? "detail-thumb--active" : ""}" type="button" data-index="${index}" data-title="${item.title}">
+                  <img src="${image}" alt="${item.title} - foto ${index + 1}" loading="lazy" />
                 </button>
               `
             )
             .join("");
 
+          loadDetailMainImage(gallery, item.title);
           detailDescriptionList.innerHTML = [
             ["Título", item.title],
             ["Categoria", item.category || "-"],

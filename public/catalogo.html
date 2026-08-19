@@ -166,7 +166,7 @@
         return `
           <article class="product-card" data-detail="./detalhe.html?slug=${item.slug}">
             <div class="product-media">
-              ${image ? `<img src="${image}" alt="${item.title}" />` : '<div class="product-media__placeholder">Sem foto</div>'}
+              ${image ? `<img src="${image}" alt="${item.title}" loading="lazy" />` : '<div class="product-media__placeholder">Sem foto</div>'}
               <div class="product-tag">${item.badge || item.category || "Catálogo"}</div>
               <button class="favorite-btn" type="button" aria-label="Favoritar">♡</button>
               <span class="photo-count">1/${photoCount}</span>

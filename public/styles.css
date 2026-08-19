@@ -2855,6 +2855,11 @@ img {
     grid-template-columns: 1fr;
   }
 
+  .home-page .catalog-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
   .results-head {
     flex-direction: column;
     align-items: flex-start;
@@ -3003,6 +3008,13 @@ img {
   .product-footer {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .home-page .product-media__placeholder {
+    min-height: 170px;
+    font-size: 0.86rem;
+    text-align: center;
+    padding: 12px;
   }
 
   .whatsapp-btn {
