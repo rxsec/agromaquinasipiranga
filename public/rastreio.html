@@ -176,7 +176,7 @@
           <div class="social-row">
             <a href="https://www.facebook.com/" aria-label="Facebook">FB</a>
             <a href="https://www.instagram.com/" aria-label="Instagram">IG</a>
-            <a href="https://wa.me/5512997371569" aria-label="WhatsApp">WA</a>
+            <a href="https://wa.me/5542991645618" aria-label="WhatsApp">WA</a>
           </div>
         </div>
 
@@ -203,21 +203,21 @@
         <div>
           <h3>Contato</h3>
           <ul class="contact-list">
-            <li>(12) 99737-1569</li>
+            <li>(42) 99164-5618</li>
             <li>contato@agromaquinas.com.br</li>
-            <li>Rod. Pres. Dutra, km 134 - Eugênio de Melo, São José dos Campos - SP, 12247-004</li>
-            <li>CNPJ: 63.448.160/0001-18</li>
+            <li>Rua 7 de Dezembro 140, Centro, Ipiranga - PR, 84450-000</li>
+            <li>CNPJ: 09.187.317/0001-53</li>
           </ul>
         </div>
       </div>
 
       <div class="container footer-bottom">
         <p>2026 Agro. Todos os direitos reservados.</p>
-        <p>CNPJ: 63.448.160/0001-18 | Rod. Pres. Dutra, km 134 - Eugênio de Melo, São José dos Campos - SP, 12247-004</p>
+        <p>CNPJ: 09.187.317/0001-53 | Rua 7 de Dezembro 140, Centro, Ipiranga - PR, 84450-000</p>
       </div>
     </footer>
 
-    <a class="floating-whatsapp" href="https://wa.me/5512997371569" aria-label="Falar no WhatsApp">WA</a>
+    <a class="floating-whatsapp" href="https://wa.me/5542991645618" aria-label="Falar no WhatsApp">WA</a>
 
     <nav class="mobile-nav" aria-label="Navegação mobile">
       <a class="mobile-nav-item" href="./index.html">Início</a>
@@ -441,10 +441,10 @@
         trackingDriverStatus.textContent = tracking.driver_status || "Situação regular";
         trackingDriverInfo.innerHTML = [
           ["Nome", tracking.driver_name || "Motorista não informado"],
-          ["Telefone", tracking.driver_phone || "(12) 99737-1569"],
+          ["Telefone", tracking.driver_phone || "(42) 99164-5618"],
           ["E-mail", tracking.driver_email || "contato@agromaquinas.com.br"],
           ["Habilitação", tracking.driver_cnh || "Categoria D"],
-          ["Endereço comercial", tracking.driver_commercial_address || tracking.yard_address || "Rod. Pres. Dutra, km 134 - Eugênio de Melo, São José dos Campos - SP"],
+          ["Endereço comercial", tracking.driver_commercial_address || tracking.yard_address || "Rua 7 de Dezembro 140, Centro, Ipiranga - PR, 84450-000"],
           ["Observações", tracking.driver_notes || "Entregador vinculado ao seu rastreio com situação regular."]
         ]
           .map(
@@ -487,10 +487,10 @@
         clearMapLayers();
 
         const startAddress = [tracking.yard_address, tracking.yard_city, tracking.yard_state].filter(Boolean).join(", ");
-        const currentAddress = tracking.current_location || tracking.yard_address || "São José dos Campos, SP";
+        const currentAddress = tracking.current_location || tracking.yard_address || "Ipiranga - PR";
 
         const [startCoords, currentCoords] = await Promise.all([
-          geocodeAddress(startAddress || "São José dos Campos, SP"),
+          geocodeAddress(startAddress || "Ipiranga - PR"),
           geocodeAddress(currentAddress)
         ]);
 

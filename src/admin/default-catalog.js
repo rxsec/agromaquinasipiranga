@@ -9,7 +9,7 @@ export const DEFAULT_CATALOG_ITEMS = [
       "relacionados"
     ],
     "price": 60915,
-    "location": "São Paulo, SP",
+    "location": "Ipiranga - PR",
     "yearLabel": "2016/2017",
     "imageUrl": "/catalogo-assets/saveiro-cd-cross-1-6-16v/01.jpg",
     "galleryImages": [
@@ -22,7 +22,7 @@ export const DEFAULT_CATALOG_ITEMS = [
       "/catalogo-assets/saveiro-cd-cross-1-6-16v/07.jpg",
       "/catalogo-assets/saveiro-cd-cross-1-6-16v/08.jpg"
     ],
-    "whatsapp": "5512997371569",
+    "whatsapp": "5542991645618",
     "badge": "Carros",
     "galleryCount": 8,
     "description": "Marca: VOLKSWAGEN\nModelo: SAVEIRO CD\nCategoria: Picapes Pequenas\nVersão: SAVEIRO CD CROSS 1.6 16V\nAno de Fabricação: 2016\nAno Modelo: 2017\nFIPE: R$ 60.915,00"
@@ -36,7 +36,7 @@ export const DEFAULT_CATALOG_ITEMS = [
       "catalogo"
     ],
     "price": 36000,
-    "location": "São Paulo, SP",
+    "location": "Ipiranga - PR",
     "yearLabel": "2016/2017",
     "imageUrl": "/catalogo-assets/corolla-gli-cvt-1-8-16v/07.jpg",
     "galleryImages": [
@@ -49,7 +49,7 @@ export const DEFAULT_CATALOG_ITEMS = [
       "/catalogo-assets/corolla-gli-cvt-1-8-16v/06.jpg",
       "/catalogo-assets/corolla-gli-cvt-1-8-16v/08.jpg"
     ],
-    "whatsapp": "5512997371569",
+    "whatsapp": "5542991645618",
     "badge": "Carros",
     "galleryCount": 8,
     "description": null
@@ -64,7 +64,7 @@ export const DEFAULT_CATALOG_ITEMS = [
       "relacionados"
     ],
     "price": 23500,
-    "location": "São Paulo, SP",
+    "location": "Ipiranga - PR",
     "yearLabel": "2017",
     "imageUrl": "/catalogo-assets/hb20s-comfort/03.jpg",
     "galleryImages": [
@@ -78,7 +78,7 @@ export const DEFAULT_CATALOG_ITEMS = [
       "/catalogo-assets/hb20s-comfort/08.jpg",
       "/catalogo-assets/hb20s-comfort/09.jpg"
     ],
-    "whatsapp": "5512997371569",
+    "whatsapp": "5542991645618",
     "badge": "Carros",
     "galleryCount": 9,
     "description": null
@@ -92,7 +92,7 @@ export const DEFAULT_CATALOG_ITEMS = [
       "catalogo"
     ],
     "price": 30900,
-    "location": "São Paulo, SP",
+    "location": "Ipiranga - PR",
     "yearLabel": "2016/2017",
     "imageUrl": "/catalogo-assets/city-lx-1-5-16v-i-vtec/08.jpg",
     "galleryImages": [
@@ -105,7 +105,7 @@ export const DEFAULT_CATALOG_ITEMS = [
       "/catalogo-assets/city-lx-1-5-16v-i-vtec/07.jpg",
       "/catalogo-assets/city-lx-1-5-16v-i-vtec/09.jpg"
     ],
-    "whatsapp": "5512997371569",
+    "whatsapp": "5542991645618",
     "badge": "Carros",
     "galleryCount": 8,
     "description": null
@@ -120,7 +120,7 @@ export const DEFAULT_CATALOG_ITEMS = [
       "relacionados"
     ],
     "price": 94000,
-    "location": "São Paulo, SP",
+    "location": "Ipiranga - PR",
     "yearLabel": "2016",
     "imageUrl": "/catalogo-assets/hilux-sw4-srx-2-8-d-4d/03.jpg",
     "galleryImages": [
@@ -134,7 +134,7 @@ export const DEFAULT_CATALOG_ITEMS = [
       "/catalogo-assets/hilux-sw4-srx-2-8-d-4d/08.jpg",
       "/catalogo-assets/hilux-sw4-srx-2-8-d-4d/09.jpg"
     ],
-    "whatsapp": "5512997371569",
+    "whatsapp": "5542991645618",
     "badge": "Carros",
     "galleryCount": 9,
     "description": null
@@ -148,7 +148,7 @@ export const DEFAULT_CATALOG_ITEMS = [
       "relacionados"
     ],
     "price": 24314,
-    "location": "São Paulo, SP",
+    "location": "Ipiranga - PR",
     "yearLabel": "2015/2016",
     "imageUrl": "/catalogo-assets/clio-expression-1-0-16v/01.jpg",
     "galleryImages": [
@@ -162,7 +162,7 @@ export const DEFAULT_CATALOG_ITEMS = [
       "/catalogo-assets/clio-expression-1-0-16v/08.jpg",
       "/catalogo-assets/clio-expression-1-0-16v/09.jpg"
     ],
-    "whatsapp": "5512997371569",
+    "whatsapp": "5542991645618",
     "badge": "Carros",
     "galleryCount": 9,
     "description": "Marca: RENAULT\nModelo: CLIO\nVersão: CLIO EXPRESSION 1.0 16V\nAno de Fabricação: 2015\nAno Modelo: 2016"
@@ -177,7 +177,7 @@ export const DEFAULT_CATALOG_ITEMS = [
       "relacionados"
     ],
     "price": 128859,
-    "location": "São Paulo, SP",
+    "location": "Ipiranga - PR",
     "yearLabel": "2015/2016",
     "imageUrl": "/catalogo-assets/mercedes-gla-200-1-6-16v/04.jpg",
     "galleryImages": [
@@ -191,7 +191,7 @@ export const DEFAULT_CATALOG_ITEMS = [
       "/catalogo-assets/mercedes-gla-200-1-6-16v/08.jpg",
       "/catalogo-assets/mercedes-gla-200-1-6-16v/09.jpg"
     ],
-    "whatsapp": "5512997371569",
+    "whatsapp": "5542991645618",
     "badge": "Carros",
     "galleryCount": 9,
     "description": null
@@ -205,7 +205,7 @@ export const DEFAULT_CATALOG_ITEMS = [
       "relacionados"
     ],
     "price": 70809,
-    "location": "São Paulo, SP",
+    "location": "Ipiranga - PR",
     "yearLabel": "2015/2016",
     "imageUrl": "/catalogo-assets/civic-exr-2-0-16v-i-vtec/01.jpg",
     "galleryImages": [
@@ -218,7 +218,7 @@ export const DEFAULT_CATALOG_ITEMS = [
       "/catalogo-assets/civic-exr-2-0-16v-i-vtec/07.jpg",
       "/catalogo-assets/civic-exr-2-0-16v-i-vtec/08.jpg"
     ],
-    "whatsapp": "5512997371569",
+    "whatsapp": "5542991645618",
     "badge": "Carros",
     "galleryCount": 8,
     "description": "Marca: HONDA\nModelo: CIVIC\nCategoria: Automóveis\nVersão: CIVIC EXR 2.0 16V I-VTEC\nAno de Fabricação: 2015\nAno Modelo: 2016"
@@ -232,7 +232,7 @@ export const DEFAULT_CATALOG_ITEMS = [
       "catalogo"
     ],
     "price": 35401,
-    "location": "São Paulo, SP",
+    "location": "Ipiranga - PR",
     "yearLabel": "2013/2014",
     "imageUrl": "/catalogo-assets/sonic-sedan-ltz-at-1-6-16v-2014/08.jpg",
     "galleryImages": [
@@ -246,7 +246,7 @@ export const DEFAULT_CATALOG_ITEMS = [
       "/catalogo-assets/sonic-sedan-ltz-at-1-6-16v-2014/07.jpg",
       "/catalogo-assets/sonic-sedan-ltz-at-1-6-16v-2014/09.jpg"
     ],
-    "whatsapp": "5512997371569",
+    "whatsapp": "5542991645618",
     "badge": "Carros",
     "galleryCount": 9,
     "description": null
@@ -261,7 +261,7 @@ export const DEFAULT_CATALOG_ITEMS = [
       "relacionados"
     ],
     "price": 45930,
-    "location": "São Paulo, SP",
+    "location": "Ipiranga - PR",
     "yearLabel": "2013/2014",
     "imageUrl": "/catalogo-assets/strada-cd-adventure-1-8-16v/01.jpg",
     "galleryImages": [
@@ -275,7 +275,7 @@ export const DEFAULT_CATALOG_ITEMS = [
       "/catalogo-assets/strada-cd-adventure-1-8-16v/08.jpg",
       "/catalogo-assets/strada-cd-adventure-1-8-16v/09.jpg"
     ],
-    "whatsapp": "5512997371569",
+    "whatsapp": "5542991645618",
     "badge": "Carros",
     "galleryCount": 9,
     "description": "Marca: FIAT\nModelo: STRADA CD\nVersão: STRADA CD ADVENTURE 1.8 16V\nAno de Fabricação: 2013\nAno Modelo: 2014\nTipo de Documento: Normal\nTipo de Chassi: Normal\nChave: Sim\nFinal de Placa: 5\nCombustível: FLEXÍVEL ÁLCOOL/GASOLINA"
@@ -290,7 +290,7 @@ export const DEFAULT_CATALOG_ITEMS = [
       "relacionados"
     ],
     "price": 410000,
-    "location": "São Paulo, SP",
+    "location": "Ipiranga - PR",
     "yearLabel": "2012",
     "imageUrl": "https://res.cloudinary.com/dihm0krca/image/upload/v1785193587/g0oxctvi8ctgjykqmpc9.jpg",
     "galleryImages": [
@@ -303,7 +303,7 @@ export const DEFAULT_CATALOG_ITEMS = [
       "https://res.cloudinary.com/dihm0krca/image/upload/v1785193591/w1izw9hqtpozoisyz5wu.jpg",
       "https://res.cloudinary.com/dihm0krca/image/upload/v1785193591/ds1lhmw7ltuixmol3m9q.jpg"
     ],
-    "whatsapp": "5512997371569",
+    "whatsapp": "5542991645618",
     "badge": "Máquinas",
     "galleryCount": 8,
     "description": "✅ Ano: 2012\n✅ Horas de trilha: 1.200 h\n✅ Horas de motor: 1.600 h\n✅ Peneira fixa\n✅ Rodados duplos\n✅ Nunca colheu milho"
@@ -329,7 +329,7 @@ export const DEFAULT_CATALOG_ITEMS = [
       "https://res.cloudinary.com/dihm0krca/image/upload/v1785194791/muxr2tuheydn4vqugesn.jpg",
       "https://res.cloudinary.com/dihm0krca/image/upload/v1785194792/cqwfte18poup9yeaos6e.jpg"
     ],
-    "whatsapp": "5512997371569",
+    "whatsapp": "5542991645618",
     "badge": "Máquinas",
     "galleryCount": 6,
     "description": "Ano 2021\nHoras 3.459\nTransmissão Power-quad \nPiloto automático/GPS STARFIRE 6000 + GS3\nBarramento hidráulico e 3° ponto \nOriginal sem reforma"
@@ -352,7 +352,7 @@ export const DEFAULT_CATALOG_ITEMS = [
       "https://res.cloudinary.com/dihm0krca/image/upload/v1785194690/arvam14vaymjbtz23e17.jpg",
       "https://res.cloudinary.com/dihm0krca/image/upload/v1785194691/qtxftxyiyvodrzu80ig3.jpg"
     ],
-    "whatsapp": "5512997371569",
+    "whatsapp": "5542991645618",
     "badge": "Máquinas",
     "galleryCount": 4,
     "description": "Ano 2003\nTração 4x4\nTransmissão power-quad tm\nBarramento hidráulica"
@@ -380,7 +380,7 @@ export const DEFAULT_CATALOG_ITEMS = [
       "https://res.cloudinary.com/dihm0krca/image/upload/v1785193386/vzzr6qmbiiudk3lrika9.jpg",
       "https://res.cloudinary.com/dihm0krca/image/upload/v1785193387/tkf7uewg9if9z9wbj7vq.jpg"
     ],
-    "whatsapp": "5512997371569",
+    "whatsapp": "5542991645618",
     "badge": "Máquinas",
     "galleryCount": 8,
     "description": "Ano – 2022\n✅ Modelo: JCB 4CX\n✅ Único dono\n✅ Motor novo\n✅ 17.350 horas\n✅ Funcionando perfeitamente, pronta para entrar em operação.\n💳 Financiamento disponível junto ao Banco BV Financeira, com condições facilitadas."
@@ -403,7 +403,7 @@ export const DEFAULT_CATALOG_ITEMS = [
       "https://res.cloudinary.com/dihm0krca/image/upload/v1784898785/qwlfxrzagqcchitahle7.jpg",
       "https://res.cloudinary.com/dihm0krca/image/upload/v1784898786/pkigq6ccvbmwkqmtkcep.jpg"
     ],
-    "whatsapp": "5512997371569",
+    "whatsapp": "5542991645618",
     "badge": "Máquinas",
     "galleryCount": 4,
     "description": "HORAS: 206 - ANO 2023\nTodo original \n150cv"
@@ -427,7 +427,7 @@ export const DEFAULT_CATALOG_ITEMS = [
       "https://res.cloudinary.com/dihm0krca/image/upload/v1784898439/yznrajke6rnstyf7084a.jpg",
       "https://res.cloudinary.com/dihm0krca/image/upload/v1784898441/iolpgcwd96kvdcsjxir6.jpg"
     ],
-    "whatsapp": "5512997371569",
+    "whatsapp": "5542991645618",
     "badge": "Máquinas",
     "galleryCount": 5,
     "description": "✅Ano 2011\n✅ 4X4 \n✅ 7 MIL HORAS\nContrapeso dianteiro e traseiro\nBom de mecânica, motor, caixa e hidráulico. \nCom procedência\nNota fiscal e toda a documentação para financiamento.\nVale a pena conferir"
@@ -452,7 +452,7 @@ export const DEFAULT_CATALOG_ITEMS = [
       "https://res.cloudinary.com/dihm0krca/image/upload/v1784898348/bknyamvnzrjrcye3ovgm.jpg",
       "https://res.cloudinary.com/dihm0krca/image/upload/v1784898349/p6f0qjvbtytsudaowdkj.jpg"
     ],
-    "whatsapp": "5512997371569",
+    "whatsapp": "5542991645618",
     "badge": "Máquinas",
     "galleryCount": 6,
     "description": "✅Trator Massey Ferguson 275✅\n\n✅Ano 1995\n✅Motor de 75 cv\n✅Câmbio 3 alavanca\n\nBem calçado de pneus.\nHidráulico e tomada de força ok\n\nBom de mecânica"
@@ -478,7 +478,7 @@ export const DEFAULT_CATALOG_ITEMS = [
       "https://res.cloudinary.com/dihm0krca/image/upload/v1784898048/bwsrqbdjwwzmogd5czo9.jpg",
       "https://res.cloudinary.com/dihm0krca/image/upload/v1784898049/giaze6ld9iorjhtj4jil.jpg"
     ],
-    "whatsapp": "5512997371569",
+    "whatsapp": "5542991645618",
     "badge": "Máquinas",
     "galleryCount": 7,
     "description": "78cv | Ano 2021 | 1.970h originais\nTransmissão 12x12 PowrReverse™️\nMotor 4cc turbo intercooler\nTDP eletro-hidráulico | 2 VCR\nCarregadeira autonivelante com joystick"
@@ -501,7 +501,7 @@ export const DEFAULT_CATALOG_ITEMS = [
       "https://res.cloudinary.com/dihm0krca/image/upload/v1784745410/cyfay7vcpyrnngah8pht.jpg",
       "https://res.cloudinary.com/dihm0krca/image/upload/v1784745411/eahqng1dfwposi1t6azb.jpg"
     ],
-    "whatsapp": "5512997371569",
+    "whatsapp": "5542991645618",
     "badge": "Máquinas",
     "galleryCount": 3,
     "description": "Equipamento novo, nunca usado, em estado impecável e pronto para o trabalho.\n* Espaçamento: 270 mm\n* 100% funcional\n* Estrutura reforçada"
@@ -528,7 +528,7 @@ export const DEFAULT_CATALOG_ITEMS = [
       "https://res.cloudinary.com/dihm0krca/image/upload/v1784745210/lmqcava2c5jf2or3hfwk.jpg",
       "https://res.cloudinary.com/dihm0krca/image/upload/v1784745210/hwnbhjt3jk82fspqvng6.jpg"
     ],
-    "whatsapp": "5512997371569",
+    "whatsapp": "5542991645618",
     "badge": "Máquinas",
     "galleryCount": 8,
     "description": null
@@ -553,7 +553,7 @@ export const DEFAULT_CATALOG_ITEMS = [
       "https://res.cloudinary.com/dihm0krca/image/upload/v1784744934/ehzsthkgf3qwqsqt1rof.jpg",
       "https://res.cloudinary.com/dihm0krca/image/upload/v1784744935/urhb0ojutwby60onqmla.jpg"
     ],
-    "whatsapp": "5512997371569",
+    "whatsapp": "5542991645618",
     "badge": "Máquinas",
     "galleryCount": 6,
     "description": "Pá carregadeira \nMarca Volvo\nModelo L70F\nAno 2021 e 2022\nMáquinas extra!"
@@ -580,7 +580,7 @@ export const DEFAULT_CATALOG_ITEMS = [
       "https://res.cloudinary.com/dihm0krca/image/upload/v1784558224/cdjjy3qvdqjhurpd5ca3.jpg",
       "https://res.cloudinary.com/dihm0krca/image/upload/v1784558225/t3pzzzwnyscbjsl56uin.jpg"
     ],
-    "whatsapp": "5512997371569",
+    "whatsapp": "5542991645618",
     "badge": "Máquinas",
     "galleryCount": 7,
     "description": "CARRETA AGRÍCOLA BASCULANTE 6 TONELADAS\nEquipamento em excelente estado de conservação, revisado e pronto para o trabalho. Ideal para transporte de grãos, silagem e adubo, garantindo praticidade e eficiência no dia a dia da propriedade.\nEspecificações: • Capacidade de carga: 6 toneladas / 7 m³\n* 2 eixos separados (maior estabilidade)\n* Rodado aro 16\n* Medidas: 3.500 x 2.000 x 1.000 mm\n* Estrutura reforçada\n* Sistema hidráulico funcionando perfeitamente\nVALOR À VISTA: R$ 28.000,00"
@@ -608,7 +608,7 @@ export const DEFAULT_CATALOG_ITEMS = [
       "https://res.cloudinary.com/dihm0krca/image/upload/v1784557706/wk1juhzevypxkgd41veq.jpg",
       "https://res.cloudinary.com/dihm0krca/image/upload/v1784557707/kr24rvslaeewvrtxkdal.jpg"
     ],
-    "whatsapp": "5512997371569",
+    "whatsapp": "5542991645618",
     "badge": "Máquinas",
     "galleryCount": 8,
     "description": null
@@ -633,7 +633,7 @@ export const DEFAULT_CATALOG_ITEMS = [
       "https://res.cloudinary.com/dihm0krca/image/upload/v1784557639/wuf9rtm0etb4suqlzgd9.jpg",
       "https://res.cloudinary.com/dihm0krca/image/upload/v1784557640/ssrviuw7vf4eikoauzzu.jpg"
     ],
-    "whatsapp": "5512997371569",
+    "whatsapp": "5542991645618",
     "badge": "Máquinas",
     "galleryCount": 6,
     "description": "Pá carregadeira  Marca Volvo Modelo L70F Ano 2021 e 2022 Máquinas extra!   Valor 380.000 R$  à vista, ou financiamento pelo plano safra"
@@ -660,7 +660,7 @@ export const DEFAULT_CATALOG_ITEMS = [
       "https://res.cloudinary.com/dihm0krca/image/upload/v1784557577/kmrms5mxldlja1g4cdyx.jpg",
       "https://res.cloudinary.com/dihm0krca/image/upload/v1784557577/odqe1aydgwjkrsp9059w.jpg"
     ],
-    "whatsapp": "5512997371569",
+    "whatsapp": "5542991645618",
     "badge": "Máquinas",
     "galleryCount": 8,
     "description": "trator Massey Ferguson 4275  4x4-Ano:2013 \nTração Central 4x4\nBarramento hidráulico/TDP/02 VCR's\n4.771 horas"
@@ -682,7 +682,7 @@ export const DEFAULT_CATALOG_ITEMS = [
       "https://res.cloudinary.com/dihm0krca/image/upload/v1784557475/fqfzipk5nogsso8lwsnf.jpg",
       "https://res.cloudinary.com/dihm0krca/image/upload/v1784557476/rigm0wlnkrhubchlacg1.jpg"
     ],
-    "whatsapp": "5512997371569",
+    "whatsapp": "5542991645618",
     "badge": "Máquinas",
     "galleryCount": 3,
     "description": "🟩TRATOR NEW HOLLAND 7630🟩\n\nTOTALMENTE REVISADO MECANICA, MOTOR,HIDRAULICA,ELETRICA, BOM PNEUS TUDO REVISADO.\n\nTrator NewHoland 7630, Ano 2001, Com Super Redutor, Dualpower, Revisado Somente Com Peças Originais NewHoland, Tem Nota Fiscal de Origem, Ótimo Estado de Conservação"
@@ -708,7 +708,7 @@ export const DEFAULT_CATALOG_ITEMS = [
       "https://res.cloudinary.com/dihm0krca/image/upload/v1784557401/yl9j8mikmekdtnpukudr.jpg",
       "https://res.cloudinary.com/dihm0krca/image/upload/v1784557401/vrrq69fyxkjiglnuganr.jpg"
     ],
-    "whatsapp": "5512997371569",
+    "whatsapp": "5542991645618",
     "badge": "Máquinas",
     "galleryCount": 7,
     "description": "Original e revisada.\nCom garantia e procedência.\nTRATOR MASSEY FERGUSON 290 ANO 1980\nREALIZAMOS FINANCIAMETOS"
@@ -732,7 +732,7 @@ export const DEFAULT_CATALOG_ITEMS = [
       "https://res.cloudinary.com/dihm0krca/image/upload/v1784557330/t55658op4gybbdpmppsp.jpg",
       "https://res.cloudinary.com/dihm0krca/image/upload/v1784557330/v1zatu3ydm7daqgk8h47.jpg"
     ],
-    "whatsapp": "5512997371569",
+    "whatsapp": "5542991645618",
     "badge": "Máquinas",
     "galleryCount": 5,
     "description": "✅Ano 2005 \n✅Pneus bons \n✅Revisado funciona perfeitamente \n✅Conjunto frontal de concha"
@@ -756,7 +756,7 @@ export const DEFAULT_CATALOG_ITEMS = [
       "https://res.cloudinary.com/dihm0krca/image/upload/v1784557204/hbo2qtmdc5bvmw1ysh0v.jpg",
       "https://res.cloudinary.com/dihm0krca/image/upload/v1784557205/kt5b1vyn6txd34pi7srd.jpg"
     ],
-    "whatsapp": "5512997371569",
+    "whatsapp": "5542991645618",
     "badge": "Máquinas",
     "galleryCount": 5,
     "description": "DAMOS GARANTIA DE MOTOR E CÂMBIO\n1 ANO(75cv)Ano 2006-Horas 8.000"
@@ -781,7 +781,7 @@ export const DEFAULT_CATALOG_ITEMS = [
       "https://res.cloudinary.com/dihm0krca/image/upload/v1784557049/k5scp8mg3hl6wtntbx2i.jpg",
       "https://res.cloudinary.com/dihm0krca/image/upload/v1784557050/jjvpsrrscxj7zte6ad77.jpg"
     ],
-    "whatsapp": "5512997371569",
+    "whatsapp": "5542991645618",
     "badge": "Máquinas",
     "galleryCount": 6,
     "description": "Ano:2015\nMotor 4cc/bomba injetora Bosch\nBarramento hidráulico/TDP/02 VCR's\n100% operacional \nSuper Redutor De Velocidade"
@@ -806,7 +806,7 @@ export const DEFAULT_CATALOG_ITEMS = [
       "https://res.cloudinary.com/dihm0krca/image/upload/v1784556977/gfoo3ujz7vxxxcoxwfuj.jpg",
       "https://res.cloudinary.com/dihm0krca/image/upload/v1784556977/rqfe1iow4xyyxis2kkmq.jpg"
     ],
-    "whatsapp": "5512997371569",
+    "whatsapp": "5542991645618",
     "badge": "Máquinas",
     "galleryCount": 6,
     "description": "TRATOR MASSEY FERGUSON 292-ANO 2008-LAMINA\n\nO VALOR DO TRATOR 💲 VALORR$95.000.00\nREALIZAMOS FINANCIAMENTO"
@@ -831,7 +831,7 @@ export const DEFAULT_CATALOG_ITEMS = [
       "https://res.cloudinary.com/dihm0krca/image/upload/v1784556472/stmaaenolumqamilxzn7.jpg",
       "https://res.cloudinary.com/dihm0krca/image/upload/v1784556473/m8z3qsxjcfsqebb7yjx4.jpg"
     ],
-    "whatsapp": "5512997371569",
+    "whatsapp": "5542991645618",
     "badge": "Máquinas",
     "galleryCount": 5,
     "description": "A 750 Ano: 2018\n2.300 horas"
@@ -857,7 +857,7 @@ export const DEFAULT_CATALOG_ITEMS = [
       "https://res.cloudinary.com/dihm0krca/image/upload/v1784556356/aq6hd5qm6ub35ix7ilvb.jpg",
       "https://res.cloudinary.com/dihm0krca/image/upload/v1784556357/siuehf8o2y09ibgq4b7z.jpg"
     ],
-    "whatsapp": "5512997371569",
+    "whatsapp": "5542991645618",
     "badge": "Máquinas",
     "galleryCount": 7,
     "description": "MASSEY FERGUSON 4290 – 2015 | CABINADO\nTrator em excelente estado de conservação, pronto para o trabalho!\nPrincipais características: • Cabine fechada (mais conforto e segurança)\n* Comando duplo\n* Pneus novos\n* Pesos traseiros e dianteiros\n* Máquina revisada e bem cuidada\nDocumentação: • Possui nota fiscal de origem\n* Manual disponivel"
