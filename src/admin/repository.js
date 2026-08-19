@@ -581,10 +581,19 @@ export const findPublicTrackingByCode = async (trackingCode) => {
         d.full_name as driver_name,
         y.name as yard_name,
         y.city as yard_city,
-        y.state as yard_state
+        y.state as yard_state,
+        concat_ws(', ',
+          nullif(u.address, ''),
+          nullif(u.number, ''),
+          nullif(u.district, ''),
+          nullif(u.city, ''),
+          nullif(u.state, ''),
+          nullif(u.cep, '')
+        ) as destination_address
       from public.app_client_tracking t
       left join public.app_drivers d on d.id = t.driver_id
       left join public.app_yards y on y.id = t.yard_id
+      left join public.app_users u on u.id = t.client_user_id
       where upper(t.tracking_code) = upper($1)
       limit 1
     `,
@@ -630,11 +639,20 @@ export const getCustomerTrackingDashboard = async ({ userId, email }) => {
         y.state as yard_state,
         y.address as yard_address,
         y.contact_name as yard_contact_name,
-        y.contact_phone as yard_contact_phone
+        y.contact_phone as yard_contact_phone,
+        concat_ws(', ',
+          nullif(u.address, ''),
+          nullif(u.number, ''),
+          nullif(u.district, ''),
+          nullif(u.city, ''),
+          nullif(u.state, ''),
+          nullif(u.cep, '')
+        ) as destination_address
       from public.app_client_tracking t
       left join public.app_catalog_items c on c.id = t.catalog_item_id
       left join public.app_drivers d on d.id = t.driver_id
       left join public.app_yards y on y.id = t.yard_id
+      left join public.app_users u on u.id = t.client_user_id
       where (
         ($1::uuid is not null and t.client_user_id = $1::uuid)
         or ($2::text is not null and lower(coalesce(t.client_email, '')) = lower($2::text))

@@ -488,14 +488,19 @@
 
         const startAddress = [tracking.yard_address, tracking.yard_city, tracking.yard_state].filter(Boolean).join(", ");
         const currentAddress = tracking.current_location || tracking.yard_address || "Ipiranga - PR";
+        const destinationAddress = tracking.destination_address || "Destino final não informado";
 
-        const [startCoords, currentCoords] = await Promise.all([
+        const [startCoords, currentCoords, destinationCoords] = await Promise.all([
           geocodeAddress(startAddress || "Ipiranga - PR"),
-          geocodeAddress(currentAddress)
+          geocodeAddress(currentAddress),
+          geocodeAddress(destinationAddress)
         ]);
 
         const fallback = [-23.1896, -45.8841];
         const points = [startCoords || fallback, currentCoords || fallback];
+        if (destinationCoords) {
+          points.push(destinationCoords);
+        }
 
         const initials = String(tracking.driver_name || "AMI")
           .split(" ")
@@ -521,9 +526,23 @@
           iconAnchor: [28, 28]
         });
 
+        const destinationIcon = L.divIcon({
+          className: "",
+          html: '<div class="tracking-map-destination-marker"></div>',
+          iconSize: [20, 20],
+          iconAnchor: [10, 10]
+        });
+
         const yardMarker = L.marker(points[0], { icon: yardIcon }).addTo(map).bindPopup("Base / Pátio");
         const currentMarker = L.marker(points[1], { icon: driverIcon }).addTo(map).bindPopup(tracking.driver_name || "Local atual");
         mapMarkers.push(yardMarker, currentMarker);
+
+        if (destinationCoords) {
+          const destinationMarker = L.marker(destinationCoords, { icon: destinationIcon })
+            .addTo(map)
+            .bindPopup(destinationAddress);
+          mapMarkers.push(destinationMarker);
+        }
 
         mapRoute = L.polyline(points, {
           color: "#f27f63",
@@ -540,7 +559,7 @@
         trackingProgressValue.textContent = `${progress}%`;
         trackingAlertText.textContent = String(tracking.alert_message || tracking.status || "Aguardando atualização").toUpperCase();
         trackingItemTitle.textContent = tracking.item_name || "Rastreio";
-        trackingMapMeta.textContent = `${tracking.tracking_code || "-"} • ${tracking.current_location || "Local sob atualização"}`;
+        trackingMapMeta.textContent = `${tracking.tracking_code || "-"} • Atual: ${tracking.current_location || "Local sob atualização"} • Destino: ${tracking.destination_address || "Não informado"}`;
         await renderMap(tracking);
       };
 

@@ -130,6 +130,63 @@ export const updateUserPasswordAndRole = async (id, passwordHash, role) => {
   return rows[0] || null;
 };
 
+export const updateUser = async (
+  id,
+  { fullName, email, whatsapp, cpf, cep, address, number, district, complement, city, state, passwordHash = null }
+) => {
+  const query = `
+    update public.app_users
+    set
+      full_name = $2,
+      email = $3,
+      whatsapp = $4,
+      cpf = $5,
+      cep = $6,
+      address = $7,
+      number = $8,
+      district = $9,
+      complement = $10,
+      city = $11,
+      state = $12,
+      password_hash = coalesce($13, password_hash),
+      updated_at = timezone('utc', now())
+    where id = $1
+    returning id, full_name, email, whatsapp, cpf, cep, address, number, district, complement, city, state, role, created_at
+  `;
+
+  const { rows } = await pool.query(query, [
+    id,
+    fullName,
+    email,
+    whatsapp,
+    cpf,
+    cep,
+    address,
+    number,
+    district,
+    complement,
+    city,
+    state,
+    passwordHash
+  ]);
+
+  return rows[0] || null;
+};
+
+export const deleteUserById = async (id) => {
+  const { rows } = await pool.query(
+    `
+      delete from public.app_users
+      where id = $1
+        and role <> 'admin'
+      returning id
+    `,
+    [id]
+  );
+
+  return rows[0] || null;
+};
+
 export const saveRefreshToken = async (userId, refreshToken) => {
   const tokenHash = hashRefreshToken(refreshToken);
   await pool.query(

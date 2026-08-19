@@ -5,11 +5,13 @@ import { fileURLToPath } from "url";
 
 import {
   createUser,
+  deleteUserById,
   findUserByEmailOrCpf,
   findUserById,
   revokeRefreshToken,
   revokeRefreshTokenByHash,
   saveRefreshToken,
+  updateUser,
   verifyRefreshTokenHash
 } from "./src/auth/repository.js";
 import {
@@ -289,9 +291,14 @@ app.get("/api/admin/dashboard", adminRequired, async (_req, res) => {
   }
 });
 
-app.post("/api/admin/customers", adminRequired, async (req, res) => {
+app.all("/api/admin/customers", adminRequired, async (req, res) => {
   try {
+    if (!["POST", "PUT", "DELETE"].includes(req.method)) {
+      return res.status(405).json({ message: "Método não permitido." });
+    }
+
     const {
+      id,
       fullName,
       email,
       whatsapp,
@@ -306,13 +313,66 @@ app.post("/api/admin/customers", adminRequired, async (req, res) => {
       password
     } = req.body;
 
+    if (req.method === "DELETE") {
+      if (!id) {
+        return res.status(400).json({ message: "ID do cliente não informado." });
+      }
+
+      const deleted = await deleteUserById(String(id).trim());
+      if (!deleted) {
+        return res.status(404).json({ message: "Cliente não encontrado." });
+      }
+
+      return res.json({ success: true });
+    }
+
     if (!fullName || !email || !whatsapp || !cpf || !cep || !address || !number || !district || !password) {
+      if (req.method === "POST") {
+        return res.status(400).json({ message: "Preencha todos os campos obrigatórios do cliente." });
+      }
+    }
+
+    if (!fullName || !email || !whatsapp || !cpf || !cep || !address || !number || !district) {
       return res.status(400).json({ message: "Preencha todos os campos obrigatórios do cliente." });
     }
 
     const normalizedEmail = String(email).trim().toLowerCase();
     const normalizedCpf = onlyDigits(cpf);
     const existingUser = await findUserByEmailOrCpf(normalizedEmail, normalizedCpf);
+
+    if (req.method === "PUT") {
+      if (!id) {
+        return res.status(400).json({ message: "ID do cliente não informado." });
+      }
+
+      if (!existingUser || existingUser.id !== String(id).trim()) {
+        if (existingUser) {
+          return res.status(409).json({ message: "Já existe um cliente com este e-mail ou CPF." });
+        }
+      }
+
+      const passwordHash = password ? await hashPassword(password) : null;
+      const user = await updateUser(String(id).trim(), {
+        fullName: String(fullName).trim(),
+        email: normalizedEmail,
+        whatsapp: String(whatsapp).trim(),
+        cpf: String(cpf).trim(),
+        cep: String(cep).trim(),
+        address: String(address).trim(),
+        number: String(number).trim(),
+        district: String(district).trim(),
+        complement: complement ? String(complement).trim() : null,
+        city: city ? String(city).trim() : null,
+        state: state ? String(state).trim() : null,
+        passwordHash
+      });
+
+      if (!user) {
+        return res.status(404).json({ message: "Cliente não encontrado." });
+      }
+
+      return res.json({ user: sanitizeUser(user) });
+    }
 
     if (existingUser) {
       return res.status(409).json({ message: "Já existe um cliente com este e-mail ou CPF." });
@@ -338,7 +398,7 @@ app.post("/api/admin/customers", adminRequired, async (req, res) => {
     return res.status(201).json({ user: sanitizeUser(user) });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: "Erro ao cadastrar cliente." });
+    return res.status(500).json({ message: "Erro ao processar cliente." });
   }
 });
 

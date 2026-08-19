@@ -1,4 +1,4 @@
-import { findUserByEmailOrCpf, saveRefreshToken } from "../src/auth/repository.js";
+import { createUser, deleteUserById, findUserByEmailOrCpf, saveRefreshToken, updateUser } from "../src/auth/repository.js";
 import { comparePassword, signAccessToken, signRefreshToken } from "../src/auth/security.js";
 import {
   createCatalogItem,
@@ -12,7 +12,8 @@ import {
 } from "../src/admin/repository.js";
 import { requireAdmin } from "./_lib/admin.js";
 import { handleOptions, readJsonBody, sendJson, getQueryParam } from "./_lib/http.js";
-import { sanitizeUser } from "../src/auth/utils.js";
+import { onlyDigits, sanitizeUser } from "../src/auth/utils.js";
+import { hashPassword } from "../src/auth/security.js";
 
 const sendAuthPayload = async (req, res, user) => {
   const accessToken = signAccessToken(user);
@@ -71,6 +72,91 @@ export default async function handler(req, res) {
 
       const data = await getAdminDashboardData();
       return sendJson(req, res, 200, data);
+    }
+
+    if (action === "customers") {
+      if (!["POST", "PUT", "DELETE"].includes(req.method)) {
+        return sendJson(req, res, 405, { message: "Método não permitido." });
+      }
+
+      const { id, fullName, email, whatsapp, cpf, cep, address, number, district, complement, city, state, password } =
+        await readJsonBody(req);
+
+      if (req.method === "DELETE") {
+        if (!id) {
+          return sendJson(req, res, 400, { message: "ID do cliente não informado." });
+        }
+
+        const deleted = await deleteUserById(String(id).trim());
+        if (!deleted) {
+          return sendJson(req, res, 404, { message: "Cliente não encontrado." });
+        }
+
+        return sendJson(req, res, 200, { success: true });
+      }
+
+      if (!fullName || !email || !whatsapp || !cpf || !cep || !address || !number || !district || (!password && req.method === "POST")) {
+        return sendJson(req, res, 400, { message: "Preencha todos os campos obrigatórios do cliente." });
+      }
+
+      const normalizedEmail = String(email).trim().toLowerCase();
+      const normalizedCpf = onlyDigits(cpf);
+      const existingUser = await findUserByEmailOrCpf(normalizedEmail, normalizedCpf);
+
+      if (req.method === "PUT") {
+        if (!id) {
+          return sendJson(req, res, 400, { message: "ID do cliente não informado." });
+        }
+
+        if (existingUser && existingUser.id !== String(id).trim()) {
+          return sendJson(req, res, 409, { message: "Já existe um cliente com este e-mail ou CPF." });
+        }
+
+        const passwordHash = password ? await hashPassword(password) : null;
+        const user = await updateUser(String(id).trim(), {
+          fullName: String(fullName).trim(),
+          email: normalizedEmail,
+          whatsapp: String(whatsapp).trim(),
+          cpf: String(cpf).trim(),
+          cep: String(cep).trim(),
+          address: String(address).trim(),
+          number: String(number).trim(),
+          district: String(district).trim(),
+          complement: complement ? String(complement).trim() : null,
+          city: city ? String(city).trim() : null,
+          state: state ? String(state).trim() : null,
+          passwordHash
+        });
+
+        if (!user) {
+          return sendJson(req, res, 404, { message: "Cliente não encontrado." });
+        }
+
+        return sendJson(req, res, 200, { user: sanitizeUser(user) });
+      }
+
+      if (existingUser) {
+        return sendJson(req, res, 409, { message: "Já existe um cliente com este e-mail ou CPF." });
+      }
+
+      const passwordHash = await hashPassword(password);
+      const user = await createUser({
+        fullName: String(fullName).trim(),
+        email: normalizedEmail,
+        whatsapp: String(whatsapp).trim(),
+        cpf: String(cpf).trim(),
+        cep: String(cep).trim(),
+        address: String(address).trim(),
+        number: String(number).trim(),
+        district: String(district).trim(),
+        complement: complement ? String(complement).trim() : null,
+        city: city ? String(city).trim() : null,
+        state: state ? String(state).trim() : null,
+        passwordHash,
+        role: "customer"
+      });
+
+      return sendJson(req, res, 201, { user: sanitizeUser(user) });
     }
 
     if (action === "catalog-items") {
@@ -236,6 +322,10 @@ export default async function handler(req, res) {
 
     if (action === "dashboard") {
       return sendJson(req, res, 500, { message: "Erro ao carregar o painel admin." });
+    }
+
+    if (action === "customers") {
+      return sendJson(req, res, 500, { message: "Erro ao processar cliente." });
     }
 
     if (action === "catalog-items") {

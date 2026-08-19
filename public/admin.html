@@ -176,6 +176,7 @@
                         <th>WhatsApp</th>
                         <th>Cidade</th>
                         <th>Perfil</th>
+                        <th>Ações</th>
                       </tr>
                     </thead>
                     <tbody></tbody>
@@ -311,6 +312,10 @@
                       <span>Endereço do local atual</span>
                       <input type="text" name="currentLocationPreview" id="trackingCurrentLocationPreview" readonly />
                     </label>
+                    <label class="admin-form__full">
+                      <span>Destino final do cliente</span>
+                      <input type="text" name="destinationPreview" id="trackingDestinationPreview" readonly />
+                    </label>
                     <label>
                       <span>Previsão de entrega</span>
                       <input type="date" name="expectedDeliveryDate" />
@@ -435,6 +440,7 @@
         </div>
 
         <form class="admin-form admin-form--grid" id="clientForm">
+          <input type="hidden" name="id" />
           <label><span>Nome completo</span><input type="text" name="fullName" required /></label>
           <label><span>E-mail</span><input type="email" name="email" required /></label>
           <label><span>Telefone WhatsApp</span><input type="text" name="whatsapp" required /></label>
@@ -446,9 +452,9 @@
           <label><span>Complemento</span><input type="text" name="complement" /></label>
           <label><span>Cidade</span><input type="text" name="city" /></label>
           <label><span>Estado</span><input type="text" name="state" /></label>
-          <label><span>Senha</span><input type="password" name="password" required /></label>
+          <label><span>Senha</span><input type="password" name="password" /></label>
           <div class="admin-form__full admin-form__actions">
-            <button class="button button-primary" type="submit">Salvar cliente</button>
+            <button class="button button-primary" type="submit" id="clientSubmitButton">Salvar cliente</button>
             <p class="admin-status" id="clientStatus"></p>
           </div>
         </form>
@@ -522,6 +528,8 @@
       const clientModal = document.getElementById("clientModal");
       const clientOpenCreateButton = document.getElementById("clientOpenCreateButton");
       const clientModalClosers = Array.from(document.querySelectorAll("[data-close-client-modal]"));
+      const clientSubmitButton = document.getElementById("clientSubmitButton");
+      const clientModalTitle = document.getElementById("clientModalTitle");
 
       const driverForm = document.getElementById("driverForm");
       const driverStatus = document.getElementById("driverStatus");
@@ -539,6 +547,7 @@
       const trackingYardSelect = document.getElementById("trackingYardSelect");
       const trackingLocationYardSelect = document.getElementById("trackingLocationYardSelect");
       const trackingCurrentLocationPreview = document.getElementById("trackingCurrentLocationPreview");
+      const trackingDestinationPreview = document.getElementById("trackingDestinationPreview");
       const yardForm = document.getElementById("yardForm");
 
       const adminStats = document.getElementById("adminStats");
@@ -560,6 +569,7 @@
         trackings: []
       };
       let selectedGalleryImages = [];
+      let editingClientId = null;
       let editingCatalogId = null;
       let draggedImageIndex = null;
       let driverPhotoBase64 = "";
@@ -710,6 +720,19 @@
         return [address, [city, state].filter(Boolean).join(" - ")].filter(Boolean).join(", ");
       };
 
+      const buildClientAddress = (user) =>
+        user
+          ? [user.address, user.number, user.district, user.city, user.state, user.cep]
+              .map((value) => String(value || "").trim())
+              .filter(Boolean)
+              .join(", ")
+          : "";
+
+      const syncTrackingDestination = () => {
+        const selectedClient = currentAdminData.users.find((user) => user.id === trackingClientSelect.value);
+        trackingDestinationPreview.value = buildClientAddress(selectedClient) || "Destino não disponível";
+      };
+
       const renderTrackingSelects = () => {
         const users = customerUsers();
 
@@ -739,6 +762,8 @@
         trackingLocationYardSelect.innerHTML = `<option value="">Selecione o local atual</option>${currentAdminData.yards
           .map((yard) => `<option value="${yard.id}">${yard.name} • ${buildYardAddress(yard) || "-"}</option>`)
           .join("")}`;
+
+        syncTrackingDestination();
       };
 
       const renderStats = (data) => {
@@ -774,10 +799,49 @@
                 <td>${user.whatsapp || "-"}</td>
                 <td>${[user.city, user.state].filter(Boolean).join(" / ") || "-"}</td>
                 <td>${user.role || "customer"}</td>
+                <td class="admin-table__actions">
+                  <button class="button button-secondary admin-card-action" type="button" data-edit-client="${user.id}">Editar</button>
+                  <button class="button admin-card-action admin-card-action--danger" type="button" data-delete-client="${user.id}">Excluir</button>
+                </td>
               </tr>
             `
           )
           .join("");
+
+        clients.forEach((user) => {
+          const editButton = document.querySelector(`[data-edit-client="${user.id}"]`);
+          const deleteButton = document.querySelector(`[data-delete-client="${user.id}"]`);
+
+          if (editButton) {
+            editButton.addEventListener("click", () => fillClientForm(user));
+          }
+
+          if (deleteButton) {
+            deleteButton.addEventListener("click", async () => {
+              const confirmed = window.confirm(`Excluir o cliente "${user.full_name}"?`);
+              if (!confirmed) {
+                return;
+              }
+
+              try {
+                await adminFetch("/api/admin/customers", {
+                  method: "DELETE",
+                  body: JSON.stringify({ id: user.id })
+                });
+
+                if (editingClientId === user.id) {
+                  resetClientForm();
+                }
+
+                setStatus(clientStatus, "Cliente excluído com sucesso.");
+                closeModal(clientModal);
+                await loadDashboard();
+              } catch (error) {
+                setStatus(clientStatus, error.message, true);
+              }
+            });
+          }
+        });
 
         renderSimpleList(
           overviewUsers,
@@ -995,8 +1059,38 @@
       };
 
       const resetClientForm = () => {
+        editingClientId = null;
         clientForm.reset();
+        clientForm.elements.id.value = "";
+        clientForm.elements.password.required = true;
+        clientForm.elements.password.placeholder = "";
+        clientSubmitButton.textContent = "Salvar cliente";
+        clientModalTitle.textContent = "Cadastrar cliente";
         setStatus(clientStatus, "");
+      };
+
+      const fillClientForm = (user) => {
+        editingClientId = user.id;
+        clientForm.elements.id.value = user.id || "";
+        clientForm.elements.fullName.value = user.full_name || "";
+        clientForm.elements.email.value = user.email || "";
+        clientForm.elements.whatsapp.value = user.whatsapp || "";
+        clientForm.elements.cpf.value = user.cpf || "";
+        clientForm.elements.cep.value = user.cep || "";
+        clientForm.elements.address.value = user.address || "";
+        clientForm.elements.number.value = user.number || "";
+        clientForm.elements.district.value = user.district || "";
+        clientForm.elements.complement.value = user.complement || "";
+        clientForm.elements.city.value = user.city || "";
+        clientForm.elements.state.value = user.state || "";
+        clientForm.elements.password.value = "";
+        clientForm.elements.password.required = false;
+        clientForm.elements.password.placeholder = "Preencha somente se quiser trocar a senha";
+        clientSubmitButton.textContent = "Salvar alterações";
+        clientModalTitle.textContent = "Editar cliente";
+        setStatus(clientStatus, "");
+        activateTab("clients");
+        openModal(clientModal);
       };
 
       const resetCatalogForm = ({ keepStatus = false } = {}) => {
@@ -1241,6 +1335,8 @@
         trackingCurrentLocationPreview.value = buildYardAddress(selectedYard);
       });
 
+      trackingClientSelect.addEventListener("change", syncTrackingDestination);
+
       adminLoginForm.addEventListener("submit", async (event) => {
         event.preventDefault();
         setStatus(adminLoginStatus, "Entrando...");
@@ -1281,10 +1377,10 @@
 
         try {
           const formData = new FormData(clientForm);
-          const response = await fetch("/api/auth/register", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
+          await adminFetch("/api/admin/customers", {
+            method: editingClientId ? "PUT" : "POST",
             body: JSON.stringify({
+              id: editingClientId,
               fullName: formData.get("fullName"),
               email: formData.get("email"),
               whatsapp: formData.get("whatsapp"),
@@ -1300,12 +1396,7 @@
             })
           });
 
-          const data = await response.json().catch(() => ({}));
-          if (!response.ok) {
-            throw new Error(data.message || "Erro ao cadastrar cliente.");
-          }
-
-          setStatus(clientStatus, "Cliente salvo com sucesso.");
+          setStatus(clientStatus, editingClientId ? "Cliente atualizado com sucesso." : "Cliente salvo com sucesso.");
           closeModal(clientModal);
           resetClientForm();
           await loadDashboard();
@@ -1396,6 +1487,7 @@
           const selectedLocationYard =
             currentAdminData.yards.find((yard) => yard.id === formData.get("currentLocationYardId")) ||
             currentAdminData.yards.find((yard) => yard.id === formData.get("yardId"));
+          const destinationAddress = buildClientAddress(client);
 
           if (!client || !item) {
             throw new Error("Selecione um cliente e um veículo válidos.");
@@ -1416,12 +1508,15 @@
               alertMessage: formData.get("alertMessage"),
               currentLocation: buildYardAddress(selectedLocationYard),
               expectedDeliveryDate: formData.get("expectedDeliveryDate"),
-              notes: formData.get("notes")
+              notes: [destinationAddress ? `Destino final: ${destinationAddress}` : "", formData.get("notes")]
+                .filter(Boolean)
+                .join("\n")
             })
           });
 
           trackingForm.reset();
           renderTrackingSelects();
+          syncTrackingDestination();
           setStatus(trackingStatus, "Rastreio salvo com sucesso.");
           await loadDashboard();
         } catch (error) {
