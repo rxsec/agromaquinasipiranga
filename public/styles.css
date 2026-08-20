@@ -792,7 +792,11 @@ img {
 }
 
 .tracking-sidebar__nav {
-  display: none;
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.84);
 }
 
 .tracking-sidebar__tab {
