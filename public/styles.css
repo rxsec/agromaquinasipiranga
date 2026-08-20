@@ -723,12 +723,12 @@ img {
 }
 
 .tracking-dashboard {
-  padding: 10px 0 0;
+  padding: 0;
 }
 
 .tracking-dashboard__container {
   display: grid;
-  gap: 16px;
+  gap: 0;
 }
 
 .tracking-dashboard__topbar {
@@ -736,7 +736,9 @@ img {
   align-items: center;
   justify-content: space-between;
   gap: 18px;
-  padding: 0 2px;
+  padding: 24px 28px 18px;
+  background: #edf1f5;
+  border-bottom: 1px solid rgba(51, 71, 93, 0.08);
 }
 
 .tracking-breadcrumb {
@@ -766,63 +768,91 @@ img {
 
 .tracking-dashboard__shell {
   display: grid;
-  grid-template-columns: 320px minmax(0, 1fr);
-  gap: 24px;
+  grid-template-columns: 252px minmax(0, 1fr);
+  gap: 0;
+  min-height: calc(100vh - 92px);
+  background: #edf1f5;
 }
 
 .tracking-sidebar {
-  border-radius: 8px;
-  background: #d3d5d7;
-  padding: 18px 20px 24px;
-  min-height: 846px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  background: #33475d;
+  color: #fff;
+  padding: 22px 18px 18px;
+  min-height: 100%;
 }
 
 .tracking-sidebar__head h2 {
   margin: 0;
-  color: #0f2238;
-  font-size: 1.1rem;
+  color: #fff;
+  font-size: 1.15rem;
   font-weight: 800;
   text-transform: uppercase;
 }
 
 .tracking-sidebar__head p {
-  margin: 0;
-  color: #6a7a8c;
-  font-size: 0.78rem;
+  margin: 8px 0 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.88rem;
 }
 
 .tracking-sidebar__nav {
   display: grid;
-  gap: 10px;
-  margin-top: 18px;
-  padding-top: 18px;
-  border-top: 1px solid rgba(255, 255, 255, 0.84);
+  gap: 8px;
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
 }
 
 .tracking-sidebar__tab {
-  min-height: 52px;
+  min-height: 46px;
   border: 0;
-  border-radius: 14px;
+  border-radius: 10px;
   background: transparent;
-  color: #1f3042;
+  color: rgba(255, 255, 255, 0.84);
   text-align: left;
-  padding: 0 16px;
+  padding: 0 14px;
   font: inherit;
-  font-weight: 800;
+  font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
+  transition: 180ms ease;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.tracking-sidebar__tab::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.42);
+  flex: 0 0 8px;
 }
 
 .tracking-sidebar__tab.is-active {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  box-shadow: none;
+}
+
+.tracking-sidebar__tab.is-active::before {
   background: #fff;
-  box-shadow: 0 10px 24px rgba(39, 63, 43, 0.08);
+}
+
+.tracking-sidebar__tab:hover {
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .tracking-vehicle-list {
   display: grid;
   gap: 12px;
-  margin-top: 18px;
+  margin-top: 8px;
   padding-top: 18px;
-  border-top: 1px solid rgba(255, 255, 255, 0.84);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
   position: relative;
 }
 
@@ -831,27 +861,33 @@ img {
   position: absolute;
   top: -1px;
   left: 0;
-  color: #24384f;
-  font-size: 0.72rem;
-  font-weight: 500;
-  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
   padding: 0 14px 10px 14px;
-  border-bottom: 3px solid #1f2f44;
+  border-bottom: 3px solid rgba(255, 255, 255, 0.86);
+  text-transform: uppercase;
 }
 
 .tracking-vehicle-card {
-  border: 1px solid rgba(255, 255, 255, 0.82);
-  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 14px;
   background: transparent;
   padding: 14px 12px;
   text-align: left;
   cursor: pointer;
-  transition: border-color 0.2s ease, background-color 0.2s ease;
+  transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
 }
 
 .tracking-vehicle-card.is-active {
-  border-color: rgba(255, 255, 255, 0.95);
+  border-color: rgba(255, 255, 255, 0.22);
   background: rgba(255, 255, 255, 0.08);
+}
+
+.tracking-vehicle-card:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255, 255, 255, 0.24);
 }
 
 .tracking-vehicle-card__row {
@@ -866,7 +902,7 @@ img {
   min-height: 32px;
   display: grid;
   align-items: center;
-  color: #40454c;
+  color: rgba(255, 255, 255, 0.7);
   font-size: 0.56rem;
   font-weight: 800;
   text-transform: uppercase;
@@ -889,8 +925,8 @@ img {
 }
 
 .tracking-vehicle-card__copy strong {
-  color: #23364d;
-  font-size: 0.74rem;
+  color: #fff;
+  font-size: 0.82rem;
   font-weight: 800;
   line-height: 1.25;
   text-transform: uppercase;
@@ -898,29 +934,32 @@ img {
 
 .tracking-vehicle-card__copy span {
   margin-top: 6px;
-  color: #6c7a89;
-  font-size: 0.58rem;
+  color: rgba(255, 255, 255, 0.66);
+  font-size: 0.64rem;
   font-weight: 800;
   line-height: 1.25;
   text-transform: uppercase;
 }
 
 .tracking-vehicle-card__arrow {
-  color: #6d7f92;
-  font-size: 1.9rem;
+  color: rgba(255, 255, 255, 0.56);
+  font-size: 1.45rem;
   line-height: 1;
 }
 
 .tracking-sidebar__empty,
 .tracking-empty-box {
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.08);
   padding: 18px;
-  color: #637182;
+  color: rgba(255, 255, 255, 0.78);
 }
 
 .tracking-main {
   display: grid;
+  gap: 24px;
+  padding: 24px 28px 40px;
+  min-width: 0;
 }
 
 .tracking-panel {
@@ -2901,8 +2940,26 @@ img {
     grid-template-columns: 1fr;
   }
 
+  .tracking-dashboard__topbar {
+    padding: 18px 16px 16px;
+  }
+
+  .tracking-main {
+    padding: 18px 16px 110px;
+  }
+
   .tracking-sidebar {
     min-height: auto;
+    border-radius: 0 0 18px 18px;
+    padding: 18px 16px;
+  }
+
+  .tracking-sidebar__nav {
+    grid-template-columns: 1fr;
+  }
+
+  .tracking-vehicle-list {
+    padding-top: 20px;
   }
 
   .tracking-map {
@@ -3008,6 +3065,62 @@ img {
 
   .button {
     width: 100%;
+  }
+
+  .tracking-dashboard__topbar {
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .tracking-breadcrumb {
+    font-size: 0.76rem;
+    line-height: 1.4;
+  }
+
+  .tracking-userbar {
+    width: 100%;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 0.8rem;
+  }
+
+  .tracking-sidebar {
+    gap: 18px;
+    border-radius: 0 0 16px 16px;
+  }
+
+  .tracking-sidebar__head h2 {
+    font-size: 1rem;
+  }
+
+  .tracking-sidebar__head p {
+    font-size: 0.82rem;
+  }
+
+  .tracking-sidebar__tab {
+    min-height: 44px;
+    font-size: 0.94rem;
+  }
+
+  .tracking-vehicle-card {
+    padding: 12px 11px;
+  }
+
+  .tracking-vehicle-card__row {
+    grid-template-columns: 28px minmax(0, 1fr) 18px;
+    gap: 10px;
+  }
+
+  .tracking-vehicle-card__copy strong {
+    font-size: 0.76rem;
+  }
+
+  .tracking-vehicle-card__copy span {
+    font-size: 0.6rem;
+  }
+
+  .tracking-map {
+    min-height: 320px;
   }
 
   .product-body {
