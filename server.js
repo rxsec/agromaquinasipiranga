@@ -244,6 +244,64 @@ app.get("/api/auth/me", authRequired, async (req, res) => {
   return res.json({ user: sanitizeUser(req.user) });
 });
 
+app.put("/api/auth/profile", authRequired, async (req, res) => {
+  try {
+    const {
+      fullName,
+      email,
+      whatsapp,
+      cpf,
+      cep,
+      address,
+      number,
+      district,
+      complement,
+      city,
+      state,
+      password,
+      photoUrl
+    } = req.body;
+
+    if (!fullName || !email || !whatsapp || !cpf || !cep || !address || !number || !district) {
+      return res.status(400).json({ message: "Preencha todos os campos obrigatórios do perfil." });
+    }
+
+    const normalizedEmail = String(email).trim().toLowerCase();
+    const normalizedCpf = onlyDigits(cpf);
+    const existingUser = await findUserByEmailOrCpf(normalizedEmail, normalizedCpf);
+
+    if (existingUser && existingUser.id !== req.user.id) {
+      return res.status(409).json({ message: "Já existe uma conta com este e-mail ou CPF." });
+    }
+
+    const passwordHash = password ? await hashPassword(password) : null;
+    const user = await updateUser(req.user.id, {
+      fullName: String(fullName).trim(),
+      email: normalizedEmail,
+      whatsapp: String(whatsapp).trim(),
+      cpf: String(cpf).trim(),
+      cep: String(cep).trim(),
+      address: String(address).trim(),
+      number: String(number).trim(),
+      district: String(district).trim(),
+      complement: complement ? String(complement).trim() : null,
+      city: city ? String(city).trim() : null,
+      state: state ? String(state).trim() : null,
+      photoUrl: photoUrl ? String(photoUrl).trim() : null,
+      passwordHash
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "Usuário não encontrado." });
+    }
+
+    return res.json({ user: sanitizeUser(user) });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Erro ao atualizar perfil." });
+  }
+});
+
 app.post("/api/auth/refresh", async (req, res) => {
   try {
     const { refreshToken } = req.body;

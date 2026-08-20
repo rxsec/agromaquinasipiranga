@@ -14,5 +14,6 @@ export const sanitizeUser = (user) => ({
   complement: user.complement,
   city: user.city,
   state: user.state,
+  photoUrl: user.photo_url || null,
   createdAt: user.created_at
 });

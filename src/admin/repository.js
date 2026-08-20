@@ -15,6 +15,9 @@ export const ensureAdminSchema = async () => {
       alter table public.app_users
       add column if not exists role text not null default 'customer';
 
+      alter table public.app_users
+      add column if not exists photo_url text;
+
       create index if not exists app_users_role_idx on public.app_users (role);
 
       create table if not exists public.app_catalog_items (
@@ -152,6 +155,7 @@ export const ensureDefaultAdminUser = async () => {
       complement: null,
       city: "Ipiranga",
       state: "PR",
+      photoUrl: null,
       passwordHash,
       role: "admin"
     });

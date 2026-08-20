@@ -13,6 +13,7 @@ create table if not exists public.app_users (
   complement text,
   city text,
   state text,
+  photo_url text,
   password_hash text not null,
   created_at timestamptz not null default timezone('utc', now()),
   updated_at timestamptz not null default timezone('utc', now())

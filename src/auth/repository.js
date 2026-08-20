@@ -17,6 +17,7 @@ export const createUser = async ({
   complement,
   city,
   state,
+  photoUrl = null,
   passwordHash,
   role = "customer"
 }) => {
@@ -33,11 +34,12 @@ export const createUser = async ({
       complement,
       city,
       state,
+      photo_url,
       password_hash,
       role
     )
-    values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)
-    returning id, full_name, email, whatsapp, cpf, cep, address, number, district, complement, city, state, role, created_at
+    values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)
+    returning id, full_name, email, whatsapp, cpf, cep, address, number, district, complement, city, state, photo_url, role, created_at
   `;
 
   const { rows } = await pool.query(query, [
@@ -52,6 +54,7 @@ export const createUser = async ({
     complement,
     city,
     state,
+    photoUrl,
     passwordHash,
     role
   ]);
@@ -74,6 +77,7 @@ export const findUserByEmailOrCpf = async (email, cpfDigits) => {
       complement,
       city,
       state,
+      photo_url,
       role,
       password_hash,
       created_at
@@ -102,6 +106,7 @@ export const findUserById = async (id) => {
       complement,
       city,
       state,
+      photo_url,
       role,
       password_hash,
       created_at
@@ -132,7 +137,21 @@ export const updateUserPasswordAndRole = async (id, passwordHash, role) => {
 
 export const updateUser = async (
   id,
-  { fullName, email, whatsapp, cpf, cep, address, number, district, complement, city, state, passwordHash = null }
+  {
+    fullName,
+    email,
+    whatsapp,
+    cpf,
+    cep,
+    address,
+    number,
+    district,
+    complement,
+    city,
+    state,
+    photoUrl = null,
+    passwordHash = null
+  }
 ) => {
   const query = `
     update public.app_users
@@ -148,10 +167,11 @@ export const updateUser = async (
       complement = $10,
       city = $11,
       state = $12,
-      password_hash = coalesce($13, password_hash),
+      photo_url = coalesce($13, photo_url),
+      password_hash = coalesce($14, password_hash),
       updated_at = timezone('utc', now())
     where id = $1
-    returning id, full_name, email, whatsapp, cpf, cep, address, number, district, complement, city, state, role, created_at
+    returning id, full_name, email, whatsapp, cpf, cep, address, number, district, complement, city, state, photo_url, role, created_at
   `;
 
   const { rows } = await pool.query(query, [
@@ -167,6 +187,7 @@ export const updateUser = async (
     complement,
     city,
     state,
+    photoUrl,
     passwordHash
   ]);
 

@@ -157,7 +157,91 @@
                     <div class="tracking-driver-status">Cadastrado</div>
                   </div>
 
-                  <div class="tracking-profile-grid" id="trackingProfileInfo"></div>
+                  <div class="tracking-profile-layout">
+                    <div class="tracking-profile-aside">
+                      <div class="tracking-profile-avatar" id="trackingProfilePhotoPreview">AMI</div>
+                      <label class="tracking-profile-upload" for="trackingProfilePhoto">
+                        Alterar foto
+                      </label>
+                      <input id="trackingProfilePhoto" type="file" accept="image/*" hidden />
+                      <div class="tracking-profile-vehicles" id="trackingProfileVehicles"></div>
+                    </div>
+
+                    <form class="tracking-profile-form" id="trackingProfileForm">
+                      <div class="tracking-profile-form__grid">
+                        <div class="tracking-profile-field tracking-profile-field--full">
+                          <label for="trackingProfileFullName">Nome completo</label>
+                          <input id="trackingProfileFullName" name="fullName" type="text" required />
+                        </div>
+
+                        <div class="tracking-profile-field">
+                          <label for="trackingProfileEmail">E-mail</label>
+                          <input id="trackingProfileEmail" name="email" type="email" required />
+                        </div>
+
+                        <div class="tracking-profile-field">
+                          <label for="trackingProfileWhatsapp">WhatsApp</label>
+                          <input id="trackingProfileWhatsapp" name="whatsapp" type="tel" required />
+                        </div>
+
+                        <div class="tracking-profile-field">
+                          <label for="trackingProfileCpf">CPF</label>
+                          <input id="trackingProfileCpf" name="cpf" type="text" maxlength="14" required />
+                        </div>
+
+                        <div class="tracking-profile-field">
+                          <label for="trackingProfileCep">CEP</label>
+                          <input id="trackingProfileCep" name="cep" type="text" maxlength="9" required />
+                        </div>
+
+                        <div class="tracking-profile-field tracking-profile-field--full">
+                          <label for="trackingProfileAddress">Endereço</label>
+                          <input id="trackingProfileAddress" name="address" type="text" required />
+                        </div>
+
+                        <div class="tracking-profile-field">
+                          <label for="trackingProfileNumber">Número</label>
+                          <input id="trackingProfileNumber" name="number" type="text" required />
+                        </div>
+
+                        <div class="tracking-profile-field">
+                          <label for="trackingProfileDistrict">Bairro</label>
+                          <input id="trackingProfileDistrict" name="district" type="text" required />
+                        </div>
+
+                        <div class="tracking-profile-field tracking-profile-field--full">
+                          <label for="trackingProfileComplement">Complemento</label>
+                          <input id="trackingProfileComplement" name="complement" type="text" />
+                        </div>
+
+                        <div class="tracking-profile-field">
+                          <label for="trackingProfileCity">Cidade</label>
+                          <input id="trackingProfileCity" name="city" type="text" />
+                        </div>
+
+                        <div class="tracking-profile-field">
+                          <label for="trackingProfileState">UF</label>
+                          <input id="trackingProfileState" name="state" type="text" maxlength="2" />
+                        </div>
+
+                        <div class="tracking-profile-field">
+                          <label for="trackingProfilePassword">Nova senha</label>
+                          <input id="trackingProfilePassword" name="password" type="password" />
+                        </div>
+
+                        <div class="tracking-profile-field">
+                          <label for="trackingProfilePasswordConfirm">Confirmar nova senha</label>
+                          <input id="trackingProfilePasswordConfirm" name="passwordConfirm" type="password" />
+                        </div>
+                      </div>
+
+                      <p class="tracking-status" id="trackingProfileStatus" aria-live="polite"></p>
+
+                      <div class="tracking-profile-form__actions">
+                        <button class="button button-primary" type="submit">Salvar alterações</button>
+                      </div>
+                    </form>
+                  </div>
                 </article>
               </div>
             </div>
@@ -232,6 +316,7 @@
       integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
       crossorigin=""
     ></script>
+    <script src="./mobile-access.js"></script>
     <script>
       const ACCESS_TOKEN_KEY = "agro_access_token";
       const REFRESH_TOKEN_KEY = "agro_refresh_token";
@@ -255,13 +340,19 @@
       const trackingDriverInfo = document.getElementById("trackingDriverInfo");
       const trackingDriverPhoto = document.getElementById("trackingDriverPhoto");
       const trackingDriverStatus = document.getElementById("trackingDriverStatus");
-      const trackingProfileInfo = document.getElementById("trackingProfileInfo");
+      const trackingProfileForm = document.getElementById("trackingProfileForm");
+      const trackingProfileStatus = document.getElementById("trackingProfileStatus");
+      const trackingProfilePhotoInput = document.getElementById("trackingProfilePhoto");
+      const trackingProfilePhotoPreview = document.getElementById("trackingProfilePhotoPreview");
+      const trackingProfileVehicles = document.getElementById("trackingProfileVehicles");
 
       let dashboardState = { user: null, trackings: [] };
       let selectedTrackingId = null;
       let map;
       let mapMarkers = [];
       let mapRoute;
+      let profilePhotoBase64 = "";
+      let requestedTrackingTab = new URLSearchParams(window.location.search).get("tab") || "overview";
 
       const getCurrentUser = () => JSON.parse(localStorage.getItem(CURRENT_USER_KEY) || "null");
       const getAccessToken = () => localStorage.getItem(ACCESS_TOKEN_KEY);
@@ -272,6 +363,20 @@
           .map((value) => String(value || "").trim())
           .filter(Boolean)
           .join(", ");
+      const formatCep = (value) => onlyDigits(value).slice(0, 8).replace(/(\d{5})(\d{0,3})/, "$1-$2").replace(/-$/, "");
+      const formatCpf = (value) =>
+        onlyDigits(value)
+          .slice(0, 11)
+          .replace(/(\d{3})(\d)/, "$1.$2")
+          .replace(/(\d{3})(\d)/, "$1.$2")
+          .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+      const formatPhone = (value) => {
+        const digits = onlyDigits(value).slice(0, 11);
+        if (digits.length <= 10) {
+          return digits.replace(/(\d{2})(\d)/, "($1) $2").replace(/(\d{4})(\d)/, "$1-$2");
+        }
+        return digits.replace(/(\d{2})(\d)/, "($1) $2").replace(/(\d{5})(\d)/, "$1-$2");
+      };
 
       const setLoggedInState = () => {
         trackingAccessSection.classList.add("hidden");
@@ -286,6 +391,7 @@
       };
 
       const activateTrackingTab = (target) => {
+        requestedTrackingTab = ["overview", "driver", "profile"].includes(target) ? target : "overview";
         trackingTabs.forEach((button) => {
           button.classList.toggle("is-active", button.dataset.trackingTab === target);
         });
@@ -298,6 +404,8 @@
           profile: "Meu Perfil"
         };
         trackingBreadcrumb.innerHTML = `Dashboard / <strong>${titles[target] || "Rastreio"}</strong>`;
+        const nextUrl = `${window.location.pathname}?tab=${requestedTrackingTab}`;
+        window.history.replaceState({}, "", nextUrl);
         if (map && target === "overview") {
           setTimeout(() => map.invalidateSize(), 120);
         }
@@ -418,6 +526,41 @@
         return gallery.find(Boolean) || tracking.item_image_url || "";
       };
 
+      const lookupCep = async (cep) => {
+        const response = await fetch(`https://viacep.com.br/ws/${onlyDigits(cep)}/json/`);
+        const data = await response.json();
+
+        if (!response.ok || data.erro) {
+          throw new Error("CEP não encontrado.");
+        }
+
+        return data;
+      };
+
+      const resizeImage = (file) =>
+        new Promise((resolve, reject) => {
+          const reader = new FileReader();
+
+          reader.onload = () => {
+            const image = new Image();
+            image.onload = () => {
+              const maxWidth = 900;
+              const ratio = Math.min(1, maxWidth / image.width);
+              const canvas = document.createElement("canvas");
+              canvas.width = Math.round(image.width * ratio);
+              canvas.height = Math.round(image.height * ratio);
+              const context = canvas.getContext("2d");
+              context.drawImage(image, 0, 0, canvas.width, canvas.height);
+              resolve(canvas.toDataURL("image/jpeg", 0.84));
+            };
+            image.onerror = () => reject(new Error("Não foi possível processar a foto."));
+            image.src = reader.result;
+          };
+
+          reader.onerror = () => reject(new Error("Não foi possível ler a foto."));
+          reader.readAsDataURL(file);
+        });
+
       const renderVehicleList = (trackings) => {
         trackingVehicleList.innerHTML = trackings.length
           ? trackings
@@ -496,22 +639,29 @@
 
       const renderProfile = (user, trackings) => {
         const vehicles = [...new Set(trackings.map((item) => item.item_name).filter(Boolean))];
-        trackingProfileInfo.innerHTML = [
-          ["Nome", user.fullName || "-"],
-          ["Telefone", user.whatsapp || "-"],
-          ["Endereço", [user.address, user.number, user.district, user.city, user.state].filter(Boolean).join(", ") || "-"],
-          ["CPF", user.cpf || "-"],
-          ["Veículos", vehicles.join(", ") || "Nenhum veículo vinculado"]
-        ]
-          .map(
-            ([label, value]) => `
-              <div class="tracking-data-line tracking-data-line--profile">
-                <span>${label}</span>
-                <strong>${value}</strong>
-              </div>
-            `
-          )
-          .join("");
+        trackingProfileForm.elements.fullName.value = user.fullName || "";
+        trackingProfileForm.elements.email.value = user.email || "";
+        trackingProfileForm.elements.whatsapp.value = formatPhone(user.whatsapp || "");
+        trackingProfileForm.elements.cpf.value = formatCpf(user.cpf || "");
+        trackingProfileForm.elements.cep.value = formatCep(user.cep || "");
+        trackingProfileForm.elements.address.value = user.address || "";
+        trackingProfileForm.elements.number.value = user.number || "";
+        trackingProfileForm.elements.district.value = user.district || "";
+        trackingProfileForm.elements.complement.value = user.complement || "";
+        trackingProfileForm.elements.city.value = user.city || "";
+        trackingProfileForm.elements.state.value = user.state || "";
+        trackingProfileForm.elements.password.value = "";
+        trackingProfileForm.elements.passwordConfirm.value = "";
+        profilePhotoBase64 = user.photoUrl || profilePhotoBase64 || "";
+        trackingProfilePhotoPreview.innerHTML = user.photoUrl
+          ? `<img src="${user.photoUrl}" alt="${user.fullName || "Cliente"}" />`
+          : `<span>${String(user.fullName || "AMI").split(" ").filter(Boolean).slice(0, 2).map((part) => part[0]).join("").toUpperCase()}</span>`;
+        trackingProfileVehicles.innerHTML = `
+          <div class="tracking-data-line tracking-data-line--profile">
+            <span>Veículos vinculados</span>
+            <strong>${vehicles.join(", ") || "Nenhum veículo vinculado"}</strong>
+          </div>
+        `;
       };
 
       const renderMap = async (tracking, user) => {
@@ -629,7 +779,7 @@
           dashboardState = data;
           selectedTrackingId = data.trackings[0]?.id || null;
           setLoggedInState();
-          activateTrackingTab("overview");
+          activateTrackingTab(requestedTrackingTab);
           await renderDashboard();
         } catch (error) {
           const refreshed = await refreshSession();
@@ -698,9 +848,102 @@
         });
       });
 
+      trackingProfileForm.elements.whatsapp.addEventListener("input", () => {
+        trackingProfileForm.elements.whatsapp.value = formatPhone(trackingProfileForm.elements.whatsapp.value);
+      });
+
+      trackingProfileForm.elements.cpf.addEventListener("input", () => {
+        trackingProfileForm.elements.cpf.value = formatCpf(trackingProfileForm.elements.cpf.value);
+      });
+
+      trackingProfileForm.elements.cep.addEventListener("input", () => {
+        trackingProfileForm.elements.cep.value = formatCep(trackingProfileForm.elements.cep.value);
+      });
+
+      trackingProfileForm.elements.cep.addEventListener("blur", async () => {
+        const cep = trackingProfileForm.elements.cep.value;
+        if (onlyDigits(cep).length !== 8) {
+          return;
+        }
+
+        try {
+          const data = await lookupCep(cep);
+          trackingProfileForm.elements.address.value = data.logradouro || trackingProfileForm.elements.address.value;
+          trackingProfileForm.elements.district.value = data.bairro || trackingProfileForm.elements.district.value;
+          trackingProfileForm.elements.city.value = data.localidade || trackingProfileForm.elements.city.value;
+          trackingProfileForm.elements.state.value = data.uf || trackingProfileForm.elements.state.value;
+        } catch (error) {
+          trackingProfileStatus.textContent = error.message;
+        }
+      });
+
+      trackingProfilePhotoInput.addEventListener("change", async (event) => {
+        const file = event.target.files?.[0];
+        if (!file) {
+          return;
+        }
+
+        try {
+          profilePhotoBase64 = await resizeImage(file);
+          trackingProfilePhotoPreview.innerHTML = `<img src="${profilePhotoBase64}" alt="Foto de perfil" />`;
+          trackingProfileStatus.textContent = "";
+        } catch (error) {
+          trackingProfileStatus.textContent = error.message;
+        }
+      });
+
+      trackingProfileForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        if (trackingProfileForm.elements.password.value !== trackingProfileForm.elements.passwordConfirm.value) {
+          trackingProfileStatus.textContent = "A confirmação da nova senha não confere.";
+          return;
+        }
+
+        trackingProfileStatus.textContent = "Salvando alterações...";
+
+        try {
+          const data = await apiFetch("/api/auth/profile", {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              fullName: trackingProfileForm.elements.fullName.value.trim(),
+              email: trackingProfileForm.elements.email.value.trim(),
+              whatsapp: trackingProfileForm.elements.whatsapp.value.trim(),
+              cpf: trackingProfileForm.elements.cpf.value.trim(),
+              cep: trackingProfileForm.elements.cep.value.trim(),
+              address: trackingProfileForm.elements.address.value.trim(),
+              number: trackingProfileForm.elements.number.value.trim(),
+              district: trackingProfileForm.elements.district.value.trim(),
+              complement: trackingProfileForm.elements.complement.value.trim(),
+              city: trackingProfileForm.elements.city.value.trim(),
+              state: trackingProfileForm.elements.state.value.trim(),
+              password: trackingProfileForm.elements.password.value,
+              photoUrl: profilePhotoBase64 || dashboardState.user?.photoUrl || null
+            })
+          });
+
+          dashboardState.user = data.user;
+          localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(data.user));
+          trackingUserName.textContent = data.user.fullName || "Cliente";
+          renderProfile(data.user, dashboardState.trackings);
+          if (dashboardState.trackings.length) {
+            await renderOverview(
+              dashboardState.trackings.find((item) => item.id === selectedTrackingId) || dashboardState.trackings[0],
+              data.user
+            );
+          }
+          trackingProfileStatus.textContent = "Perfil atualizado com sucesso.";
+        } catch (error) {
+          trackingProfileStatus.textContent = error.message;
+        }
+      });
+
       const currentUser = getCurrentUser();
       if (getAccessToken() && currentUser) {
-        activateTrackingTab("overview");
+        activateTrackingTab(requestedTrackingTab);
         loadDashboard();
       } else {
         setLoggedOutState();
