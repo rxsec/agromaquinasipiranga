@@ -391,11 +391,17 @@
         return 52;
       };
 
+      const getTrackingItemImage = (tracking) => {
+        const gallery = Array.isArray(tracking.item_gallery_images) ? tracking.item_gallery_images : [];
+        return gallery.find(Boolean) || tracking.item_image_url || "";
+      };
+
       const renderVehicleList = (trackings) => {
         trackingVehicleList.innerHTML = trackings.length
           ? trackings
               .map(
                 (tracking) => {
+                  const image = getTrackingItemImage(tracking);
                   const badge = String(tracking.item_name || "AMI")
                     .split(" ")
                     .filter(Boolean)
@@ -406,7 +412,11 @@
                   <button class="tracking-vehicle-card ${tracking.id === selectedTrackingId ? "is-active" : ""}" type="button" data-select-tracking="${tracking.id}">
                     <div class="tracking-vehicle-card__row">
                       <div class="tracking-vehicle-card__thumb">
-                        <span>${badge}</span>
+                        ${
+                          image
+                            ? `<img src="${image}" alt="${tracking.item_name || "Veículo"}" loading="lazy" />`
+                            : `<span>${badge}</span>`
+                        }
                       </div>
                       <div class="tracking-vehicle-card__copy">
                         <strong>${tracking.item_name || "Veículo"}</strong>
