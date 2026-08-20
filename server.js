@@ -26,7 +26,8 @@ import {
   findPublicTrackingByCode,
   getAdminDashboardData,
   listPublicCatalogItems,
-  updateCatalogItem
+  updateCatalogItem,
+  updateDriver
 } from "./src/admin/repository.js";
 import {
   comparePassword,
@@ -466,12 +467,40 @@ app.all("/api/admin/catalog-items", adminRequired, async (req, res) => {
   }
 });
 
-app.post("/api/admin/drivers", adminRequired, async (req, res) => {
+app.all("/api/admin/drivers", adminRequired, async (req, res) => {
   try {
-    const { fullName, cpf, cnh, phone, email, commercialAddress, photoUrl, status, notes } = req.body;
+    if (!["POST", "PUT"].includes(req.method)) {
+      return res.status(405).json({ message: "Método não permitido." });
+    }
+
+    const { id, fullName, cpf, cnh, phone, email, commercialAddress, photoUrl, status, notes } = req.body;
 
     if (!fullName) {
       return res.status(400).json({ message: "Nome do motorista é obrigatório." });
+    }
+
+    if (req.method === "PUT") {
+      if (!id) {
+        return res.status(400).json({ message: "ID do motorista não informado." });
+      }
+
+      const driver = await updateDriver(String(id).trim(), {
+        fullName: String(fullName).trim(),
+        cpf: cpf ? String(cpf).trim() : null,
+        cnh: cnh ? String(cnh).trim() : null,
+        phone: phone ? String(phone).trim() : null,
+        email: email ? String(email).trim().toLowerCase() : null,
+        commercialAddress: commercialAddress ? String(commercialAddress).trim() : null,
+        photoUrl: photoUrl ? String(photoUrl).trim() : null,
+        status: status ? String(status).trim() : "ativo",
+        notes: notes ? String(notes).trim() : null
+      });
+
+      if (!driver) {
+        return res.status(404).json({ message: "Motorista não encontrado." });
+      }
+
+      return res.json({ driver });
     }
 
     const driver = await createDriver({
@@ -489,7 +518,7 @@ app.post("/api/admin/drivers", adminRequired, async (req, res) => {
     return res.status(201).json({ driver });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: "Erro ao cadastrar motorista." });
+    return res.status(500).json({ message: "Erro ao processar motorista." });
   }
 });
 

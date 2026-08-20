@@ -473,6 +473,7 @@
         </div>
 
         <form class="admin-form admin-form--grid" id="driverForm">
+          <input type="hidden" name="id" />
           <label><span>Nome completo</span><input type="text" name="fullName" required /></label>
           <label><span>Telefone</span><input type="text" name="phone" /></label>
           <label><span>E-mail</span><input type="email" name="email" /></label>
@@ -495,10 +496,27 @@
           </div>
           <label class="admin-form__full"><span>Observações</span><textarea name="notes" rows="3"></textarea></label>
           <div class="admin-form__full admin-form__actions">
-            <button class="button button-primary" type="submit">Salvar motorista</button>
+            <button class="button button-primary" type="submit" id="driverSubmitButton">Salvar motorista</button>
             <p class="admin-status" id="driverStatus"></p>
           </div>
         </form>
+      </div>
+    </div>
+
+    <div class="admin-modal hidden" id="recordViewModal">
+      <div class="admin-modal__backdrop" data-close-record-view-modal></div>
+      <div class="admin-modal__dialog admin-modal__dialog--compact" role="dialog" aria-modal="true" aria-labelledby="recordViewTitle">
+        <div class="admin-modal__head">
+          <div>
+            <span class="admin-eyebrow" id="recordViewEyebrow">Ficha</span>
+            <h2 id="recordViewTitle">Detalhes</h2>
+          </div>
+          <button class="admin-modal__close" type="button" data-close-record-view-modal aria-label="Fechar">×</button>
+        </div>
+        <div class="admin-record-view" id="recordViewBody"></div>
+        <div class="admin-form__full admin-form__actions">
+          <button class="button button-secondary hidden" type="button" id="recordViewEditButton">Editar</button>
+        </div>
       </div>
     </div>
 
@@ -538,6 +556,15 @@
       const driverModalClosers = Array.from(document.querySelectorAll("[data-close-driver-modal]"));
       const driverPhotoInput = document.getElementById("driverPhotoInput");
       const driverPhotoPreview = document.getElementById("driverPhotoPreview");
+      const driverSubmitButton = document.getElementById("driverSubmitButton");
+      const driverModalTitle = document.getElementById("driverModalTitle");
+
+      const recordViewModal = document.getElementById("recordViewModal");
+      const recordViewModalClosers = Array.from(document.querySelectorAll("[data-close-record-view-modal]"));
+      const recordViewEyebrow = document.getElementById("recordViewEyebrow");
+      const recordViewTitle = document.getElementById("recordViewTitle");
+      const recordViewBody = document.getElementById("recordViewBody");
+      const recordViewEditButton = document.getElementById("recordViewEditButton");
 
       const trackingForm = document.getElementById("trackingForm");
       const trackingStatus = document.getElementById("trackingStatus");
@@ -570,6 +597,7 @@
       };
       let selectedGalleryImages = [];
       let editingClientId = null;
+      let editingDriverId = null;
       let editingCatalogId = null;
       let draggedImageIndex = null;
       let driverPhotoBase64 = "";
@@ -800,6 +828,7 @@
                 <td>${[user.city, user.state].filter(Boolean).join(" / ") || "-"}</td>
                 <td>${user.role || "customer"}</td>
                 <td class="admin-table__actions">
+                  <button class="button button-secondary admin-card-action" type="button" data-view-client="${user.id}">Abrir ficha</button>
                   <button class="button button-secondary admin-card-action" type="button" data-edit-client="${user.id}">Editar</button>
                   <button class="button admin-card-action admin-card-action--danger" type="button" data-delete-client="${user.id}">Excluir</button>
                 </td>
@@ -809,8 +838,29 @@
           .join("");
 
         clients.forEach((user) => {
+          const viewButton = document.querySelector(`[data-view-client="${user.id}"]`);
           const editButton = document.querySelector(`[data-edit-client="${user.id}"]`);
           const deleteButton = document.querySelector(`[data-delete-client="${user.id}"]`);
+
+          if (viewButton) {
+            viewButton.addEventListener("click", () =>
+              openRecordView({
+                eyebrow: "Ficha do cliente",
+                title: user.full_name || "Cliente",
+                fields: [
+                  ["Nome completo", user.full_name],
+                  ["E-mail", user.email],
+                  ["WhatsApp", user.whatsapp],
+                  ["CPF", user.cpf],
+                  ["CEP", user.cep],
+                  ["Endereço", buildClientAddress(user)],
+                  ["Complemento", user.complement],
+                  ["Perfil", user.role || "customer"]
+                ],
+                onEdit: () => fillClientForm(user)
+              })
+            );
+          }
 
           if (editButton) {
             editButton.addEventListener("click", () => fillClientForm(user));
@@ -951,6 +1001,34 @@
         return `<div class="admin-list-item__avatar admin-list-item__avatar--placeholder">${initials}</div>`;
       };
 
+      const openRecordView = ({ eyebrow, title, fields, onEdit = null }) => {
+        recordViewEyebrow.textContent = eyebrow;
+        recordViewTitle.textContent = title;
+        recordViewBody.innerHTML = fields
+          .map(
+            ([label, value]) => `
+              <div class="admin-record-view__line">
+                <span>${label}</span>
+                <strong>${value || "-"}</strong>
+              </div>
+            `
+          )
+          .join("");
+
+        if (onEdit) {
+          recordViewEditButton.classList.remove("hidden");
+          recordViewEditButton.onclick = () => {
+            closeModal(recordViewModal);
+            onEdit();
+          };
+        } else {
+          recordViewEditButton.classList.add("hidden");
+          recordViewEditButton.onclick = null;
+        }
+
+        openModal(recordViewModal);
+      };
+
       const renderDrivers = (drivers) => {
         renderSimpleList(
           overviewDrivers,
@@ -983,9 +1061,42 @@
                   <p>${[driver.cnh, driver.phone, driver.email].filter(Boolean).join(" • ") || "Sem contato informado"}</p>
                 </div>
               </div>
+              <div class="admin-list-item__actions">
+                <button class="button button-secondary admin-card-action" type="button" data-view-driver="${driver.id}">Abrir ficha</button>
+                <button class="button button-primary admin-card-action" type="button" data-edit-driver="${driver.id}">Editar</button>
+              </div>
             </article>
           `
         );
+
+        drivers.forEach((driver) => {
+          const viewButton = document.querySelector(`[data-view-driver="${driver.id}"]`);
+          const editButton = document.querySelector(`[data-edit-driver="${driver.id}"]`);
+
+          if (viewButton) {
+            viewButton.addEventListener("click", () =>
+              openRecordView({
+                eyebrow: "Ficha do motorista",
+                title: driver.full_name || "Motorista",
+                fields: [
+                  ["Nome completo", driver.full_name],
+                  ["Status", driver.status],
+                  ["Telefone", driver.phone],
+                  ["E-mail", driver.email],
+                  ["CPF", driver.cpf],
+                  ["Habilitação", driver.cnh],
+                  ["Endereço comercial", driver.commercial_address],
+                  ["Observações", driver.notes]
+                ],
+                onEdit: () => fillDriverForm(driver)
+              })
+            );
+          }
+
+          if (editButton) {
+            editButton.addEventListener("click", () => fillDriverForm(driver));
+          }
+        });
       };
 
       const renderYards = (yards) => {
@@ -1051,11 +1162,36 @@
       };
 
       const resetDriverForm = () => {
+        editingDriverId = null;
         driverForm.reset();
+        driverForm.elements.id.value = "";
         driverPhotoBase64 = "";
         driverPhotoInput.value = "";
+        driverSubmitButton.textContent = "Salvar motorista";
+        driverModalTitle.textContent = "Cadastrar motorista";
         setStatus(driverStatus, "");
         renderDriverPhotoPreview();
+      };
+
+      const fillDriverForm = (driver) => {
+        editingDriverId = driver.id;
+        driverForm.elements.id.value = driver.id || "";
+        driverForm.elements.fullName.value = driver.full_name || "";
+        driverForm.elements.phone.value = driver.phone || "";
+        driverForm.elements.email.value = driver.email || "";
+        driverForm.elements.cpf.value = driver.cpf || "";
+        driverForm.elements.cnh.value = driver.cnh || "";
+        driverForm.elements.status.value = driver.status || "Situação regular";
+        driverForm.elements.commercialAddress.value = driver.commercial_address || "";
+        driverForm.elements.notes.value = driver.notes || "";
+        driverPhotoBase64 = driver.photo_url || "";
+        driverPhotoInput.value = "";
+        driverSubmitButton.textContent = "Salvar alterações";
+        driverModalTitle.textContent = "Editar motorista";
+        setStatus(driverStatus, "");
+        renderDriverPhotoPreview();
+        activateTab("drivers");
+        openModal(driverModal);
       };
 
       const resetClientForm = () => {
@@ -1244,6 +1380,12 @@
         });
       });
 
+      recordViewModalClosers.forEach((button) => {
+        button.addEventListener("click", () => {
+          closeModal(recordViewModal);
+        });
+      });
+
       catalogCancelButton.addEventListener("click", () => {
         resetCatalogForm();
         closeModal(catalogModal);
@@ -1412,8 +1554,9 @@
         try {
           const formData = new FormData(driverForm);
           await adminFetch("/api/admin/drivers", {
-            method: "POST",
+            method: editingDriverId ? "PUT" : "POST",
             body: JSON.stringify({
+              id: editingDriverId,
               fullName: formData.get("fullName"),
               cpf: formData.get("cpf"),
               cnh: formData.get("cnh"),
@@ -1426,7 +1569,7 @@
             })
           });
 
-          setStatus(driverStatus, "Motorista salvo com sucesso.");
+          setStatus(driverStatus, editingDriverId ? "Motorista atualizado com sucesso." : "Motorista salvo com sucesso.");
           closeModal(driverModal);
           resetDriverForm();
           await loadDashboard();

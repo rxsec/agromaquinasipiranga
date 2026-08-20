@@ -396,6 +396,31 @@ export const createDriver = async ({ fullName, cpf, cnh, phone, email, commercia
   return rows[0];
 };
 
+export const updateDriver = async (id, { fullName, cpf, cnh, phone, email, commercialAddress, photoUrl, status, notes }) => {
+  await ensureAdminSchema();
+
+  const { rows } = await pool.query(
+    `
+      update public.app_drivers
+      set
+        full_name = $2,
+        cpf = $3,
+        cnh = $4,
+        phone = $5,
+        email = $6,
+        commercial_address = $7,
+        photo_url = coalesce($8, photo_url),
+        status = $9,
+        notes = $10
+      where id = $1
+      returning *
+    `,
+    [id, fullName, cpf, cnh, phone, email, commercialAddress, photoUrl, status, notes]
+  );
+
+  return rows[0] || null;
+};
+
 export const createYard = async ({
   name,
   city,

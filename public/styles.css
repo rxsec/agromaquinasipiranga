@@ -3569,6 +3569,14 @@ img {
   gap: 14px;
 }
 
+.admin-list-item__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
 .admin-list-item__avatar {
   width: 62px;
   height: 62px;
@@ -3964,6 +3972,36 @@ img {
   background: rgba(31, 127, 61, 0.14);
 }
 
+.admin-record-view {
+  display: grid;
+  gap: 12px;
+}
+
+.admin-record-view__line {
+  display: grid;
+  gap: 6px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(31, 127, 61, 0.12);
+}
+
+.admin-record-view__line:last-child {
+  border-bottom: 0;
+}
+
+.admin-record-view__line span {
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(22, 48, 34, 0.62);
+}
+
+.admin-record-view__line strong {
+  color: #163022;
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
 .admin-select-note {
   margin: -6px 0 0;
   color: rgba(22, 48, 34, 0.68);
@@ -4169,6 +4207,11 @@ img {
     padding: 15px 16px;
   }
 
+  .admin-list-item__actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
   .admin-catalog-card {
     border-radius: 24px;
   }
@@ -4287,6 +4330,10 @@ img {
 
   .admin-card__head h2 {
     font-size: 1.1rem;
+  }
+
+  .admin-record-view__line strong {
+    font-size: 0.96rem;
   }
 
   .admin-modal {

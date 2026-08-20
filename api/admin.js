@@ -8,7 +8,8 @@ import {
   deleteCatalogItem,
   ensureDefaultAdminUser,
   getAdminDashboardData,
-  updateCatalogItem
+  updateCatalogItem,
+  updateDriver
 } from "../src/admin/repository.js";
 import { requireAdmin } from "./_lib/admin.js";
 import { handleOptions, readJsonBody, sendJson, getQueryParam } from "./_lib/http.js";
@@ -218,14 +219,38 @@ export default async function handler(req, res) {
     }
 
     if (action === "drivers") {
-      if (req.method !== "POST") {
+      if (!["POST", "PUT"].includes(req.method)) {
         return sendJson(req, res, 405, { message: "Método não permitido." });
       }
 
-      const { fullName, cpf, cnh, phone, email, commercialAddress, photoUrl, status, notes } = await readJsonBody(req);
+      const { id, fullName, cpf, cnh, phone, email, commercialAddress, photoUrl, status, notes } = await readJsonBody(req);
 
       if (!fullName) {
         return sendJson(req, res, 400, { message: "Nome do motorista é obrigatório." });
+      }
+
+      if (req.method === "PUT") {
+        if (!id) {
+          return sendJson(req, res, 400, { message: "ID do motorista não informado." });
+        }
+
+        const driver = await updateDriver(String(id).trim(), {
+          fullName: String(fullName).trim(),
+          cpf: cpf ? String(cpf).trim() : null,
+          cnh: cnh ? String(cnh).trim() : null,
+          phone: phone ? String(phone).trim() : null,
+          email: email ? String(email).trim().toLowerCase() : null,
+          commercialAddress: commercialAddress ? String(commercialAddress).trim() : null,
+          photoUrl: photoUrl ? String(photoUrl).trim() : null,
+          status: status ? String(status).trim() : "ativo",
+          notes: notes ? String(notes).trim() : null
+        });
+
+        if (!driver) {
+          return sendJson(req, res, 404, { message: "Motorista não encontrado." });
+        }
+
+        return sendJson(req, res, 200, { driver });
       }
 
       const driver = await createDriver({
@@ -333,7 +358,7 @@ export default async function handler(req, res) {
     }
 
     if (action === "drivers") {
-      return sendJson(req, res, 500, { message: "Erro ao cadastrar motorista." });
+      return sendJson(req, res, 500, { message: "Erro ao processar motorista." });
     }
 
     if (action === "yards") {

@@ -267,6 +267,11 @@
       const getAccessToken = () => localStorage.getItem(ACCESS_TOKEN_KEY);
       const getRefreshToken = () => localStorage.getItem(REFRESH_TOKEN_KEY);
       const onlyDigits = (value) => String(value || "").replace(/\D/g, "");
+      const buildUserAddress = (user) =>
+        [user?.address, user?.number, user?.district, user?.city, user?.state, user?.cep]
+          .map((value) => String(value || "").trim())
+          .filter(Boolean)
+          .join(", ");
 
       const setLoggedInState = () => {
         trackingAccessSection.classList.add("hidden");
@@ -344,20 +349,37 @@
       };
 
       const geocodeAddress = async (address) => {
-        if (!address) {
+        const rawAddress = String(address || "").trim();
+        if (!rawAddress) {
           return null;
         }
 
-        try {
-          const response = await fetch(`https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q=${encodeURIComponent(address)}`);
-          const data = await response.json();
-          if (!Array.isArray(data) || !data.length) {
-            return null;
-          }
-          return [Number(data[0].lat), Number(data[0].lon)];
-        } catch (_error) {
-          return null;
+        const cepDigits = onlyDigits(rawAddress);
+        const baseCandidates = [
+          rawAddress,
+          `${rawAddress}, Brasil`,
+          rawAddress.replace(/\s{2,}/g, " ")
+        ];
+
+        if (cepDigits.length >= 8) {
+          baseCandidates.push(`${rawAddress.replace(cepDigits, `${cepDigits.slice(0, 5)}-${cepDigits.slice(5, 8)}`)}, Brasil`);
         }
+
+        const candidates = [...new Set(baseCandidates.map((item) => item.trim()).filter(Boolean))];
+
+        for (const candidate of candidates) {
+          try {
+            const response = await fetch(`https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q=${encodeURIComponent(candidate)}`);
+            const data = await response.json();
+            if (Array.isArray(data) && data.length) {
+              return [Number(data[0].lat), Number(data[0].lon)];
+            }
+          } catch (_error) {
+            // Tenta a próxima variação do endereço.
+          }
+        }
+
+        return null;
       };
 
       const ensureMap = () => {
@@ -492,13 +514,14 @@
           .join("");
       };
 
-      const renderMap = async (tracking) => {
+      const renderMap = async (tracking, user) => {
         ensureMap();
         clearMapLayers();
 
         const startAddress = [tracking.yard_address, tracking.yard_city, tracking.yard_state].filter(Boolean).join(", ");
         const currentAddress = tracking.current_location || tracking.yard_address || "Ipiranga - PR";
-        const destinationAddress = tracking.destination_address || "Destino final não informado";
+        const profileAddress = buildUserAddress(user);
+        const destinationAddress = tracking.destination_address || profileAddress || "Destino final não informado";
 
         const [startCoords, currentCoords, destinationCoords] = await Promise.all([
           geocodeAddress(startAddress || "Ipiranga - PR"),
@@ -563,14 +586,15 @@
         map.fitBounds(L.latLngBounds(points), { padding: [40, 40] });
       };
 
-      const renderOverview = async (tracking) => {
+      const renderOverview = async (tracking, user) => {
         const progress = progressByStatus(tracking.status, tracking.alert_message);
+        const destinationAddress = tracking.destination_address || buildUserAddress(user) || "Não informado";
         trackingProgressFill.style.width = `${progress}%`;
         trackingProgressValue.textContent = `${progress}%`;
         trackingAlertText.textContent = String(tracking.alert_message || tracking.status || "Aguardando atualização").toUpperCase();
         trackingItemTitle.textContent = tracking.item_name || "Rastreio";
-        trackingMapMeta.textContent = `${tracking.tracking_code || "-"} • Atual: ${tracking.current_location || "Local sob atualização"} • Destino: ${tracking.destination_address || "Não informado"}`;
-        await renderMap(tracking);
+        trackingMapMeta.textContent = `${tracking.tracking_code || "-"} • Atual: ${tracking.current_location || "Local sob atualização"} • Destino: ${destinationAddress}`;
+        await renderMap(tracking, user);
       };
 
       const renderDashboard = async () => {
@@ -593,7 +617,7 @@
         }
 
         selectedTrackingId = selectedTracking.id;
-        await renderOverview(selectedTracking);
+        await renderOverview(selectedTracking, user);
         renderDriver(selectedTracking);
         renderProfile(user, trackings);
         renderVehicleList(trackings);
