@@ -778,6 +778,7 @@ img {
   display: flex;
   flex-direction: column;
   gap: 22px;
+  border-radius: 0;
   background: #33475d;
   color: #fff;
   padding: 22px 18px 18px;
@@ -1195,7 +1196,7 @@ img {
 }
 
 .tracking-page.is-dashboard-mode main {
-  padding: 0 6px 6px;
+  padding: 0;
 }
 
 .tracking-page.is-dashboard-mode .container {
@@ -2950,7 +2951,7 @@ img {
 
   .tracking-sidebar {
     min-height: auto;
-    border-radius: 0 0 18px 18px;
+    border-radius: 0;
     padding: 18px 16px;
   }
 
@@ -3086,7 +3087,7 @@ img {
 
   .tracking-sidebar {
     gap: 18px;
-    border-radius: 0 0 16px 16px;
+    border-radius: 0;
   }
 
   .tracking-sidebar__head h2 {
